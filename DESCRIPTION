@@ -1,0 +1,36 @@
+Package: kwb.geosalz
+Version: 0.1.0.9000
+Title: R Package for Documenting Workflow Used in Project "geosalz"
+Description: R Package for Documenting Workflow Used in Project "geosalz".
+Authors@R: c(person("Michael", "Rustler", , "michael.rustler@kompetenz-wasser.de",
+           role = c("aut", "cre"), comment = c(ORCID = "0000-0003-0647-7726")),
+           person("Hauke", "Sonnenberg", , "hauke.sonnenberg@kompetenz-wasser.de", 
+           role = c("ctb"), comment = c(ORCID = "0000-0001-9134-2871")),
+           person("Kompetenzzentrum Wasser Berlin gGmbH (KWB)", role = c("cph")))
+Imports: 
+    cellranger,
+    crayon,
+    data.table,
+    dplyr,
+    fs,
+    janitor,
+    kwb.utils,
+    magrittr,
+    readxl,
+    stringr,
+    tidyr
+Suggests: 
+    covr,
+    ggplot2,
+    knitr,
+    rmarkdown
+Remotes: 
+    github::KWB-R/kwb.utils
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+ByteCompile: true
+URL: https://github.com/KWB-R/kwb.geosalz
+BugReports: https://github.com/KWB-R/kwb.geosalz/issues
+RoxygenNote: 6.0.1
+VignetteBuilder: knitr

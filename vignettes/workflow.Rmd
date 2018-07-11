@@ -1,0 +1,384 @@
+---
+title: "Workflow"
+author: "Michael Rustler"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Workflow documentation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# 1 Install R packages
+
+```{r eval=FALSE}
+if (! require("devtools")) {
+  install.packages("devtools", repos = "https://cloud.r-project.org")
+}
+
+devtools::install_github("kwb-r/kwb.geosalz", 
+                         dependencies = TRUE)
+```
+
+# 2 Setup the project 
+
+## 2.1 Define paths
+
+```{r eval=TRUE, echo = TRUE}
+# Define paths and resolve placeholders
+paths <- list(
+  root_server = "//medusa/processing",
+  project = "geosalz",
+  processing = "<root>/<project>",
+  input_dir = "<processing>/precleaned-data/v0.2",
+  input_dir_meta = "<input_dir>/META",
+  export_dir = "<processing>/precleaned-data/v0.3",
+  export_dir_meta = "<export_dir>/META",
+  cleaned_data_dir = "<processing>/cleaned-data",
+  figures_dir = "<processing>/figures",
+  foerdermengen = "<export_dir>/2018-04-27 Rohwasser Bericht - Galeriefördermengen.xlsx",
+  parameters = "<export_dir_meta>/2018-06-01 Lab Parameter.xlsx",
+  lookup_para = "<export_dir_meta>/lookup_para.csv",
+  sites = "<export_dir_meta>/Info-Altdaten.xlsx"
+)
+
+#paths <- kwb.utils::resolve(paths, root = "root_server")
+paths <- kwb.utils::resolve(paths, root = "C:/projects")
+```
+
+```{r echo = FALSE}
+if(fs::dir_exists(paths$input_dir)) {
+  knitr::opts_chunk$set(eval=TRUE, message=FALSE, echo=TRUE)
+} else {
+ knitr::opts_chunk$set(eval=FALSE, message=FALSE, echo=TRUE)
+}
+```
+
+
+## 2.2 Check input directory 
+
+Check if input directory selected above exists:
+
+```{r}
+# Check if input directory exists
+input_dir <- kwb.utils::safePath(kwb.utils::selectElements(paths, "input_dir"))
+```
+
+## 2.3 Check export directory 
+
+Check and in case the export directory is not available create it:
+
+
+```{r}
+# Check if exists and if not create it
+
+if (!dir.exists(paths$export_dir)) {
+  print(sprintf("Creating export directory: %s", paths$export_dir))
+  fs::dir_create(paths$export_dir)
+}
+export_dir <- kwb.utils::safePath(kwb.utils::selectElements(paths, "export_dir"))
+```
+
+```{r eval = FALSE}
+## Convert xls to xlsx files
+kwb.geosalz::convert_xls_as_xlsx(input_dir, 
+                                 export_dir)
+
+## Copy xlsx files 
+kwb.geosalz::copy_xlsx_files(input_dir, export_dir, overwrite = TRUE)
+```
+
+# 3 Data import
+
+## 3.1 Categorise the Excel Files
+
+Select files if they consist of: 
+
+- Header 1 (meta): with manually added metadata in an extra sheet
+
+- Header 1: single header tables
+
+- Header 2: two-row header tables or
+
+- Header 4: four row header tables
+
+
+
+
+```{r }
+# Get all xlsx files to be imported
+files <- dir(export_dir, ".xlsx", recursive = TRUE, full.names = TRUE)
+
+
+files_meta <- c(
+  "Meta Info",
+  "Header ident",
+  "Parameter ident",
+  "Parameter",
+  "Info-Altdaten",
+  "Brandenburg_Parameter_BWB_Stolpe",
+  "Kopie von Brandenburg_Parameter_BWB_Stolpe",
+  "2005-10BeschilderungProbenahmestellenGWWIII",
+  "Bezeichnungen der Reinwasserstellen",
+  "ReinwasserNomenklatur",
+  "Info zu Altdaten 1970-1998",
+  "2018-06-01 Lab Parameter"
+)
+
+
+
+
+files_header1_meta <- c(
+  "FRI_Br_GAL_C_Einzelparameter",
+  "FRI_Roh_Rein_NH4+NO3_2001-2003",
+  "MTBE_2003-11_2004",
+  "Reinwasser_2003_Fe_Mn", ## unclean
+  "VC_CN_in Brunnen bis Aug_2005 ", ## unclean
+  "Wuhlheide_Beelitzhof_Teildaten" ## unclean
+)
+
+files_header1 <- c(
+  "2018-04-11 Chlorid in Brunnen - Übersicht",
+  "2018-04-27 LIMS Reiw & Rohw Sammel ",
+  "2018-04-27 Rohwasser Bericht - Galeriefördermengen"
+)
+
+
+files_header4 <- c(
+  "STO Rohw_1999-6_2004",
+  "Wuhlheide_1999-2003_Okt - Neu",
+  "KAU_1999-Okt2003"
+)
+
+
+files_archive <- "Siebert"
+
+files_to_ignore <- c(
+  files_meta, files_header1, files_header1_meta,
+  files_header4, files_archive
+)
+
+in_files_to_ignore <- kwb.utils::removeExtension(basename(files)) %in% files_to_ignore
+
+filepaths_header2 <- files[!in_files_to_ignore]
+```
+
+## 3.2 Header 1 (with metadata)
+
+
+```{r, warning=FALSE}
+cond1 <- kwb.utils::removeExtension(basename(files)) %in% files_header1_meta
+filepaths_header1_meta <- files[cond1]
+
+ labor_list_1meta <- kwb.geosalz::import_labor(
+    filepaths_header1_meta ,
+    export_dir,
+    func = kwb.geosalz::read_bwb_header1_meta
+  )
+
+
+  has_errors <- sapply(labor_list_1meta, inherits, "try-error")
+  #has_errors
+
+  labor_df_1meta <- data.table::rbindlist(
+    l = labor_list_1meta[!has_errors],
+    fill = TRUE
+  )
+```
+
+```{r}
+library(dplyr)
+cond2 <- labor_df_1meta$OriginalName %in% c("el. Leitfähigkeit (25 °C)", "Chlorid", "Sulfat")
+  labor_df_1meta[cond2 & !is.na(labor_df_1meta$DataValue), ] %>%
+    dplyr::group_by_("OriginalName", "Meßstelle") %>%
+    dplyr::summarise(n = n())
+```
+
+## 3.3 Header 2
+
+```{r}
+  labor_header2_list <- kwb.geosalz::import_labor(
+    files = filepaths_header2,
+    export_dir = export_dir,
+    func = kwb.geosalz::read_bwb_header2
+  )
+
+  has_errors <- sapply(labor_header2_list, inherits, "try-error")
+  #has_errors
+  
+  labor_header2_df <- data.table::rbindlist(
+    l = labor_header2_list[!has_errors],
+    fill = TRUE
+  )
+
+```
+
+## 3.4 Header 4
+
+```{r}
+cond3 <- kwb.utils::removeExtension(basename(files)) %in% files_header4
+filepaths_header4 <- files[cond3]
+
+labor_header4_list <- kwb.geosalz::import_labor(
+    files = filepaths_header4,
+    export_dir = export_dir,
+    func = kwb.geosalz::read_bwb_header4
+  )
+
+  has_errors <- sapply(labor_header4_list, inherits, "try-error")
+  has_errors
+
+  labor_header4_df <- data.table::rbindlist(
+    l = labor_header4_list[!has_errors],
+    fill = TRUE
+  )
+```
+
+
+# 4 Data cleaning
+
+## 4.1 Merging Header2 and Header4
+
+```{r}
+ labor_all <- data.table::rbindlist(
+    l = list(
+      x1 = labor_header2_df,
+      x2 = labor_header4_df
+    ),
+    fill = TRUE
+  )
+
+```
+
+## 4.2 Filtering
+
+```{r}
+labor_all <- labor_all %>%
+    dplyr::filter_("!is.na(DataValue)") %>%
+    dplyr::mutate_("Date" = "dplyr::if_else(condition = !is.na(Datum),
+        true = Datum,
+        false =  Probenahme)") %>%
+      ### Some "Datum" rentries are missing in;
+      ### K-TL_LSW-Altdaten-Werke Teil 1\Werke Teil 1\Kaulsdorf\KAU_1999-Okt2003.xlsx
+      ### sheets: 66 KAU Rein 1999-2000, 65 KAU NordSüd 1999-2000
+    dplyr::filter_("!is.na(Date)") %>%
+    dplyr::filter_("!is.na(VariableName_org)")
+nrow(labor_all)
+
+```
+
+## 4.3 Reducing dataset by adding metadata
+
+```{r}
+labordaten_ww <- kwb.geosalz::add_para_metadata(
+    df = labor_all,
+    lookup_para_path = paths$lookup_para,
+    parameters_path = paths$parameters
+  )
+
+  labordaten_ww <- kwb.geosalz::add_site_metadata(
+    df = labordaten_ww,
+    site_path = paths$sites
+  ) %>%
+    dplyr::mutate_(
+      year = "as.numeric(format(Date,format = '%Y'))",
+      DataValue = "as.numeric(DataValue)"
+    )
+nrow(labordaten_ww)
+
+```
+
+## 5.  Exporting cleaned dataset
+
+```{r}
+ fs::dir_create(paths$cleaned_data_dir, recursive = TRUE)
+  print(sprintf("Export cleaned data to: %s", paths$cleaned_data_dir))
+  foerdermengen_ww <- kwb.geosalz::get_foerdermengen(paths$foerdermengen)
+  save(labordaten_ww, foerdermengen_ww,
+    file = file.path(paths$cleaned_data_dir, "cleaned-data.Rds")
+  )
+  write.csv2(labordaten_ww,
+    file.path(paths$cleaned_data_dir, "labordaten_ww.csv"),
+    row.names = FALSE
+  )
+  write.csv2(foerdermengen_ww,
+    file = file.path(paths$cleaned_data_dir, "foerdermengen_ww.csv"),
+    row.names = FALSE
+  )
+```
+
+## 6. Visualisation
+
+```{r}
+library(ggplot2)
+  fs::dir_create(paths$figures_dir, recursive = TRUE)
+  print(sprintf("Export figures/plots to: %s", paths$figures_dir))
+
+
+
+  para_info <- kwb.geosalz::get_parameters_meta(paths$parameters)
+  water_types <- c("Reinwasser", "Rohwasser")
+
+
+  for (water_type in water_types) {
+    pdf_file <- file.path(
+      paths$figures_dir,
+      sprintf(
+        "Zeitreihen_Jahresmittelwerte_Werke_%s.pdf",
+        water_type
+      )
+    )
+
+    cat(sprintf("Creating plot:\n%s\n", pdf_file))
+    pdf(file = pdf_file, width = 14, height = 9)
+    for (sel_para_id in unique(labordaten_ww$para_id)) {
+      my_selection <- sprintf(
+        "%s (%s)",
+        para_info$para_kurzname[para_info$para_id == sel_para_id],
+        water_type
+      )
+
+      tmp <- labordaten_ww %>%
+        dplyr::filter_(sprintf("prufgegenstand == '%s'", water_type)) %>%
+        dplyr::filter_(.dots = sprintf("para_id == %d", sel_para_id)) %>%
+        dplyr::group_by_("para_kurzname", "werk", "year") %>%
+        dplyr::summarise_(mean_DataValue = "mean(as.numeric(DataValue), na.rm=TRUE)") %>%
+        dplyr::filter_("!is.na(werk)") %>%
+        dplyr::left_join(
+          y = kwb.geosalz::get_foerdermengen(paths$foerdermengen),
+          by = c("werk", "year")
+        )
+
+
+      if (nrow(tmp) > 0) {
+        cat(sprintf("for %s\n", my_selection))
+
+        g <- ggplot2::ggplot(tmp, mapping = ggplot2::aes_string(
+          x = "year",
+          y = "mean_DataValue",
+          col = "werk"
+        )) +
+          ggplot2::geom_point() +
+          ggplot2::geom_line() +
+          ggplot2::theme_bw() +
+          ggplot2::ggtitle(label = my_selection) +
+          ggplot2::labs(x = "", y = "Jahresmittelwert")
+
+        print(g)
+      } else {
+        cat(sprintf(
+          "not data availabe for %s\n",
+          my_selection
+        ))
+      }
+    }
+    dev.off()
+  }
+```

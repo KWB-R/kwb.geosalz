@@ -1,0 +1,8 @@
+[![Appveyor build Status](https://ci.appveyor.com/api/projects/status/hq86yd3s3xi0t371/branch/master?svg=true)](https://ci.appveyor.com/project/KWB-R/kwb-geosalz/branch/master)
+[![Travis build Status](https://travis-ci.org/KWB-R/kwb.geosalz.svg?branch=master)](https://travis-ci.org/KWB-R/kwb.geosalz)
+[![codecov](https://codecov.io/github/KWB-R/kwb.geosalz/branch/master/graphs/badge.svg)](https://codecov.io/github/KWB-R/kwb.geosalz)
+[![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/kwb.geosalz)]()
+
+
+R Package for Documenting Workflow Used in Project "geosalz".
