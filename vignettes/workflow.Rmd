@@ -49,8 +49,8 @@ paths <- list(
   sites = "<export_dir_meta>/Info-Altdaten.xlsx"
 )
 
-#paths <- kwb.utils::resolve(paths, root = "root_server")
-paths <- kwb.utils::resolve(paths, root = "C:/projects")
+paths <- kwb.utils::resolve(paths, root = "root_server")
+#paths <- kwb.utils::resolve(paths, root = "C:/projects")
 ```
 
 ```{r echo = FALSE}
