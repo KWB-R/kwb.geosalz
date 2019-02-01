@@ -18,7 +18,8 @@ get_foerdermengen <- function(xlsx_path,
   q_ww <- readxl::read_xlsx(
     xlsx_path, 
     sheet = sheet_name, 
-    range = sheet_range) 
+    range = sheet_range, 
+    .name_repair = "minimal") 
   
   q_ww <- q_ww %>% 
     tidyr::gather_(
@@ -26,8 +27,8 @@ get_foerdermengen <- function(xlsx_path,
       value_col = "Foerdermenge_m3",
       gather_cols = setdiff(names(q_ww), "Jahr")
     ) %>%
-    dplyr::rename_(year = "Jahr") %>%
-    dplyr::filter_("!is.na(Foerdermenge_m3)")
+    dplyr::rename(year = .data$Jahr) %>%
+    dplyr::filter(!is.na(.data$Foerdermenge_m3))
 
   lookup_werk <- data.frame(
     Wasserwerk = unique(q_ww$Wasserwerk),

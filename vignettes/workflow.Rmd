@@ -14,16 +14,18 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+library(dplyr)
+library(tidyr)
 ```
 
 # 1 Install R packages
 
 ```{r eval=FALSE}
-if (! require("devtools")) {
-  install.packages("devtools", repos = "https://cloud.r-project.org")
+if (! require("remotes")) {
+  install.packages("remotes", repos = "https://cloud.r-project.org")
 }
 
-devtools::install_github("kwb-r/kwb.geosalz", 
+remotes::install_github("kwb-r/kwb.geosalz", 
                          dependencies = TRUE)
 ```
 
@@ -54,7 +56,7 @@ paths <- kwb.utils::resolve(paths, root = "root_server")
 ```
 
 ```{r echo = FALSE}
-if(fs::dir_exists(paths$input_dir)) {
+if(dir.exists(paths$input_dir)) {
   knitr::opts_chunk$set(eval=TRUE, message=FALSE, echo=TRUE)
 } else {
  knitr::opts_chunk$set(eval=FALSE, message=FALSE, echo=TRUE)
@@ -261,15 +263,15 @@ labor_header4_list <- kwb.geosalz::import_labor(
 
 ```{r}
 labor_all <- labor_all %>%
-    dplyr::filter_("!is.na(DataValue)") %>%
-    dplyr::mutate_("Date" = "dplyr::if_else(condition = !is.na(Datum),
-        true = Datum,
-        false =  Probenahme)") %>%
+    dplyr::filter(!is.na(.data$DataValue)) %>%
+    dplyr::mutate(Date = dplyr::if_else(condition = !is.na(Datum),
+        true = .data$Datum,
+        false =  .data$Probenahme)) %>%
       ### Some "Datum" rentries are missing in;
       ### K-TL_LSW-Altdaten-Werke Teil 1\Werke Teil 1\Kaulsdorf\KAU_1999-Okt2003.xlsx
       ### sheets: 66 KAU Rein 1999-2000, 65 KAU NordSüd 1999-2000
-    dplyr::filter_("!is.na(Date)") %>%
-    dplyr::filter_("!is.na(VariableName_org)")
+    dplyr::filter(!is.na(.data$Date)) %>%
+    dplyr::filter(!is.na(.data$VariableName_org))
 nrow(labor_all)
 
 ```
@@ -287,9 +289,9 @@ labordaten_ww <- kwb.geosalz::add_para_metadata(
     df = labordaten_ww,
     site_path = paths$sites
   ) %>%
-    dplyr::mutate_(
-      year = "as.numeric(format(Date,format = '%Y'))",
-      DataValue = "as.numeric(DataValue)"
+    dplyr::mutate(
+      year = as.numeric(format(.data$Date,format = '%Y')),
+      DataValue = as.numeric(.data$DataValue)
     )
 nrow(labordaten_ww)
 
@@ -346,11 +348,11 @@ library(ggplot2)
       )
 
       tmp <- labordaten_ww %>%
-        dplyr::filter_(sprintf("prufgegenstand == '%s'", water_type)) %>%
-        dplyr::filter_(.dots = sprintf("para_id == %d", sel_para_id)) %>%
-        dplyr::group_by_("para_kurzname", "werk", "year") %>%
-        dplyr::summarise_(mean_DataValue = "mean(as.numeric(DataValue), na.rm=TRUE)") %>%
-        dplyr::filter_("!is.na(werk)") %>%
+        dplyr::filter(sprintf("prufgegenstand == '%s'", .data$water_type)) %>%
+        dplyr::filter(.dots = sprintf("para_id == %d", .data$sel_para_id)) %>%
+        dplyr::group_by(.data$para_kurzname, "werk", "year") %>%
+        dplyr::summarise(mean_DataValue = mean(as.numeric(.data$DataValue), na.rm=TRUE)) %>%
+        dplyr::filter(!is.na(.data$werk)) %>%
         dplyr::left_join(
           y = kwb.geosalz::get_foerdermengen(paths$foerdermengen),
           by = c("werk", "year")
@@ -382,3 +384,37 @@ library(ggplot2)
     dev.off()
   }
 ```
+
+# 7 Session Info 
+
+## Plattform
+
+```{r plattform, eval = TRUE, echo= FALSE}
+environment <- sessioninfo::session_info()  
+
+knitr::kable(tibble::enframe(unlist(environment$platform)))
+
+```
+
+## Packages
+
+```{r packages, eval = TRUE, echo= FALSE}
+
+environment$packages
+
+```
+
+### Pandoc
+
+```{r pandoc, eval = TRUE, echo= FALSE}
+
+if(rmarkdown::pandoc_available()) {
+data.frame(pandoc_directory = rmarkdown::pandoc_exec(),
+           pandoc_version = as.character(rmarkdown::pandoc_version()), 
+           stringsAsFactors = FALSE)
+} else {
+  print("No PANDOC installed!")
+}
+
+```
+

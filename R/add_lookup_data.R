@@ -12,7 +12,7 @@
 get_parameters_meta <- function(xlsx_path,
                                 sheet_name = "nur Parameterliste") {
 
-  readxl::read_excel(xlsx_path, sheet = sheet_name) %>%
+  readxl::read_excel(xlsx_path, sheet = sheet_name, .name_repair = "minimal") %>%
     janitor::clean_names()
 }
 
@@ -25,6 +25,7 @@ get_parameters_meta <- function(xlsx_path,
 #' @importFrom magrittr "%>%"
 #' @import dplyr
 #' @import crayon
+#' @importFrom rlang .data
 #' @importFrom utils write.csv read.csv
 #' @return return "df" with added parameter metadata
 #' @export
@@ -38,7 +39,7 @@ add_para_metadata <- function(df,
       file = lookup_para_path,
       stringsAsFactors = FALSE
     ) %>%
-      dplyr::filter_("!is.na(para_id)")
+      dplyr::filter(!is.na(.data$para_id))
 
     if (length(lookup_para) > 0) {
       parameters <- get_parameters_meta(parameters_path)
@@ -62,7 +63,7 @@ add_para_metadata <- function(df,
 
       labor_sel <- df %>%
         dplyr::left_join(y = lookup_para, by = "VariableName_org") %>%
-        dplyr::filter_("!is.na(para_id)")
+        dplyr::filter(!is.na(.data$para_id))
     } else {
       stop(sprintf("No parameters defined in %s", lookup_para_path))
     }
@@ -113,9 +114,10 @@ add_site_metadata <- function(df,
                               site_path) {
 
 
-  sites <- readxl::read_excel(path = site_path) %>%
+  sites <- readxl::read_excel(path = site_path, 
+                              .name_repair = "minimal") %>%
     janitor::clean_names() %>%
-    dplyr::rename_(site_id = "interne_nr")
+    dplyr::rename(site_id = .data$interne_nr)
 
   df %>%
     dplyr::left_join(y = sites, by = "site_id")
