@@ -4,7 +4,8 @@
 \alias{safe_office_folder}
 \title{Helper function: safe_office_folder}
 \usage{
-safe_office_folder(office_path = "C:/Program Files (x86)/Microsoft Office")
+
+  safe_office_folder(office_path = "C:/Program Files (x86)/Microsoft Office")
 }
 \arguments{
 \item{office_path}{office folder path (default: 

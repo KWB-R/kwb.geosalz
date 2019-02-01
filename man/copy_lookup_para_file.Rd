@@ -4,8 +4,8 @@
 \alias{copy_lookup_para_file}
 \title{Helper function: copy_lookup_para_file}
 \usage{
-copy_lookup_para_file(from_dir, to_dir, overwrite = FALSE, recursive = TRUE,
-  file_pattern = "^lookup_para\\\\.csv$")
+copy_lookup_para_file(from_dir, to_dir, overwrite = FALSE,
+  recursive = TRUE, file_pattern = "^lookup_para\\\\.csv$")
 }
 \arguments{
 \item{from_dir}{input directory with xlsx files}

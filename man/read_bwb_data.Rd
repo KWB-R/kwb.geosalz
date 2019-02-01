@@ -4,8 +4,9 @@
 \alias{read_bwb_data}
 \title{Import: read_bwb_data}
 \usage{
-read_bwb_data(files, meta_pattern = "META", keep_pattern = gather_ignore(),
-  site_id_pattern = "^[0-9]{1,4}", dbg = TRUE)
+read_bwb_data(files, meta_pattern = "META",
+  keep_pattern = gather_ignore(), site_id_pattern = "^[0-9]{1,4}",
+  dbg = TRUE)
 }
 \arguments{
 \item{files}{file path(s) to EXCEL spreadsheet}
