@@ -31,12 +31,12 @@ get_excelcnv_exe <- function(office_folder = safe_office_folder()) {
 }
 
 #' Helper function: safe_office_folder
-#' @param office_path office folder path (default: 
+#' @param office_path office folder path (default:
 #' "C:/Program Files (x86)/Microsoft Office")
 #' @return path of office folder (if existing)
 #' @importFrom kwb.utils safePath
 safe_office_folder <- function(
-  office_path = "C:/Program Files (x86)/Microsoft Office") {
+                               office_path = "C:/Program Files (x86)/Microsoft Office") {
   kwb.utils::safePath(office_path)
 }
 
@@ -46,7 +46,7 @@ safe_office_folder <- function(
 #' @param office_folder office folder path (default: \code{safe_office_folder})
 #' @param dbg debug (default: TRUE)
 #' @importFrom kwb.utils catIf
-#' 
+#'
 delete_registry <- function(office_folder = safe_office_folder(), dbg = TRUE) {
   exe_path <- get_excelcnv_exe(office_folder)
 
@@ -79,8 +79,8 @@ delete_registry <- function(office_folder = safe_office_folder(), dbg = TRUE) {
 #' @export
 #'
 convert_xls_as_xlsx <- function(input_dir,
-                                export_dir = tempdir(), 
-                                office_folder = safe_office_folder(), 
+                                export_dir = tempdir(),
+                                office_folder = safe_office_folder(),
                                 dbg = TRUE) {
   input_dir <- normalizePath(input_dir)
 
@@ -110,11 +110,11 @@ convert_xls_as_xlsx <- function(input_dir,
 
 #' Helper function: convert_xls_to_xlsx
 #'
-#' @param exe exe 
+#' @param exe exe
 #' @param xls xls
 #' @param xlsx xlsx
 #' @param i i
-#' @param n_files n_files 
+#' @param n_files n_files
 #' @param dbg debug (default: TRUE)
 #' @importFrom kwb.utils catIf
 
@@ -133,50 +133,50 @@ convert_xls_to_xlsx <- function(exe, xls, xlsx, i, n_files, dbg = TRUE) {
 ### Uncomment functions created just for testing DRAKE
 ###############################################################################
 
-# get_file_paths_with_pattern <- function(input_dir, 
+# get_file_paths_with_pattern <- function(input_dir,
 #                       pattern = "\\.([xX][lL][sS])$") {
 #   input_dir <- normalizePath(input_dir)
-#   
-# 
-#   
+#
+#
+#
 #   normalizePath(dir(
 #     input_dir, pattern,
 #     recursive = TRUE, full.names = TRUE
 #   ))
-#   
-#   
+#
+#
 # }
 
 
 # get_xls_file_paths <- function(input_dir, pattern = "\\.([xX][lL][sS])$") {
 #   get_file_paths_with_pattern(input_dir, pattern)
 # }
-# 
+#
 # get_xlsx_file_paths <- function(input_dir, pattern = "\\.([xX][lL][sS][xX])$") {
 #   get_file_paths_with_pattern(input_dir, pattern)
 # }
-# 
+#
 # convert_xls_as_xlsx2 <- function(xls_paths,
 #   input_dir,
-#   export_dir, 
-#   office_folder = safe_office_folder(), 
+#   export_dir,
+#   office_folder = safe_office_folder(),
 #   dbg = TRUE) {
 #   input_dir <- normalizePath(input_dir)
-#   
+#
 #   export_dir <- normalizePath(export_dir)
-#   
-#   
+#
+#
 #   xlsx <- gsub(input_dir, export_dir, xls_paths, fixed = TRUE)
-#   
+#
 #   xlsx <- gsub("\\.([xX][lL][sS])$", ".xlsx", xlsx)
-#   
+#
 #   fs::dir_create(path = normalizePath(dirname(xlsx)), recursive = TRUE)
-#   
+#
 #   exe <- normalizePath(get_excelcnv_exe(office_folder))
-#   
+#
 #   for (i in seq_along(xls_paths)) {
 #     convert_xls_to_xlsx(exe, xls_paths[i], xlsx[i], i, length(xls_paths), dbg = dbg)
-#     
+#
 #     delete_registry(office_folder, dbg = dbg)
 #   }
 # }

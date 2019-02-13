@@ -4,16 +4,16 @@
 #' @param to_dir target directory where to copy the xlsx files
 #' @param overwrite should existing files be overwritten (TRUE) otherwise (FALSE)
 #' ? (default: FALSE)
-#' @param recursive if TRUE recursively find all xlsx files in the directory 
+#' @param recursive if TRUE recursively find all xlsx files in the directory
 #' specified in parameter "from_dir" (default: TRUE)
-#' @param file_pattern pattern for identifying lookup_para file 
+#' @param file_pattern pattern for identifying lookup_para file
 #' (default: "^lookup_para\\.csv$")
 #' @importFrom fs dir_create
 #' @importFrom fs file_copy
 #' @export
-copy_lookup_para_file <- function(from_dir, 
-                                  to_dir, 
-                                  overwrite = FALSE, 
+copy_lookup_para_file <- function(from_dir,
+                                  to_dir,
+                                  overwrite = FALSE,
                                   recursive = TRUE,
                                   file_pattern = "^lookup_para\\.csv$") {
   from_dir <- normalizePath(from_dir)

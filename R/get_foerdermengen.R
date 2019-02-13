@@ -12,16 +12,16 @@
 #' @import dplyr
 #' @export
 get_foerdermengen <- function(xlsx_path,
-                              sheet_name =  "WW Q Rhow ",
+                              sheet_name = "WW Q Rhow ",
                               sheet_range = "A4:S127") {
-
   q_ww <- readxl::read_xlsx(
-    xlsx_path, 
-    sheet = sheet_name, 
-    range = sheet_range) %>% 
+    xlsx_path,
+    sheet = sheet_name,
+    range = sheet_range
+  ) %>%
     dplyr::select(-dplyr::starts_with(".."))
-  
-  q_ww <- q_ww %>% 
+
+  q_ww <- q_ww %>%
     tidyr::gather_(
       key_col = "Wasserwerk",
       value_col = "Foerdermenge_m3",

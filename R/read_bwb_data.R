@@ -1,6 +1,6 @@
 #' Helper function: get_site_id
 #'
-#' @param string vector with character strings 
+#' @param string vector with character strings
 #' @param pattern pattern used for identifying site_id (default: "^[0-9]{1,4}")
 #' @return extracted site_id`s from input string
 #' @importFrom stringr str_extract
@@ -10,39 +10,39 @@ get_site_id <- function(string, pattern = "^[0-9]{1,4}") {
 }
 
 #' Helper function: gather_ignore
-#' 
+#'
 #' @param fields column names to be ignored for gathering (default: c(
-#'"Datum", "KN", "[iI]nterne Nr.", "Name der", "Ort", "Probe", "Pr\\u00FC",
-#'"Untersuchung", "Labor", "Jahr", "Galer", "Detail", "Me\\u00DF", "Zeit",
-#'"Bezei", "Monat")
-#' @return vector with ignored columns for gathering 
+#' "Datum", "KN", "[iI]nterne Nr.", "Name der", "Ort", "Probe", "Pr\\u00FC",
+#' "Untersuchung", "Labor", "Jahr", "Galer", "Detail", "Me\\u00DF", "Zeit",
+#' "Bezei", "Monat")
+#' @return vector with ignored columns for gathering
 #' @importFrom kwb.utils collapsed
 #' @export
-#' 
+#'
 gather_ignore <- function(
-  fields = c("Datum", "KN", "[iI]nterne Nr.", "Name der", "Ort", "Probe", 
-"Pr\u00FC","Untersuchung", "Labor", "Jahr", "Galer", "Detail", 
-"Me\u00DF", "Zeit", "Bezei", "Monat") ) {
-  
-
+                          fields = c(
+                            "Datum", "KN", "[iI]nterne Nr.", "Name der", "Ort", "Probe",
+                            "Pr\u00FC", "Untersuchung", "Labor", "Jahr", "Galer", "Detail",
+                            "Me\u00DF", "Zeit", "Bezei", "Monat"
+                          )) {
   kwb.utils::collapsed(fields, "|")
 }
 
 
 
 #' Helper function: gather_ignore_clean
-#' 
-#' @param fields column names to be ignored for gathering (default: 
+#'
+#' @param fields column names to be ignored for gathering (default:
 #' c("LabSampleCode", "Date", "Time", "Waterbody", "ExSiteCode", Site")
-#' @return vector with ignored columns for gathering 
+#' @return vector with ignored columns for gathering
 #' @importFrom kwb.utils collapsed
 #' @export
-#' 
+#'
 gather_ignore_clean <- function(
-  fields = c(
-  "LabSampleCode", "Date", "Time", "Waterbody", "ExSiteCode",
-  "Site")) {
-
+                                fields = c(
+                                  "LabSampleCode", "Date", "Time", "Waterbody", "ExSiteCode",
+                                  "Site"
+                                )) {
   kwb.utils::collapsed(fields, "|")
 }
 
@@ -59,10 +59,10 @@ gather_ignore_clean <- function(
 #' @importFrom stringr str_detect
 #' @importFrom data.table rbindlist
 #' @export
-#' 
+#'
 read_bwb_header1_meta <- function(
-   file, meta_pattern = "META", keep_pattern = gather_ignore(),
-   dbg = FALSE) {
+                                  file, meta_pattern = "META", keep_pattern = gather_ignore(),
+                                  dbg = FALSE) {
   # Get the names of the sheets in the Excel workbook
   sheets <- readxl::excel_sheets(file)
 
@@ -135,7 +135,7 @@ get_meta_sheet_or_stop <- function(sheets, pattern, file) {
 #'
 #' @param fmt fmt
 #' @param ... arguments passed to fmt
-#' @return calls stop with fmt and additional arguments defined in ... 
+#' @return calls stop with fmt and additional arguments defined in ...
 
 stop_formatted <- function(fmt, ...) {
   stop(sprintf(fmt, ...), call. = FALSE)
@@ -163,7 +163,7 @@ read_bwb_header2 <- function(
   # Define helper functions, 2^20 = max number of rows in xlsx
   read_from_excel <- function(...) {
     readxl::read_excel(..., col_names = FALSE, guess_max = 2^20)
-}
+  }
   sheets <- readxl::excel_sheets(file)
 
   has_site_id <- stringr::str_detect(sheets, site_id_pattern)
@@ -181,7 +181,7 @@ read_bwb_header2 <- function(
     # Read the header rows
     stopifnot(skip == 2) # Otherwise we need more column names!
     header <- read_from_excel(file, sheet,
-      range = cellranger::cell_rows(c(1, skip)), 
+      range = cellranger::cell_rows(c(1, skip)),
     )
     header <- to_full_metadata_2(header, file, sheet)
 
@@ -291,7 +291,7 @@ read_bwb_header4 <- function(
 
 
 stop_on_missing_or_inform_on_extra_sheets <- function(
-  has_site_id, file, sheets) {
+                                                      has_site_id, file, sheets) {
   if (!any(has_site_id)) {
     stop_formatted(
       paste0(
@@ -320,7 +320,7 @@ stop_on_missing_or_inform_on_extra_sheets <- function(
 #' @param file file
 #' @param sheet sheet
 #' @return data frame with metadata for header2 (EXCEL) files
-#' 
+#'
 to_full_metadata_2 <- function(header, file, sheet) {
   # Start a metadata table with the Variable name and unit
   header <- as.data.frame(t(header),
@@ -345,7 +345,7 @@ to_full_metadata_2 <- function(header, file, sheet) {
 #' @param file file
 #' @param sheet sheet
 #' @return data frame with metadata for header4 (EXCEL) files
-#' 
+#'
 to_full_metadata_4 <- function(header, file, sheet) {
   # Start a metadata table with the Variable name and unit
   header <- as.data.frame(t(header),
@@ -367,7 +367,7 @@ to_full_metadata_4 <- function(header, file, sheet) {
 #' Helper function: print_datatype_info_if
 #'
 #' @param dbg dbg
-#' @param tbl_datatypes tbl_datatypes 
+#' @param tbl_datatypes tbl_datatypes
 #' @param columns_keep columns_keep
 #' @importFrom kwb.utils stringList
 #' @importFrom stringr str_c
@@ -403,15 +403,14 @@ cat_green_bold_0 <- function(...) {
 #'
 #' @param tmp_data tmp_data
 #' @param columns_keep columns_keep
-#' @param metadata metadata 
-#' @param dbg dbg (default: FALSE) 
+#' @param metadata metadata
+#' @param dbg dbg (default: FALSE)
 #' @importFrom kwb.utils printIf
 #' @importFrom tidyr gather_
 #' @importFrom dplyr left_join
 #' @return gathered and joined data frame
 
 gather_and_join_1 <- function(tmp_data, columns_keep, metadata, dbg = FALSE) {
-
   kwb.utils::printIf(dbg, names(tmp_data))
   kwb.utils::printIf(dbg, columns_keep)
 
@@ -442,14 +441,14 @@ gather_and_join_2 <- function(tmp_content, columns_keep, header) {
 
 
 #' Import: read_bwb_data
-#' @description wrapper around \code{read_bwb_header2} and 
+#' @description wrapper around \code{read_bwb_header2} and
 #' \code{read_bwb_header1_meta}
 #' @param files file path(s) to EXCEL spreadsheet
 #' @param meta_pattern (default: "META")
 #' @param keep_pattern  (default: \code{gather_ignore})
 #' @param site_id_pattern (default: "^[0-9]{1,4}")
 #' @param dbg debug (default: TRUE)
-#' @return data.table with imported xls(x) files 
+#' @return data.table with imported xls(x) files
 #' @importFrom readxl excel_sheets
 #' @importFrom stringr str_detect
 #' @importFrom data.table rbindlist
@@ -510,7 +509,7 @@ cat_red_bold_0 <- function(...) {
 #' @param func function to be used (default: \code{read_bwb_header2})
 #' @return list with length equal to number of input files
 #' @importFrom stats setNames
-#' @importFrom utils capture.output str 
+#' @importFrom utils capture.output str
 #' @export
 
 import_labor <- function(files, export_dir, func = read_bwb_header2) {
@@ -518,15 +517,15 @@ import_labor <- function(files, export_dir, func = read_bwb_header2) {
 
   labor <- stats::setNames(lapply(files, try_func_on_file), basename(files))
 
-#   if(capture_output) {    
-#   func_txt <- gsub("::|:::", "_", as.character(substitute(func)))
-# 
-#  file_name <- sprintf("%s_structure.txt", func_txt)
-# 
-#  file <- file.path(export_dir, file_name, fsep = "/")
-# 
-#  utils::capture.output(utils::str(labor, nchar.max = 254, list.len = 10000), file = file)
-# }
-#   
+  #   if(capture_output) {
+  #   func_txt <- gsub("::|:::", "_", as.character(substitute(func)))
+  #
+  #  file_name <- sprintf("%s_structure.txt", func_txt)
+  #
+  #  file <- file.path(export_dir, file_name, fsep = "/")
+  #
+  #  utils::capture.output(utils::str(labor, nchar.max = 254, list.len = 10000), file = file)
+  # }
+  #
   labor
 }

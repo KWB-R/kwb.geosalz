@@ -4,7 +4,7 @@
 #' @param to_dir target directory where to copy the xlsx files
 #' @param overwrite should existing files be overwritten (TRUE) otherwise (FALSE)
 #' ? (default: FALSE)
-#' @param recursive if TRUE recursively find all xlsx files in the directory 
+#' @param recursive if TRUE recursively find all xlsx files in the directory
 #' specified in parameter "from_dir" (default: TRUE)
 #' @param file_pattern pattern for identifying xlsx fles (default: "[xX][lL][sS][xX]")
 #' @importFrom fs dir_create

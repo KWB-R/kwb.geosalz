@@ -1,17 +1,16 @@
 #' get_parameters_meta
 #'
 #' @param xlsx_path  path to EXCEL spreadsheet with parameter metadata
-#' @param sheet_name name of sheet containing metadata table 
+#' @param sheet_name name of sheet containing metadata table
 #' (default: "nur Parameterliste")
 #' @return imported parameter metadata with cleaned columns names
 #' @export
 #' @importFrom magrittr "%>%"
 #' @importFrom readxl read_excel
 #' @importFrom janitor clean_names
-#' 
+#'
 get_parameters_meta <- function(xlsx_path,
                                 sheet_name = "nur Parameterliste") {
-
   readxl::read_excel(xlsx_path, sheet = sheet_name) %>%
     janitor::clean_names()
 }
@@ -19,7 +18,7 @@ get_parameters_meta <- function(xlsx_path,
 
 #' add_para_metadata
 #'
-#' @param df df 
+#' @param df df
 #' @param lookup_para_path lookup_para_path
 #' @param parameters_path parameters_path
 #' @importFrom magrittr "%>%"
@@ -33,7 +32,6 @@ get_parameters_meta <- function(xlsx_path,
 add_para_metadata <- function(df,
                               lookup_para_path,
                               parameters_path) {
-
   if (file.exists(lookup_para_path)) {
     lookup_para <- read.csv(
       file = lookup_para_path,
@@ -100,10 +98,10 @@ add_para_metadata <- function(df,
   return(labor_sel)
 }
 
-#' add_site_metadata 
+#' add_site_metadata
 #'
-#' @param df df 
-#' @param site_path site_path 
+#' @param df df
+#' @param site_path site_path
 #'
 #' @return data frame with added site metadata
 #' @importFrom magrittr "%>%"
@@ -112,10 +110,10 @@ add_para_metadata <- function(df,
 #' @export
 add_site_metadata <- function(df,
                               site_path) {
-
-
-  sites <- readxl::read_excel(path = site_path, 
-                              .name_repair = "minimal") %>%
+  sites <- readxl::read_excel(
+    path = site_path,
+    .name_repair = "minimal"
+  ) %>%
     janitor::clean_names() %>%
     dplyr::rename(site_id = .data$interne_nr)
 
