@@ -113,21 +113,22 @@
 <a class="sourceLine" id="cb2-3" data-line-number="3">  <span class="dt">servername =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Sys.getenv">Sys.getenv</a></span>(<span class="st">"servername"</span>),</a>
 <a class="sourceLine" id="cb2-4" data-line-number="4">  <span class="dt">root_server =</span> <span class="st">"//&lt;servername&gt;/processing"</span>,</a>
 <a class="sourceLine" id="cb2-5" data-line-number="5">  <span class="dt">project =</span> <span class="st">"geosalz"</span>,</a>
-<a class="sourceLine" id="cb2-6" data-line-number="6">  <span class="dt">processing =</span> <span class="st">"&lt;root&gt;/&lt;project&gt;"</span>,</a>
-<a class="sourceLine" id="cb2-7" data-line-number="7">  <span class="dt">input_dir =</span> <span class="st">"&lt;processing&gt;/precleaned-data/v0.2"</span>,</a>
-<a class="sourceLine" id="cb2-8" data-line-number="8">  <span class="dt">input_dir_meta =</span> <span class="st">"&lt;input_dir&gt;/META"</span>,</a>
-<a class="sourceLine" id="cb2-9" data-line-number="9">  <span class="dt">export_dir =</span> <span class="st">"&lt;processing&gt;/precleaned-data/v0.3"</span>,</a>
-<a class="sourceLine" id="cb2-10" data-line-number="10">  <span class="dt">export_dir_meta =</span> <span class="st">"&lt;export_dir&gt;/META"</span>,</a>
-<a class="sourceLine" id="cb2-11" data-line-number="11">  <span class="dt">cleaned_data_dir =</span> <span class="st">"&lt;processing&gt;/cleaned-data"</span>,</a>
-<a class="sourceLine" id="cb2-12" data-line-number="12">  <span class="dt">figures_dir =</span> <span class="st">"&lt;processing&gt;/figures"</span>,</a>
-<a class="sourceLine" id="cb2-13" data-line-number="13">  <span class="dt">foerdermengen =</span> <span class="st">"&lt;export_dir&gt;/2018-04-27 Rohwasser Bericht - Galeriefördermengen.xlsx"</span>,</a>
-<a class="sourceLine" id="cb2-14" data-line-number="14">  <span class="dt">parameters =</span> <span class="st">"&lt;export_dir_meta&gt;/2018-06-01 Lab Parameter.xlsx"</span>,</a>
-<a class="sourceLine" id="cb2-15" data-line-number="15">  <span class="dt">lookup_para =</span> <span class="st">"&lt;export_dir_meta&gt;/lookup_para.csv"</span>,</a>
-<a class="sourceLine" id="cb2-16" data-line-number="16">  <span class="dt">sites =</span> <span class="st">"&lt;export_dir_meta&gt;/Info-Altdaten.xlsx"</span></a>
-<a class="sourceLine" id="cb2-17" data-line-number="17">)</a>
-<a class="sourceLine" id="cb2-18" data-line-number="18"></a>
-<a class="sourceLine" id="cb2-19" data-line-number="19">paths &lt;-<span class="st"> </span>kwb.utils<span class="op">::</span><span class="kw">resolve</span>(paths, <span class="dt">root =</span> <span class="st">"root_server"</span>)</a>
-<a class="sourceLine" id="cb2-20" data-line-number="20"><span class="co">#paths &lt;- kwb.utils::resolve(paths, root = "C:/projects")</span></a></code></pre></div>
+<a class="sourceLine" id="cb2-6" data-line-number="6">  <span class="dt">task =</span> <span class="st">"labor"</span>,</a>
+<a class="sourceLine" id="cb2-7" data-line-number="7">  <span class="dt">processing =</span> <span class="st">"&lt;root&gt;/&lt;project&gt;/&lt;task&gt;"</span>,</a>
+<a class="sourceLine" id="cb2-8" data-line-number="8">  <span class="dt">input_dir =</span> <span class="st">"&lt;processing&gt;/precleaned-data/v0.2"</span>,</a>
+<a class="sourceLine" id="cb2-9" data-line-number="9">  <span class="dt">input_dir_meta =</span> <span class="st">"&lt;input_dir&gt;/META"</span>,</a>
+<a class="sourceLine" id="cb2-10" data-line-number="10">  <span class="dt">export_dir =</span> <span class="st">"&lt;processing&gt;/precleaned-data/v0.3"</span>,</a>
+<a class="sourceLine" id="cb2-11" data-line-number="11">  <span class="dt">export_dir_meta =</span> <span class="st">"&lt;export_dir&gt;/META"</span>,</a>
+<a class="sourceLine" id="cb2-12" data-line-number="12">  <span class="dt">cleaned_data_dir =</span> <span class="st">"&lt;processing&gt;/cleaned-data"</span>,</a>
+<a class="sourceLine" id="cb2-13" data-line-number="13">  <span class="dt">figures_dir =</span> <span class="st">"&lt;processing&gt;/figures"</span>,</a>
+<a class="sourceLine" id="cb2-14" data-line-number="14">  <span class="dt">foerdermengen =</span> <span class="st">"&lt;export_dir&gt;/2018-04-27 Rohwasser Bericht - Galeriefördermengen.xlsx"</span>,</a>
+<a class="sourceLine" id="cb2-15" data-line-number="15">  <span class="dt">parameters =</span> <span class="st">"&lt;export_dir_meta&gt;/2018-06-01 Lab Parameter.xlsx"</span>,</a>
+<a class="sourceLine" id="cb2-16" data-line-number="16">  <span class="dt">lookup_para =</span> <span class="st">"&lt;export_dir_meta&gt;/lookup_para.csv"</span>,</a>
+<a class="sourceLine" id="cb2-17" data-line-number="17">  <span class="dt">sites =</span> <span class="st">"&lt;export_dir_meta&gt;/Info-Altdaten.xlsx"</span></a>
+<a class="sourceLine" id="cb2-18" data-line-number="18">)</a>
+<a class="sourceLine" id="cb2-19" data-line-number="19"></a>
+<a class="sourceLine" id="cb2-20" data-line-number="20">paths &lt;-<span class="st"> </span>kwb.utils<span class="op">::</span><span class="kw">resolve</span>(paths, <span class="dt">root =</span> <span class="st">"root_server"</span>)</a>
+<a class="sourceLine" id="cb2-21" data-line-number="21"><span class="co">#paths &lt;- kwb.utils::resolve(paths, root = "C:/projects")</span></a></code></pre></div>
 </div>
 <div id="check-input-directory" class="section level2">
 <h2 class="hasAnchor">
@@ -307,7 +308,7 @@
 <a href="#filtering" class="anchor"></a>4.2 Filtering</h2>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">labor_all &lt;-<span class="st"> </span>labor_all <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb12-2" data-line-number="2"><span class="st">    </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/NA">is.na</a></span>(.data<span class="op">$</span>DataValue)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="st">    </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">Date =</span> dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span>(<span class="dt">condition =</span> <span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/NA">is.na</a></span>(Datum),</a>
+<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="st">    </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">Date =</span> dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span>(<span class="dt">condition =</span> <span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/NA">is.na</a></span>(.data<span class="op">$</span>Datum),</a>
 <a class="sourceLine" id="cb12-4" data-line-number="4">        <span class="dt">true =</span> .data<span class="op">$</span>Datum,</a>
 <a class="sourceLine" id="cb12-5" data-line-number="5">        <span class="dt">false =</span>  .data<span class="op">$</span>Probenahme)) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb12-6" data-line-number="6"><span class="st">      </span>### Some "Datum" rentries are missing in;</a>
@@ -386,9 +387,9 @@
 <a class="sourceLine" id="cb15-27" data-line-number="27">      )</a>
 <a class="sourceLine" id="cb15-28" data-line-number="28"></a>
 <a class="sourceLine" id="cb15-29" data-line-number="29">      tmp &lt;-<span class="st"> </span>labordaten_ww <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb15-30" data-line-number="30"><span class="st">        </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sprintf">sprintf</a></span>(<span class="st">"prufgegenstand == '%s'"</span>, .data<span class="op">$</span>water_type)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb15-31" data-line-number="31"><span class="st">        </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="dt">.dots =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sprintf">sprintf</a></span>(<span class="st">"para_id == %d"</span>, .data<span class="op">$</span>sel_para_id)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb15-32" data-line-number="32"><span class="st">        </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(.data<span class="op">$</span>para_kurzname, <span class="st">"werk"</span>, <span class="st">"year"</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb15-30" data-line-number="30"><span class="st">        </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(prufgegenstand <span class="op">==</span><span class="st"> </span>water_type) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb15-31" data-line-number="31"><span class="st">        </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(para_id <span class="op">==</span><span class="st"> </span>sel_para_id) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb15-32" data-line-number="32"><span class="st">        </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(.data<span class="op">$</span>para_kurzname, .data<span class="op">$</span>werk, .data<span class="op">$</span>year) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb15-33" data-line-number="33"><span class="st">        </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span>(<span class="dt">mean_DataValue =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/numeric">as.numeric</a></span>(.data<span class="op">$</span>DataValue), <span class="dt">na.rm=</span><span class="ot">TRUE</span>)) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb15-34" data-line-number="34"><span class="st">        </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/NA">is.na</a></span>(.data<span class="op">$</span>werk)) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb15-35" data-line-number="35"><span class="st">        </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/join.html">left_join</a></span>(</a>
