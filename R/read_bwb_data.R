@@ -12,8 +12,8 @@ get_site_id <- function(string, pattern = "^[0-9]{1,4}") {
 #' Helper function: gather_ignore
 #' 
 #' @param fields column names to be ignored for gathering (default: c(
-#'"Datum", "KN", "[iI]nterne Nr.", "Name der", "Ort", "Probe", "Pr\\u00fcf",
-#'"Untersuchung", "Labor", "Jahr", "Galer", "Detail", "Me\\u00DF", "Zeit",
+#'"Datum", "KN", "[iI]nterne Nr.", "Name der", "Ort", "Probe", "Prüf",
+#'"Untersuchung", "Labor", "Jahr", "Galer", "Detail", "Meß", "Zeit",
 #'"Bezei", "Monat")
 #' @return vector with ignored columns for gathering 
 #' @importFrom kwb.utils collapsed
@@ -21,8 +21,8 @@ get_site_id <- function(string, pattern = "^[0-9]{1,4}") {
 #' 
 gather_ignore <- function(
   fields = c("Datum", "KN", "[iI]nterne Nr.", "Name der", "Ort", "Probe", 
-"Pr\\u00fcf","Untersuchung", "Labor", "Jahr", "Galer", "Detail", 
-"Me\\u00DF", "Zeit", "Bezei", "Monat") ) {
+"Prüf","Untersuchung", "Labor", "Jahr", "Galer", "Detail", 
+"Meß", "Zeit", "Bezei", "Monat") ) {
   
 
   kwb.utils::collapsed(fields, "|")
@@ -70,7 +70,7 @@ read_bwb_header1_meta <- function(
   meta_sheet <- get_meta_sheet_or_stop(sheets, meta_pattern, file)
 
   # Read the metadata sheet
-  all_metadata <- readxl::read_excel(file, meta_sheet, .name_repair = "minimal")
+  all_metadata <- readxl::read_excel(file, meta_sheet)
 
   # Get the names of the sheets for which metadata are available
   described_sheets <- unique(kwb.utils::selectColumns(all_metadata, "Sheet"))
@@ -84,8 +84,7 @@ read_bwb_header1_meta <- function(
     metadata$sheet_name <- sheet
 
     # Load the data from the current sheet
-    tmp_data <- readxl::read_excel(file, sheet, guess_max = 2^20, 
-                                   .name_repair = "minimal")
+    tmp_data <- readxl::read_excel(file, sheet, guess_max = 2^20)
 
     # Safely select the original column names
     columns_orig <- kwb.utils::selectColumns(metadata, "OriginalName")
@@ -163,8 +162,7 @@ read_bwb_header2 <- function(
                              site_id_pattern = "^[0-9]{1,4}", dbg = TRUE) {
   # Define helper functions, 2^20 = max number of rows in xlsx
   read_from_excel <- function(...) {
-    readxl::read_excel(..., col_names = FALSE, guess_max = 2^20, 
-                       .name_repair = "minimal")
+    readxl::read_excel(..., col_names = FALSE, guess_max = 2^20)
 }
   sheets <- readxl::excel_sheets(file)
 
@@ -233,8 +231,7 @@ read_bwb_header4 <- function(
                              site_id_pattern = "^[0-9]{1,4}", dbg = TRUE) {
   # Define helper functions
   read_from_excel <- function(...) {
-    readxl::read_xlsx(..., col_names = FALSE, guess_max = 2^20, 
-                      .name_repair = "minimal")
+    readxl::read_xlsx(..., col_names = FALSE, guess_max = 2^20)
   }
 
   sheets <- readxl::excel_sheets(file)

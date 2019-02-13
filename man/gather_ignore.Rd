@@ -5,13 +5,13 @@
 \title{Helper function: gather_ignore}
 \usage{
 gather_ignore(fields = c("Datum", "KN", "[iI]nterne Nr.", "Name der",
-  "Ort", "Probe", "Pr\\\\u00fcf", "Untersuchung", "Labor", "Jahr", "Galer",
-  "Detail", "Me\\\\u00DF", "Zeit", "Bezei", "Monat"))
+  "Ort", "Probe", "Prüf", "Untersuchung", "Labor", "Jahr", "Galer",
+  "Detail", "Meß", "Zeit", "Bezei", "Monat"))
 }
 \arguments{
 \item{fields}{column names to be ignored for gathering (default: c(
-"Datum", "KN", "[iI]nterne Nr.", "Name der", "Ort", "Probe", "Pr\\u00fcf",
-"Untersuchung", "Labor", "Jahr", "Galer", "Detail", "Me\\u00DF", "Zeit",
+"Datum", "KN", "[iI]nterne Nr.", "Name der", "Ort", "Probe", "Prüf",
+"Untersuchung", "Labor", "Jahr", "Galer", "Detail", "Meß", "Zeit",
 "Bezei", "Monat")}
 }
 \value{

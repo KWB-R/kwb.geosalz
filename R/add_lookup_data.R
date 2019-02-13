@@ -12,7 +12,7 @@
 get_parameters_meta <- function(xlsx_path,
                                 sheet_name = "nur Parameterliste") {
 
-  readxl::read_excel(xlsx_path, sheet = sheet_name, .name_repair = "minimal") %>%
+  readxl::read_excel(xlsx_path, sheet = sheet_name) %>%
     janitor::clean_names()
 }
 

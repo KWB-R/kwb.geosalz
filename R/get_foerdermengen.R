@@ -18,8 +18,8 @@ get_foerdermengen <- function(xlsx_path,
   q_ww <- readxl::read_xlsx(
     xlsx_path, 
     sheet = sheet_name, 
-    range = sheet_range, 
-    .name_repair = "minimal") 
+    range = sheet_range) %>% 
+    dplyr::select(-dplyr::starts_with(".."))
   
   q_ww <- q_ww %>% 
     tidyr::gather_(

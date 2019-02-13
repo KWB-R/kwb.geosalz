@@ -39,7 +39,8 @@ paths <- list(
   servername = Sys.getenv("servername"),
   root_server = "//<servername>/processing",
   project = "geosalz",
-  processing = "<root>/<project>",
+  task = "labor",
+  processing = "<root>/<project>/<task>",
   input_dir = "<processing>/precleaned-data/v0.2",
   input_dir_meta = "<input_dir>/META",
   export_dir = "<processing>/precleaned-data/v0.3",
@@ -265,7 +266,7 @@ labor_header4_list <- kwb.geosalz::import_labor(
 ```{r}
 labor_all <- labor_all %>%
     dplyr::filter(!is.na(.data$DataValue)) %>%
-    dplyr::mutate(Date = dplyr::if_else(condition = !is.na(Datum),
+    dplyr::mutate(Date = dplyr::if_else(condition = !is.na(.data$Datum),
         true = .data$Datum,
         false =  .data$Probenahme)) %>%
       ### Some "Datum" rentries are missing in;
@@ -349,9 +350,9 @@ library(ggplot2)
       )
 
       tmp <- labordaten_ww %>%
-        dplyr::filter(sprintf("prufgegenstand == '%s'", .data$water_type)) %>%
-        dplyr::filter(.dots = sprintf("para_id == %d", .data$sel_para_id)) %>%
-        dplyr::group_by(.data$para_kurzname, "werk", "year") %>%
+        dplyr::filter(prufgegenstand == water_type) %>%
+        dplyr::filter(para_id == sel_para_id) %>%
+        dplyr::group_by(.data$para_kurzname, .data$werk, .data$year) %>%
         dplyr::summarise(mean_DataValue = mean(as.numeric(.data$DataValue), na.rm=TRUE)) %>%
         dplyr::filter(!is.na(.data$werk)) %>%
         dplyr::left_join(
