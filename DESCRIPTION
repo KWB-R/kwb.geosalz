@@ -1,5 +1,5 @@
 Package: kwb.geosalz
-Version: 0.1.0.9000
+Version: 0.0.0.9000
 Title: R Package for Documenting Workflow Used in Project "geosalz"
 Description: R Package for Documenting Workflow Used in Project "geosalz".
 Authors@R: c(person("Michael", "Rustler", , "michael.rustler@kompetenz-wasser.de",
