@@ -3,6 +3,7 @@
 [![codecov](https://codecov.io/github/KWB-R/kwb.geosalz/branch/master/graphs/badge.svg)](https://codecov.io/github/KWB-R/kwb.geosalz)
 [![Project Status](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/kwb.geosalz)]()
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.2563870.svg)](https://doi.org/10.5281/zenodo.2563870)
 
 # kwb.geosalz
 
