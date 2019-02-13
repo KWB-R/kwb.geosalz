@@ -36,7 +36,8 @@ remotes::install_github("kwb-r/kwb.geosalz",
 ```{r eval=TRUE, echo = TRUE}
 # Define paths and resolve placeholders
 paths <- list(
-  root_server = "//medusa/processing",
+  servername = Sys.getenv("servername"),
+  root_server = "//<servername>/processing",
   project = "geosalz",
   processing = "<root>/<project>",
   input_dir = "<processing>/precleaned-data/v0.2",
