@@ -1,5 +1,5 @@
-[![Appveyor build Status](https://ci.appveyor.com/api/projects/status/github/KWB-R/kwb.geosalz?branch=master&svg=true)](https://ci.appveyor.com/project/KWB-R/kwb-geosalz/branch/master)
-[![Travis build Status](https://travis-ci.org/KWB-R/kwb.geosalz.svg?branch=master)](https://travis-ci.org/KWB-R/kwb.geosalz)
+[![R-CMD-check](https://github.com/KWB-R/kwb.geosalz/workflows/R-CMD-check/badge.svg)](https://github.com/KWB-R/kwb.geosalz/actions?query=workflow%3AR-CMD-check)
+[![pkgdown](https://github.com/KWB-R/kwb.geosalz/workflows/pkgdown/badge.svg)](https://github.com/KWB-R/kwb.geosalz/actions?query=workflow%3Apkgdown)
 [![codecov](https://codecov.io/github/KWB-R/kwb.geosalz/branch/master/graphs/badge.svg)](https://codecov.io/github/KWB-R/kwb.geosalz)
 [![Project Status](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/kwb.geosalz)]()
