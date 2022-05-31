@@ -1,7 +1,7 @@
 Package: kwb.geosalz
 Title: R Package for Documenting Workflow Used in Project
     "geosalz"
-Version: 0.1.0
+Version: 0.1.0.9000
 Authors@R: 
     c(person(given = "Michael",
              family = "Rustler",
