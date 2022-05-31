@@ -13,6 +13,7 @@ Authors@R:
              role = "ctb",
              email = "hauke.sonnenberg@kompetenz-wasser.de",
              comment = c(ORCID = "0000-0001-9134-2871")),
+      person("GeoSalz", role = "fnd"),
       person(given = "Kompetenzzentrum Wasser Berlin gGmbH (KWB)",
              role = "cph"))
 Description: R Package for Documenting Workflow Used in Project
