@@ -4,6 +4,7 @@
 [![Project Status](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/kwb.geosalz)]()
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.2563870.svg)](https://doi.org/10.5281/zenodo.2563870)
+[![R-Universe_Status_Badge](https://kwb-r.r-universe.dev/badges/kwb.geosalz)](https://kwb-r.r-universe.dev/)
 
 # kwb.geosalz
 
