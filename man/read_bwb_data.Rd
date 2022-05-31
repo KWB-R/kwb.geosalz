@@ -4,9 +4,13 @@
 \alias{read_bwb_data}
 \title{Import: read_bwb_data}
 \usage{
-read_bwb_data(files, meta_pattern = "META",
-  keep_pattern = gather_ignore(), site_id_pattern = "^[0-9]{1,4}",
-  dbg = TRUE)
+read_bwb_data(
+  files,
+  meta_pattern = "META",
+  keep_pattern = gather_ignore(),
+  site_id_pattern = "^[0-9]{1,4}",
+  dbg = TRUE
+)
 }
 \arguments{
 \item{files}{file path(s) to EXCEL spreadsheet}
@@ -23,6 +27,6 @@ read_bwb_data(files, meta_pattern = "META",
 data.table with imported xls(x) files
 }
 \description{
-wrapper around \code{read_bwb_header2} and 
+wrapper around \code{read_bwb_header2} and
 \code{read_bwb_header1_meta}
 }

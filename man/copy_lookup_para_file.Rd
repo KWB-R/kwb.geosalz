@@ -4,8 +4,13 @@
 \alias{copy_lookup_para_file}
 \title{Helper function: copy_lookup_para_file}
 \usage{
-copy_lookup_para_file(from_dir, to_dir, overwrite = FALSE,
-  recursive = TRUE, file_pattern = "^lookup_para\\\\.csv$")
+copy_lookup_para_file(
+  from_dir,
+  to_dir,
+  overwrite = FALSE,
+  recursive = TRUE,
+  file_pattern = "^lookup_para\\\\.csv$"
+)
 }
 \arguments{
 \item{from_dir}{input directory with xlsx files}
@@ -15,10 +20,10 @@ copy_lookup_para_file(from_dir, to_dir, overwrite = FALSE,
 \item{overwrite}{should existing files be overwritten (TRUE) otherwise (FALSE)
 ? (default: FALSE)}
 
-\item{recursive}{if TRUE recursively find all xlsx files in the directory 
+\item{recursive}{if TRUE recursively find all xlsx files in the directory
 specified in parameter "from_dir" (default: TRUE)}
 
-\item{file_pattern}{pattern for identifying lookup_para file 
+\item{file_pattern}{pattern for identifying lookup_para file
 (default: "^lookup_para\\.csv$")}
 }
 \description{

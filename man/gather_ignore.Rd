@@ -4,9 +4,10 @@
 \alias{gather_ignore}
 \title{Helper function: gather_ignore}
 \usage{
-gather_ignore(fields = c("Datum", "KN", "[iI]nterne Nr.", "Name der",
-  "Ort", "Probe", "Prü", "Untersuchung", "Labor", "Jahr", "Galer",
-  "Detail", "Meß", "Zeit", "Bezei", "Monat"))
+gather_ignore(
+  fields = c("Datum", "KN", "[iI]nterne Nr.", "Name der", "Ort", "Probe", "Prü",
+    "Untersuchung", "Labor", "Jahr", "Galer", "Detail", "Meß", "Zeit", "Bezei", "Monat")
+)
 }
 \arguments{
 \item{fields}{column names to be ignored for gathering (default: c(
