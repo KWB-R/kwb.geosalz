@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">kwb.geosalz</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,6 +24,7 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/data-availability_fri.html">Data Availability Waterworks Friedrichshagen</a>
     <a class="dropdown-item" href="../articles/workflow.html">Workflow</a>
   </div>
 </li>
@@ -57,8 +58,12 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">read_bwb_header1_meta</span><span class="op">(</span><span class="va">file</span>, meta_pattern <span class="op">=</span> <span class="st">"META"</span>,
-  keep_pattern <span class="op">=</span> <span class="fu"><a href="gather_ignore.html">gather_ignore</a></span><span class="op">(</span><span class="op">)</span>, dbg <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">read_bwb_header1_meta</span><span class="op">(</span>
+  <span class="va">file</span>,
+  meta_pattern <span class="op">=</span> <span class="st">"META"</span>,
+  keep_pattern <span class="op">=</span> <span class="fu"><a href="gather_ignore.html">gather_ignore</a></span><span class="op">(</span><span class="op">)</span>,
+  dbg <span class="op">=</span> <span class="cn">FALSE</span>
+<span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -82,7 +87,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by <a href="https://mrustl.de" class="external-link">Michael Rustler</a>.</p>
+  <p></p><p>Developed by <a href="https://mrustl.de" class="external-link">Michael Rustler</a>, <a href="https://www.kompetenz-wasser.de/en/forschung/projekte/geosalz" class="external-link"><img src="https://www.kompetenz-wasser.de/media/pages/forschung/projekte/geosalz/7bc1cad2b3-1650461797/geosalz_logo_transparent_rgb.png" alt="Project GeoSalz" height="24"></a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">

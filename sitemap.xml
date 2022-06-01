@@ -1,120 +1,126 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>/404.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/404.html</loc>
   </url>
   <url>
-    <loc>/articles/index.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/articles/data-availability_fri.html</loc>
   </url>
   <url>
-    <loc>/articles/workflow.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/articles/index.html</loc>
   </url>
   <url>
-    <loc>/authors.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/articles/workflow.html</loc>
   </url>
   <url>
-    <loc>/index.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/authors.html</loc>
   </url>
   <url>
-    <loc>/LICENSE-text.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/index.html</loc>
   </url>
   <url>
-    <loc>/LICENSE.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>/news/index.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/LICENSE.html</loc>
   </url>
   <url>
-    <loc>/reference/add_para_metadata.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/news/index.html</loc>
   </url>
   <url>
-    <loc>/reference/add_site_metadata.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/add_para_metadata.html</loc>
   </url>
   <url>
-    <loc>/reference/cat_green_bold_0.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/add_site_metadata.html</loc>
   </url>
   <url>
-    <loc>/reference/cat_red_bold_0.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/cat_green_bold_0.html</loc>
   </url>
   <url>
-    <loc>/reference/convert_xls_as_xlsx.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/cat_red_bold_0.html</loc>
   </url>
   <url>
-    <loc>/reference/convert_xls_to_xlsx.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/convert_xls_as_xlsx.html</loc>
   </url>
   <url>
-    <loc>/reference/copy_lookup_para_file.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/convert_xls_to_xlsx.html</loc>
   </url>
   <url>
-    <loc>/reference/copy_xlsx_files.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/copy_lookup_para_file.html</loc>
   </url>
   <url>
-    <loc>/reference/delete_registry.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/copy_xlsx_files.html</loc>
   </url>
   <url>
-    <loc>/reference/gather_and_join_1.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/delete_registry.html</loc>
   </url>
   <url>
-    <loc>/reference/gather_and_join_2.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/gather_and_join_1.html</loc>
   </url>
   <url>
-    <loc>/reference/gather_ignore.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/gather_and_join_2.html</loc>
   </url>
   <url>
-    <loc>/reference/gather_ignore_clean.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/gather_ignore.html</loc>
   </url>
   <url>
-    <loc>/reference/get_excelcnv_exe.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/gather_ignore_clean.html</loc>
   </url>
   <url>
-    <loc>/reference/get_foerdermengen.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/get_excelcnv_exe.html</loc>
   </url>
   <url>
-    <loc>/reference/get_meta_sheet_or_stop.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/get_foerdermengen.html</loc>
   </url>
   <url>
-    <loc>/reference/get_parameters_meta.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/get_foerdermengen_gal_fri.html</loc>
   </url>
   <url>
-    <loc>/reference/get_site_id.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/get_meta_sheet_or_stop.html</loc>
   </url>
   <url>
-    <loc>/reference/import_labor.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/get_parameters_meta.html</loc>
   </url>
   <url>
-    <loc>/reference/index.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/get_site_id.html</loc>
   </url>
   <url>
-    <loc>/reference/pipe.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/import_labor.html</loc>
   </url>
   <url>
-    <loc>/reference/print_datatype_info_if.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/index.html</loc>
   </url>
   <url>
-    <loc>/reference/read_bwb_data.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/pipe.html</loc>
   </url>
   <url>
-    <loc>/reference/read_bwb_header1_meta.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/print_datatype_info_if.html</loc>
   </url>
   <url>
-    <loc>/reference/read_bwb_header2.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/read_bwb_data.html</loc>
   </url>
   <url>
-    <loc>/reference/read_bwb_header4.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/read_bwb_header1_meta.html</loc>
   </url>
   <url>
-    <loc>/reference/safe_office_folder.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/read_bwb_header2.html</loc>
   </url>
   <url>
-    <loc>/reference/stop_formatted.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/read_bwb_header4.html</loc>
   </url>
   <url>
-    <loc>/reference/stop_on_missing_or_inform_on_extra_sheets.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/safe_office_folder.html</loc>
   </url>
   <url>
-    <loc>/reference/to_full_metadata_2.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/stop_formatted.html</loc>
   </url>
   <url>
-    <loc>/reference/to_full_metadata_4.html</loc>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/stop_on_missing_or_inform_on_extra_sheets.html</loc>
+  </url>
+  <url>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/to_full_metadata_2.html</loc>
+  </url>
+  <url>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/to_full_metadata_4.html</loc>
   </url>
 </urlset>
