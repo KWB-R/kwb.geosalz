@@ -6,19 +6,24 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.2563870.svg)](https://doi.org/10.5281/zenodo.2563870)
 [![R-Universe_Status_Badge](https://kwb-r.r-universe.dev/badges/kwb.geosalz)](https://kwb-r.r-universe.dev/)
 
-# kwb.geosalz
-
 R Package for Documenting Workflow Used in Project "geosalz".
 
 ## Installation
 
+For installing the latest release of this R package run the following code below:
+
 ```r
-#install.packages("remotes", repos = "https://cloud.r-project.org")
-remotes::install_github("KWB-R/kwb.geosalz")
+# Enable repository from kwb-r
+options(repos = c(
+  kwbr = 'https://kwb-r.r-universe.dev',
+  CRAN = 'https://cloud.r-project.org'))
+  
+# Download and install kwb.geosalz in R
+install.packages('kwb.geosalz')
+
+# Browse the kwb.geosalz manual pages
+help(package = 'kwb.geosalz')
 ```
+## Usage 
 
-## Documentation
-
-Release: [https://kwb-r.github.io/kwb.geosalz](https://kwb-r.github.io/kwb.geosalz)
-
-Development: [https://kwb-r.github.io/kwb.geosalz/dev](https://kwb-r.github.io/kwb.geosalz/dev)
+Checkout the [Workflow](articles/workflow.html) article on how to use this R package.

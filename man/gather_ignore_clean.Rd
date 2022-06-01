@@ -4,11 +4,12 @@
 \alias{gather_ignore_clean}
 \title{Helper function: gather_ignore_clean}
 \usage{
-gather_ignore_clean(fields = c("LabSampleCode", "Date", "Time",
-  "Waterbody", "ExSiteCode", "Site"))
+gather_ignore_clean(
+  fields = c("LabSampleCode", "Date", "Time", "Waterbody", "ExSiteCode", "Site")
+)
 }
 \arguments{
-\item{fields}{column names to be ignored for gathering (default: 
+\item{fields}{column names to be ignored for gathering (default:
 c("LabSampleCode", "Date", "Time", "Waterbody", "ExSiteCode", Site")}
 }
 \value{

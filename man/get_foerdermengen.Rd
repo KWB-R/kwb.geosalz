@@ -4,8 +4,11 @@
 \alias{get_foerdermengen}
 \title{get_foerdermengen}
 \usage{
-get_foerdermengen(xlsx_path, sheet_name = "WW Q Rhow ",
-  sheet_range = "A4:S127")
+get_foerdermengen(
+  xlsx_path,
+  sheet_name = "WW Q Rhow ",
+  sheet_range = "A4:S127"
+)
 }
 \arguments{
 \item{xlsx_path}{path to xlsx file with pumping rates}

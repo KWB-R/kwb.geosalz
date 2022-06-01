@@ -1,0 +1,232 @@
+---
+title: "Data Availability Waterworks Friedrichshagen"
+author: "Michael Rustler"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Data Availability Waterworks Friedrichshagen}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(dplyr)
+library(tidyr)
+```
+
+## 1 Install R packages
+
+```{r eval=FALSE}
+if (! require("remotes")) {
+  install.packages("remotes", repos = "https://cloud.r-project.org")
+}
+
+remotes::install_github("kwb-r/kwb.geosalz", 
+                         dependencies = TRUE)
+```
+
+## 2 Define paths
+
+```{r eval=TRUE, echo = TRUE}
+# Define paths and resolve placeholders
+paths_list <- list(
+  servername = Sys.getenv("servername"),
+  root_server = "//<servername>",
+  project = "geosalz",
+  rawdata = "<root_server>/rawdata/<project>/BWB_labor",
+  processing = "<root_server>/processing/<project>",
+  cleaned_data_dir = "<processing>/labor/cleaned-data",
+  cleaned_data_rds = "<cleaned_data_dir>/cleaned-data.Rds",
+  foerdermengen = "<rawdata>/2018-04-27 Rohwasser Bericht - Galeriefördermengen.xlsx",
+  parameters = "<rawdata>/2018-06-01 Lab Parameter.xlsx",
+  figures_dir = "<processing>/figures"
+)
+
+paths <- kwb.utils::resolve(paths_list)
+
+```
+
+```{r echo = FALSE}
+all_files_exist <- all(file.exists(paths$cleaned_data_rds,
+                               paths$foerdermengen,
+                               paths$parameters))
+
+if(all_files_exist) {
+  knitr::opts_chunk$set(eval=TRUE, message=FALSE, echo=TRUE)
+} else {
+ knitr::opts_chunk$set(eval=FALSE, message=FALSE, echo=TRUE)
+}
+```
+
+
+## 3 Input data
+
+Checkout the [Workflow](../workflow/) vignette for reproducing the creation of 
+`cleaned-data.Rds`.
+
+```{r}
+library(kwb.geosalz)
+
+## Load water quality data (<= 2000, prepared within first phase of Geosalz project!)
+## for creation see the "workflow.Rmd" vignette
+
+load(file = file.path(paths$cleaned_data_rds))
+
+foerdermengen_ww <- kwb.geosalz::get_foerdermengen(paths$foerdermengen)
+
+foerdermengen_fri_gal <- kwb.geosalz::get_foerdermengen_gal_fri(path = paths$foerdermengen)
+
+para_info <- kwb.geosalz::get_parameters_meta(paths$parameters)
+
+```
+
+## 4 Visualisation
+
+
+### 4.1 Water quality
+
+
+```{r}
+#Check and in case the export directory is not available create it:
+fs::dir_create(paths$figures_dir, recurse = TRUE)
+
+print(sprintf("Export figures/plots to: %s", paths$figures_dir))
+
+water_types <- c("Rohwasser")
+
+for (water_type in water_types) {
+  pdf_file <- file.path(paths$figures_dir,
+                        sprintf("Zeitreihen_FRI_%s_Guete.pdf",
+                                water_type))
+  
+  cat(sprintf("Creating plot:\n%s\n", pdf_file))
+  pdf(file = pdf_file,
+      width = 14,
+      height = 9)
+  for (sel_para_id in unique(labordaten_ww$para_id)) {
+    my_selection <- sprintf("%s (%s)",
+                            para_info$para_kurzname[para_info$para_id == sel_para_id],
+                            water_type)
+    
+    
+    tmp <- labordaten_ww %>%
+      dplyr::filter(prufgegenstand == water_type,
+                    para_id == sel_para_id, 
+                    werk == "FRI") %>%
+      dplyr::filter(stringr::str_detect(.data$galerie,
+                                        pattern = "GWW",
+                                        negate = TRUE))
+    
+    y_label <-  sprintf("%s (%s)",
+                        para_info$para_kurzname[para_info$para_id == sel_para_id],
+                        paste0(unique(tmp$UnitName_org), collapse = ", "))
+    
+    
+    if (nrow(tmp) > 0) {
+      cat(sprintf("for %s\n", my_selection))
+      
+      g <-
+        ggplot2::ggplot(tmp,
+                        mapping = ggplot2::aes_string(x = "Date",
+                                                      y = "DataValue",
+                                                      col = "galerie")) +
+        ggplot2::geom_point() +
+        ggplot2::geom_line() +
+        ggplot2::theme_bw() +
+        ggplot2::ggtitle(label = my_selection) +
+        ggplot2::labs(x = "", y = y_label)
+      
+      print(g)
+    } else {
+      cat(sprintf("not data availabe for %s\n",
+                  my_selection))
+    }
+  }
+  dev.off()
+}
+```
+
+### 4.2 Yearly Abstraction Volume
+
+#### 4.2.1 Total 
+
+```{r}
+pdf_file <- file.path(paths$figures_dir,
+                      "Zeitreihen_FRI_Gesamt_Jahresfoerdermengen.pdf")
+pdf(file = pdf_file,
+    width = 14,
+    height = 9)
+
+foerdermengen_ww %>%
+  dplyr::filter(.data$Wasserwerk == "Friedrichshagen") %>% 
+  ggplot2::ggplot(mapping = ggplot2::aes_string(x = "year",
+                                                y = "Foerdermenge_m3",
+                                                col = "werk")) + 
+  ggplot2::geom_point() +
+  ggplot2::geom_line() +
+  ggplot2::theme_bw() +
+  ggplot2::ggtitle(label = "Wasserwerk Friedrichshagen") +
+  ggplot2::labs(x = "Datum", y = "Jahresf\u00F6rdermenge (m3)")
+dev.off()
+```
+
+#### 4.2.2 By Well Galeries
+
+```{r}
+pdf_file <- file.path(paths$figures_dir,
+                      "Zeitreihen_FRI_Galerien_Jahresfoerdermengen.pdf")
+pdf(file = pdf_file,
+    width = 14,
+    height = 9)
+
+foerdermengen_fri_gal %>%  
+  ggplot2::ggplot(mapping = ggplot2::aes_string(x = "date",
+                                                y = "foerdermenge_m3", 
+                                                col = "galerie")) + 
+  ggplot2::geom_point() +
+  ggplot2::geom_line() +
+  ggplot2::theme_bw() +
+  ggplot2::ggtitle(label = "Brunnengalerien FRI") +
+  ggplot2::labs(x = "Datum", y = "Jahresf\u00F6rdermenge (m3)")
+dev.off()
+```
+
+
+
+## 5 Session Info 
+
+### Plattform
+
+```{r plattform, eval = TRUE, echo= FALSE}
+environment <- sessioninfo::session_info()  
+
+knitr::kable(tibble::enframe(unlist(environment$platform)))
+
+```
+
+### Packages
+
+```{r packages, eval = TRUE, echo= FALSE}
+
+environment$packages
+
+```
+
+### Pandoc
+
+```{r pandoc, eval = TRUE, echo= FALSE}
+
+if(rmarkdown::pandoc_available()) {
+data.frame(pandoc_directory = rmarkdown::pandoc_exec(),
+           pandoc_version = as.character(rmarkdown::pandoc_version()), 
+           stringsAsFactors = FALSE)
+} else {
+  print("No PANDOC installed!")
+}
+
+```
+

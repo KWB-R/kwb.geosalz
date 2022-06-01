@@ -4,8 +4,12 @@
 \alias{convert_xls_as_xlsx}
 \title{Convert xls to xlsx}
 \usage{
-convert_xls_as_xlsx(input_dir, export_dir = tempdir(),
-  office_folder = safe_office_folder(), dbg = TRUE)
+convert_xls_as_xlsx(
+  input_dir,
+  export_dir = tempdir(),
+  office_folder = safe_office_folder(),
+  dbg = TRUE
+)
 }
 \arguments{
 \item{input_dir}{input directory containing .xls files}

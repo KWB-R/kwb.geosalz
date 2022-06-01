@@ -4,8 +4,12 @@
 \alias{read_bwb_header1_meta}
 \title{Import: read_bwb_header1_meta}
 \usage{
-read_bwb_header1_meta(file, meta_pattern = "META",
-  keep_pattern = gather_ignore(), dbg = FALSE)
+read_bwb_header1_meta(
+  file,
+  meta_pattern = "META",
+  keep_pattern = gather_ignore(),
+  dbg = FALSE
+)
 }
 \arguments{
 \item{file}{path(s) to EXCEL spreadsheet}

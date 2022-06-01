@@ -9,7 +9,7 @@ get_parameters_meta(xlsx_path, sheet_name = "nur Parameterliste")
 \arguments{
 \item{xlsx_path}{path to EXCEL spreadsheet with parameter metadata}
 
-\item{sheet_name}{name of sheet containing metadata table 
+\item{sheet_name}{name of sheet containing metadata table
 (default: "nur Parameterliste")}
 }
 \value{

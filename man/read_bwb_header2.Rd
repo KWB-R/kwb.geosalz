@@ -4,8 +4,13 @@
 \alias{read_bwb_header2}
 \title{Import: read_bwb_header2}
 \usage{
-read_bwb_header2(file, skip = 2, keep_pattern = gather_ignore(),
-  site_id_pattern = "^[0-9]{1,4}", dbg = TRUE)
+read_bwb_header2(
+  file,
+  skip = 2,
+  keep_pattern = gather_ignore(),
+  site_id_pattern = "^[0-9]{1,4}",
+  dbg = TRUE
+)
 }
 \arguments{
 \item{file}{file path(s) to EXCEL spreadsheet}
