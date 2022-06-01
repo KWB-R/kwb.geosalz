@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   data-availability_fri: data-availability_fri.html
   workflow: workflow.html
-last_built: 2022-06-01T09:56Z
+last_built: 2022-06-01T10:03Z
 urls:
   reference: https://kwb-r.github.io/kwb.geosalz/reference
   article: https://kwb-r.github.io/kwb.geosalz/articles
