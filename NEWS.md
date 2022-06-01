@@ -1,3 +1,11 @@
+# [kwb.geosalz 0.2.0](https://github.com/KWB-R/kwb.geosalz/releases/tag/v0.2.0) <small>2022-06-01</small>
+
+* Add `get_foerdermengen_gal_fri()` for getting annual abstraction values of 
+well field galeries for waterworks Friedrichshagen
+
+* Add workflow [Data Availability WW Friedrichshagen](../articles/data-availability_fri.html) checking available data 
+from pre-project phase (see: [workflow](../articles/workflow.html) article)
+
 # [kwb.geosalz 0.1.0](https://github.com/KWB-R/kwb.geosalz/releases/tag/v0.1.0) <small>2019-02-13</small>
 
 * Release on Zenodo [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.2563870.svg)](https://doi.org/10.5281/zenodo.2563870)
