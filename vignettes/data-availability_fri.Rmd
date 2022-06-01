@@ -82,6 +82,11 @@ foerdermengen_fri_gal <- kwb.geosalz::get_foerdermengen_gal_fri(path = paths$foe
 
 para_info <- kwb.geosalz::get_parameters_meta(paths$parameters)
 
+labordaten_ww %>%
+    dplyr::filter(prufgegenstand == "Rohwasser",
+                  werk == "FRI") %>% 
+    readr::write_csv(file.path(paths$figures_dir, "Zeitreihen_FRI_Guete.csv"))
+
 ```
 
 ## 4 Visualisation
