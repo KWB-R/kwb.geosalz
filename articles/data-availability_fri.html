@@ -129,7 +129,12 @@
 
 <span class="va">foerdermengen_fri_gal</span> <span class="op">&lt;-</span> <span class="fu">kwb.geosalz</span><span class="fu">::</span><span class="fu"><a href="../reference/get_foerdermengen_gal_fri.html">get_foerdermengen_gal_fri</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">paths</span><span class="op">$</span><span class="va">foerdermengen</span><span class="op">)</span>
 
-<span class="va">para_info</span> <span class="op">&lt;-</span> <span class="fu">kwb.geosalz</span><span class="fu">::</span><span class="fu"><a href="../reference/get_parameters_meta.html">get_parameters_meta</a></span><span class="op">(</span><span class="va">paths</span><span class="op">$</span><span class="va">parameters</span><span class="op">)</span></code></pre></div>
+<span class="va">para_info</span> <span class="op">&lt;-</span> <span class="fu">kwb.geosalz</span><span class="fu">::</span><span class="fu"><a href="../reference/get_parameters_meta.html">get_parameters_meta</a></span><span class="op">(</span><span class="va">paths</span><span class="op">$</span><span class="va">parameters</span><span class="op">)</span>
+
+<span class="va">labordaten_ww</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">prufgegenstand</span> <span class="op">==</span> <span class="st">"Rohwasser"</span>,
+                  <span class="va">werk</span> <span class="op">==</span> <span class="st">"FRI"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+    <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/write_delim.html" class="external-link">write_csv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">paths</span><span class="op">$</span><span class="va">figures_dir</span>, <span class="st">"Zeitreihen_FRI_Guete.csv"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="visualisation">4 Visualisation<a class="anchor" aria-label="anchor" href="#visualisation"></a>
@@ -325,7 +330,7 @@
 <span class="co">#&gt;  jquerylib     0.1.4   <span style="color: #555555;">2021-04-26</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span>
 <span class="co">#&gt;  jsonlite      1.8.0   <span style="color: #555555;">2022-02-22</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span>
 <span class="co">#&gt;  knitr         1.39    <span style="color: #555555;">2022-04-26</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span>
-<span class="co">#&gt;  kwb.utils     0.12.0  <span style="color: #555555;">2022-06-01</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">Github (KWB-R/kwb.utils@9a63030)</span></span>
+<span class="co">#&gt;  kwb.utils     0.12.0  <span style="color: #555555;">2022-05-31</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">Github (KWB-R/kwb.utils@9a63030)</span></span>
 <span class="co">#&gt;  lifecycle     1.0.1   <span style="color: #555555;">2021-09-24</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span>
 <span class="co">#&gt;  magrittr      2.0.3   <span style="color: #555555;">2022-03-30</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span>
 <span class="co">#&gt;  memoise       2.0.1   <span style="color: #555555;">2021-11-26</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span>
