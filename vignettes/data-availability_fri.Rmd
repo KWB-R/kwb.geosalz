@@ -78,14 +78,37 @@ load(file = file.path(paths$cleaned_data_rds))
 
 foerdermengen_ww <- kwb.geosalz::get_foerdermengen(paths$foerdermengen)
 
-foerdermengen_fri_gal <- kwb.geosalz::get_foerdermengen_gal_fri(path = paths$foerdermengen)
+foerdermengen_fri_gal <- kwb.geosalz::get_foerdermengen_gal_fri(path = paths$foerdermengen) %>% 
+  dplyr::filter(.data$galerie %in% sprintf("Gal. %s", LETTERS[6:13]), 
+                !is.na(!.data$foerdermenge_m3))
 
 para_info <- kwb.geosalz::get_parameters_meta(paths$parameters)
 
-labordaten_ww %>%
+labordaten_ww_timeseries <- labordaten_ww %>%
     dplyr::filter(prufgegenstand == "Rohwasser",
-                  werk == "FRI") %>% 
-    readr::write_csv(file.path(paths$figures_dir, "Zeitreihen_FRI_Guete.csv"))
+                  werk == "FRI") 
+
+readr::write_csv(labordaten_ww_timeseries,
+                 file = file.path(paths$figures_dir, "Zeitreihen_FRI_Guete.csv"))
+
+
+labordaten_ww_stats <- labordaten_ww_timeseries %>%
+  dplyr::group_by(.data$para_id,
+                  .data$para_kuerzel, 
+                  .data$para_kurzname,
+                  .data$werk, 
+                  .data$galerie) %>% 
+  dplyr::summarise(date_min = as.Date(min(.data$Date)),
+                   date_max = as.Date(max(.data$Date)),
+                   period_days = diff(c(.data$date_min, .data$date_max)),
+                   number_of_samples = dplyr::n(), 
+                   mean_sampling_intervall_days = round(.data$period_days/.data$number_of_samples, 0)) %>% 
+  dplyr::arrange(.data$para_id, .data$galerie)
+
+readr::write_csv(labordaten_ww_stats,
+                 file = file.path(paths$figures_dir, "Stats_FRI_Guete.csv"))
+
+
 
 ```
 
