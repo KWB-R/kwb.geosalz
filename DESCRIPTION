@@ -20,10 +20,12 @@ Imports:
     dplyr (>= 0.7.8),
     fs (>= 1.2.6),
     janitor (>= 1.1.1),
+    jsonlite,
     kwb.utils (>= 0.4.0.9000),
     magrittr (>= 1.5),
     readxl (>= 1.2.0),
     rlang (>= 0.3.1),
+    sf, 
     stringr (>= 1.4.0),
     tidyr (>= 0.8.2),
     tidyselect (>= 1.1.2)
@@ -43,4 +45,4 @@ Remotes:
 ByteCompile: true
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0
