@@ -88,7 +88,7 @@ labordaten_ww_timeseries <- labordaten_ww %>%
     dplyr::filter(prufgegenstand == "Rohwasser",
                   werk == "FRI") 
 
-readr::write_csv(labordaten_ww_timeseries,
+readr::write_csv2(labordaten_ww_timeseries,
                  file = file.path(paths$figures_dir, "Zeitreihen_FRI_Guete.csv"))
 
 
