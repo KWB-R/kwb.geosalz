@@ -33,15 +33,18 @@ Suggests:
     covr (>= 3.2.1),
     ggplot2 (>= 3.1.0),
     ggforce,
+    leaflet,
     knitr (>= 1.21),
     readr(>= 1.4.0), 
     rmarkdown (>= 1.11),
     sessioninfo (>= 1.1.1),
-    tibble (>= 2.0.1)
+    tibble (>= 2.0.1),
+    wasserportal
 VignetteBuilder: 
     knitr
 Remotes: 
-    github::KWB-R/kwb.utils
+    github::KWB-R/kwb.utils,
+    github::KWB-R/wasserportal
 ByteCompile: true
 Encoding: UTF-8
 LazyData: true
