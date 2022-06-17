@@ -30,6 +30,7 @@ Imports:
 Suggests: 
     covr (>= 3.2.1),
     ggplot2 (>= 3.1.0),
+    ggforce,
     knitr (>= 1.21),
     readr(>= 1.4.0), 
     rmarkdown (>= 1.11),

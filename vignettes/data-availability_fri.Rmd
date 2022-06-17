@@ -79,8 +79,8 @@ load(file = file.path(paths$cleaned_data_rds))
 foerdermengen_ww <- kwb.geosalz::get_foerdermengen(paths$foerdermengen)
 
 foerdermengen_fri_gal <- kwb.geosalz::get_foerdermengen_gal_fri(path = paths$foerdermengen) %>% 
-  dplyr::filter(.data$galerie %in% sprintf("Gal. %s", LETTERS[6:13]), 
-                !is.na(!.data$foerdermenge_m3))
+  dplyr::filter(!is.na(!.data$foerdermenge_m3))
+
 
 para_info <- kwb.geosalz::get_parameters_meta(paths$parameters)
 
@@ -105,7 +105,7 @@ labordaten_ww_stats <- labordaten_ww_timeseries %>%
                    mean_sampling_intervall_days = round(.data$period_days/.data$number_of_samples, 0)) %>% 
   dplyr::arrange(.data$para_id, .data$galerie)
 
-readr::write_csv(labordaten_ww_stats,
+readr::write_csv2(labordaten_ww_stats,
                  file = file.path(paths$figures_dir, "Stats_FRI_Guete.csv"))
 
 
@@ -221,6 +221,38 @@ foerdermengen_fri_gal %>%
   ggplot2::ggtitle(label = "Brunnengalerien FRI") +
   ggplot2::labs(x = "Datum", y = "Jahresf\u00F6rdermenge (m3)")
 dev.off()
+
+
+pdf_file <- file.path(paths$figures_dir,
+                      "Zeitreihen_FRI_Galerien_Jahresfoerdermengen_multipage.pdf")
+pdf(file = pdf_file,
+    width = 14,
+    height = 9)
+
+tmp <- foerdermengen_fri_gal %>%  
+  dplyr::mutate(foerdermenge_million_m3 = .data$foerdermenge_m3/1000000)
+
+n_pages <- tmp %>% 
+  dplyr::count(.data$galerie) %>% 
+  dplyr::pull(.data$galerie) %>% 
+  length()
+
+  for(page in seq_len(n_pages)) {
+  print(tmp %>% 
+  ggplot2::ggplot(mapping = ggplot2::aes_string(x = "date", 
+                                                y = "foerdermenge_million_m3")) + 
+  ggforce::facet_wrap_paginate(~ galerie, ncol = 1, nrow = 1, page = page) +
+  #ggplot2::facet_wrap(~ galerie, ncol = 1) + 
+  ggplot2::geom_point() +
+  ggplot2::geom_line() +
+  ggplot2::labs(x = "Datum", y = "Foerdermenge (m3/Jahr)") +
+  ggplot2::theme_bw()
+  )
+}
+#dev.off()
+kwb.utils::finishAndShowPdf(PDF = pdf_file)
+
+
 ```
 
 
