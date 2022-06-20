@@ -216,7 +216,6 @@ swl_map
 gwl_map
 gwq_map
 ```
-<<<<<<< HEAD
 
 ## Maps 
 
