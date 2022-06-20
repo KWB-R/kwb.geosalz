@@ -243,22 +243,30 @@ htmlwidgets::saveWidget(
 )
 ```
 
-[https://kwb-r.github.io/kwb.geosalz/map_swl.html](../map_swl.html)
-[https://kwb-r.github.io/kwb.geosalz/map_gwl.html](../map_gwl.html)
-[https://kwb-r.github.io/kwb.geosalz/map_gwq.html](../map_gwq.html)
+**Links to full-page view maps:**
+
+* [https://kwb-r.github.io/kwb.geosalz/map_swl.html](../map_swl.html)
+
+* [https://kwb-r.github.io/kwb.geosalz/map_gwl.html](../map_gwl.html)
+
+* [https://kwb-r.github.io/kwb.geosalz/map_gwq.html](../map_gwq.html)
 
 
 ## Download Datasets
 
 ### JSON Format
 
-[https://kwb-r.github.io/kwb.geosalz/swl_data_stats.json](../swl_data_stats.json)
-[https://kwb-r.github.io/kwb.geosalz/gwl_data_stats.json](../gwl_data_stats.json)
-[https://kwb-r.github.io/kwb.geosalz/gwq_data_stats.json](../gwq_data_stats.json)
+* [https://kwb-r.github.io/kwb.geosalz/swl_data_stats.json](../swl_data_stats.json)
+
+* [https://kwb-r.github.io/kwb.geosalz/gwl_data_stats.json](../gwl_data_stats.json)
+
+* [https://kwb-r.github.io/kwb.geosalz/gwq_data_stats.json](../gwq_data_stats.json)
 
 ### CSV Format
 
-[https://kwb-r.github.io/kwb.geosalz/swl_data_stats.csv](../swl_data_stats.csv)
-[https://kwb-r.github.io/kwb.geosalz/gwl_data_stats.csv](../gwl_data_stats.csv)
-[https://kwb-r.github.io/kwb.geosalz/gwq_data_stats.csv](../gwq_data_stats.csv)
+* [https://kwb-r.github.io/kwb.geosalz/swl_data_stats.csv](../swl_data_stats.csv)
+
+* [https://kwb-r.github.io/kwb.geosalz/gwl_data_stats.csv](../gwl_data_stats.csv)
+
+* [https://kwb-r.github.io/kwb.geosalz/gwq_data_stats.csv](../gwq_data_stats.csv)
 
