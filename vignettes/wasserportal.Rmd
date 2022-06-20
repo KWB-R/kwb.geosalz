@@ -43,6 +43,10 @@ get_data_stats <- function(df, group_col = "Messstellennummer") {
     )
   
 }
+
+period_to_numeric <- function(df, col_period = "period") {
+  df[[col_period]] <- as.numeric(df[[col_period]])
+}
 ```
 
 ```{r setup}
@@ -93,8 +97,10 @@ swl_data <- stats::setNames(lapply(names(swl_data_list), function(name) {
   
 
 swl_data_stats <- get_data_stats(swl_data)
-jsonlite::write_json(swl_data_stats, 
-                     "swl_data_stats.json")
+
+swl_data_stats %>% 
+period_to_numeric() %>% 
+jsonlite::write_json("swl_data_stats.json")
 readr::write_csv2(swl_data_stats,
                   file = "swl_data_stats.csv")
 
@@ -114,8 +120,9 @@ gwl_data <- data.table::rbindlist(lapply(gwl_master$Nummer,
 
 gwl_data_stats <- get_data_stats(gwl_data)
 
-jsonlite::write_json(gwl_data_stats, 
-                     "gwl_data_stats.json")
+gwl_data_stats %>% 
+period_to_numeric() %>% 
+jsonlite::write_json("gwl_data_stats.json")
 readr::write_csv2(gwl_data_stats,
                   file = "gwl_data_stats.csv")
 
@@ -138,8 +145,9 @@ gwq_data_stats <- gwq_data %>%
   dplyr::filter(.data$Parameter == "Chlorid") %>%
   get_data_stats()
 
-jsonlite::write_json(gwq_data_stats, 
-                     "gwq_data_stats.json")
+gwq_data_stats %>% 
+period_to_numeric() %>% 
+jsonlite::write_json("gwq_data_stats.json")
 
 readr::write_csv2(gwq_data_stats,
                   file = "gwq_data_stats.csv")
