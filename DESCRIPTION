@@ -45,6 +45,7 @@ Suggests:
 VignetteBuilder: 
     knitr
 Remotes: 
+    github::KWB-R/kwb.pkgbuild,
     github::KWB-R/kwb.utils,
     github::KWB-R/wasserportal
 ByteCompile: true
