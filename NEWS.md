@@ -1,3 +1,19 @@
+# [kwb.geosalz 0.3.0](https://github.com/KWB-R/kwb.geosalz/releases/tag/v0.3.0) <small>2022-06-20</small>
+
+Adding functionality for checking data availability for SVM Friedrichshagen based on available BWB data from pre-project phase (digitalised at KWB) and open-data from [Wasserportal Berlin](https://wasserportal.berlin.de)
+
+**Functions**
+
+* Add `convert_to_sf()` converting different CRS projections to `4326` (OSM map used as background map)
+
+
+**Workflows**
+
+* Added new workflow [Wasserportal](../articles/wasserportal.html) for  checking available data from [Wasserportal Berlin](https://wasserportal.berlin.de)
+
+* Updated workflow [Data Availability WW Friedrichshagen](../articles/data-availability_fri.html) checking available data from pre-project phase (see: [workflow](../articles/workflow.html) article)
+
+
 # [kwb.geosalz 0.2.0](https://github.com/KWB-R/kwb.geosalz/releases/tag/v0.2.0) <small>2022-06-01</small>
 
 * Add `get_foerdermengen_gal_fri()` for getting annual abstraction values of 
