@@ -77,7 +77,6 @@ swl_master <- wasserportal::get_wasserportal_masters_data(
   sf::st_filter(y = polygon_svm_fri) %>%
   add_label(columns = c("Nummer", "Gewaesser", "Auspraegung", "Betreiber"))
 
-<<<<<<< HEAD
 swl_data_list <- stats::setNames(lapply(swl_master$Nummer, function(station) {
 wasserportal::read_wasserportal(station = station, 
                                 from_date = "1900-01-01",
@@ -98,8 +97,7 @@ jsonlite::write_json(swl_data_stats,
                      "swl_data_stats.json")
 readr::write_csv2(swl_data_stats,
                   file = "swl_data_stats.csv")
-=======
->>>>>>> 67820ded408a9e8811ed3068f7fa8b9b4cdf251e
+
 
 gwl_master <-
   jsonlite::fromJSON("https://kwb-r.github.io/wasserportal/stations_gwl_master.json") %>%
@@ -116,11 +114,8 @@ gwl_data <- data.table::rbindlist(lapply(gwl_master$Nummer,
 
 gwl_data_stats <- get_data_stats(gwl_data)
 
-<<<<<<< HEAD
 jsonlite::write_json(gwl_data_stats, 
                      "gwl_data_stats.json")
-=======
->>>>>>> 67820ded408a9e8811ed3068f7fa8b9b4cdf251e
 readr::write_csv2(gwl_data_stats,
                   file = "gwl_data_stats.csv")
 
@@ -258,5 +253,4 @@ htmlwidgets::saveWidget(
 [https://kwb-r.github.io/kwb.geosalz/swl_data_stats.csv](../swl_data_stats.csv)
 [https://kwb-r.github.io/kwb.geosalz/gwl_data_stats.csv](../gwl_data_stats.csv)
 [https://kwb-r.github.io/kwb.geosalz/gwq_data_stats.csv](../gwq_data_stats.csv)
-=======
->>>>>>> 67820ded408a9e8811ed3068f7fa8b9b4cdf251e
+
