@@ -167,7 +167,10 @@ gwq_master <-
 gwq_data <-
   jsonlite::fromJSON("https://kwb-r.github.io/wasserportal/stations_gwq_data.json")
 
-gwq_data_stats <- get_data_stats(gwq_data) 
+
+gwq_data_stats <- gwq_data %>% 
+  dplyr::filter(.data$Parameter == "Chlorid") %>%
+  get_data_stats()
 
 gwq_data_stats_export <- 
   gwq_master %>% 
