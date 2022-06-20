@@ -44,8 +44,23 @@ get_data_stats <- function(df, group_col = "Messstellennummer") {
   
 }
 
-period_to_numeric <- function(df, col_period = "period") {
-  df[[col_period]] <- as.numeric(df[[col_period]])
+difftime_to_numeric <- function(df) {
+  df %>%  
+    dplyr::rename(period_days = .data$period, 
+                  interval_days = .data$interval) %>% 
+    dplyr::mutate(period_days = as.numeric(.data$period_days),
+                  interval_days = as.numeric(.data$interval_days)
+                  )
+}
+
+remove_na_and_geometry <- function(df) {
+  if(any(names(df) == "label")) {
+    df <- dplyr::select(df, - .data$label)
+  }
+  sf::st_geometry(df) <- NULL
+  
+  df %>% 
+  dplyr::select_if(function(x){!all(is.na(x))})
 }
 ```
 
@@ -98,10 +113,16 @@ swl_data <- stats::setNames(lapply(names(swl_data_list), function(name) {
 
 swl_data_stats <- get_data_stats(swl_data)
 
-swl_data_stats %>% 
-period_to_numeric() %>% 
-jsonlite::write_json("swl_data_stats.json")
-readr::write_csv2(swl_data_stats,
+
+swl_data_stats_export <- 
+  swl_master %>% 
+  remove_na_and_geometry() %>%
+  dplyr::left_join(difftime_to_numeric(swl_data_stats),
+                   by = c("Nummer" = "Messstellennummer"))
+  
+jsonlite::write_json(swl_data_stats_export, 
+                     "swl_data_stats.json")
+readr::write_csv2(swl_data_stats_export,
                   file = "swl_data_stats.csv")
 
 
@@ -118,12 +139,17 @@ gwl_data <- data.table::rbindlist(lapply(gwl_master$Nummer,
 
 
 
-gwl_data_stats <- get_data_stats(gwl_data)
+gwl_data_stats <- get_data_stats(gwl_data) 
 
-gwl_data_stats %>% 
-period_to_numeric() %>% 
-jsonlite::write_json("gwl_data_stats.json")
-readr::write_csv2(gwl_data_stats,
+gwl_data_stats_export <- 
+  gwl_master %>% 
+  remove_na_and_geometry() %>%
+  dplyr::left_join(difftime_to_numeric(gwl_data_stats),
+                   by = c("Nummer" = "Messstellennummer"))
+  
+jsonlite::write_json(gwl_data_stats_export, 
+                     "gwl_data_stats.json")
+readr::write_csv2(gwl_data_stats_export,
                   file = "gwl_data_stats.csv")
 
 
@@ -141,15 +167,21 @@ gwq_master <-
 gwq_data <-
   jsonlite::fromJSON("https://kwb-r.github.io/wasserportal/stations_gwq_data.json")
 
-gwq_data_stats <- gwq_data %>%
+
+gwq_data_stats <- gwq_data %>% 
   dplyr::filter(.data$Parameter == "Chlorid") %>%
   get_data_stats()
 
-gwq_data_stats %>% 
-period_to_numeric() %>% 
-jsonlite::write_json("gwq_data_stats.json")
-
-readr::write_csv2(gwq_data_stats,
+gwq_data_stats_export <- 
+  gwq_master %>% 
+  remove_na_and_geometry() %>%
+  dplyr::mutate(Nummer = as.integer(.data$Nummer)) %>% 
+  dplyr::left_join(difftime_to_numeric(gwq_data_stats),
+                   by = c("Nummer" = "Messstellennummer"))
+  
+jsonlite::write_json(gwq_data_stats_export, 
+                     "gwq_data_stats.json")
+readr::write_csv2(gwq_data_stats_export,
                   file = "gwq_data_stats.csv")
 
 gwq_master_stats <- gwq_master %>%
@@ -251,9 +283,10 @@ htmlwidgets::saveWidget(
 * [https://kwb-r.github.io/kwb.geosalz/map_gwq.html](../map_gwq.html)
 
 
-## Download Datasets
+## Datasets
 
-### JSON Format
+
+### Download JSON Format
 
 * [https://kwb-r.github.io/kwb.geosalz/swl_data_stats.json](../swl_data_stats.json)
 
@@ -261,11 +294,33 @@ htmlwidgets::saveWidget(
 
 * [https://kwb-r.github.io/kwb.geosalz/gwq_data_stats.json](../gwq_data_stats.json)
 
-### CSV Format
+### Download CSV Format
 
 * [https://kwb-r.github.io/kwb.geosalz/swl_data_stats.csv](../swl_data_stats.csv)
 
 * [https://kwb-r.github.io/kwb.geosalz/gwl_data_stats.csv](../gwl_data_stats.csv)
 
 * [https://kwb-r.github.io/kwb.geosalz/gwq_data_stats.csv](../gwq_data_stats.csv)
+
+### Tables
+
+#### SW Levels 
+
+```{r tbl_swl}
+DT::datatable(swl_data_stats_export)
+```
+
+#### GW Levels 
+
+```{r tbl_gwl}
+DT::datatable(gwl_data_stats_export)
+```
+
+#### GW Quality 
+
+stats for `Chloride`
+
+```{r tbl_gwq}
+DT::datatable(gwq_data_stats_export)
+```
 
