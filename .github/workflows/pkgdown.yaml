@@ -41,7 +41,6 @@ jobs:
 
       - name: Install package
         run: R CMD INSTALL .
-        shell: cmd
 
       - name: Deploy package
         run: |
