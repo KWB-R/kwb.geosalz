@@ -89,12 +89,18 @@ stations <- wasserportal::get_stations()
 
 swl_master <- wasserportal::get_wasserportal_masters_data(
   station_ids = stations$overview_list$surface_water.water_level %>%
-    dplyr::filter(.data$Betreiber == "SenUVK") %>%
+    dplyr::filter(.data$Betreiber == "Land Berlin") %>%
     dplyr::pull(.data$Messstellennummer)
 )  %>%
   kwb.geosalz::convert_to_sf(crs_target = crs_target) %>%
   sf::st_filter(y = polygon_svm_fri) %>%
   add_label(columns = c("Nummer", "Gewaesser", "Auspraegung", "Betreiber"))
+
+readr::write_csv2(swl_master,
+                 file = "swl_master.csv")
+# readr::write_csv2(swl_master,
+#                  file = file.path(paths$figures_dir,
+#                                   "swl_master.csv"))
 
 swl_data_list <- stats::setNames(lapply(swl_master$Nummer, function(station) {
 wasserportal::read_wasserportal(station = station, 
@@ -109,7 +115,12 @@ swl_data <- stats::setNames(lapply(names(swl_data_list), function(name) {
   names(swl_data_list)) %>% 
   dplyr::bind_rows(.id = "Messstellennummer") %>% 
   dplyr::mutate(Datum = as.Date(.data$Datum, format = "%d.%m.%Y"))
-  
+
+readr::write_csv2(swl_data,
+                  file = "swl_data.csv")
+# readr::write_csv2(swl_data,
+#                  file = file.path(paths$figures_dir,
+#                                   "swl_data.csv"))
 
 swl_data_stats <- get_data_stats(swl_data)
 
@@ -131,13 +142,22 @@ gwl_master <-
   kwb.geosalz::convert_to_sf(crs_target = crs_target) %>%
   sf::st_filter(y = polygon_svm_fri)
 
+readr::write_csv2(gwl_master,
+                  file = "gwl_master.csv")
+# readr::write_csv2(gwl_master,
+#                  file = file.path(paths$figures_dir,
+#                                   "gwl_master.csv"))
 
 gwl_data <- data.table::rbindlist(lapply(gwl_master$Nummer,
                                          function(id) {
                                            wasserportal::read_wasserportal_raw_gw(station = id, stype = "gwl")
                                          }))
 
-
+readr::write_csv2(gwl_data,
+                  file = "gwl_data.csv")
+# readr::write_csv2(gwl_data,
+#                  file = file.path(paths$figures_dir,
+#                                   "gwl_data.csv"))
 
 gwl_data_stats <- get_data_stats(gwl_data) 
 
@@ -164,29 +184,60 @@ gwq_master <-
   kwb.geosalz::convert_to_sf(crs_target = crs_target) %>%
   sf::st_filter(y = polygon_svm_fri)
 
-gwq_data <-
-  jsonlite::fromJSON("https://kwb-r.github.io/wasserportal/stations_gwq_data.json")
+# readr::write_csv2(gwq_master,
+#                   file = "gwq_master.csv")
+readr::write_csv2(gwq_master,
+                 file = file.path(paths$figures_dir,
+                                  "gwq_master.csv"))
 
 
-gwq_data_stats <- gwq_data %>% 
-  dplyr::filter(.data$Parameter == "Chlorid") %>%
+gwq_data <- jsonlite::fromJSON("https://kwb-r.github.io/wasserportal/stations_gwq_data.json") %>%
+  dplyr::filter(.data$Messstellennummer %in% gwq_master$Nummer)
+
+readr::write_csv2(gwq_data,
+                  file = "gwq_data.csv")
+# readr::write_csv2(gwq_data,
+#                  file = file.path(paths$figures_dir,
+#                                   "gwq_data.csv"))
+
+gwq_chloride_data <- gwq_data %>%
+  dplyr::filter(.data$Parameter == "Chlorid")
+
+readr::write_csv2(gwq_chloride_data,
+                  file = "gwq_chloride_data.csv")
+# readr::write_csv2(gwq_chloride_data,
+#                  file = file.path(paths$figures_dir,
+#                                   "gwq_chloride_data.csv"))
+
+gwq_chloride_master <- gwq_master %>% 
+  dplyr::filter(.data$Nummer %in% gwq_chloride_data$Messstellennummer)
+
+
+readr::write_csv2(gwq_chloride_master,
+                  file = "gwq_chloride_master.csv")
+# readr::write_csv2(gwq_chloride_master,
+#                  file = file.path(paths$figures_dir,
+#                                   "gwq_chloride_master.csv"))
+
+
+gwq_chloride_data_stats <- gwq_chloride_data %>%
   get_data_stats()
 
-gwq_data_stats_export <- 
+gwq_chloride_stats_export <- 
   gwq_master %>% 
   remove_na_and_geometry() %>%
   dplyr::mutate(Nummer = as.integer(.data$Nummer)) %>% 
-  dplyr::left_join(difftime_to_numeric(gwq_data_stats),
+  dplyr::left_join(difftime_to_numeric(gwq_chloride_data_stats),
                    by = c("Nummer" = "Messstellennummer"))
   
-jsonlite::write_json(gwq_data_stats_export, 
-                     "gwq_data_stats.json")
-readr::write_csv2(gwq_data_stats_export,
-                  file = "gwq_data_stats.csv")
+jsonlite::write_json(gwq_chloride_data_stats_export, 
+                     "gwq_chloride_data_stats.json")
+readr::write_csv2(gwq_chloride_stats_export,
+                  file = "gwq_chloride_data_stats.csv")
 
-gwq_master_stats <- gwq_master %>%
+gwq_chloride_master_stats <- gwq_chloride_master %>%
   dplyr::mutate(Nummer = as.integer(.data$Nummer)) %>%
-  dplyr::left_join(gwq_data_stats, by = c("Nummer" = "Messstellennummer")) %>%
+  dplyr::left_join(gwq_chloride_data_stats, by = c("Nummer" = "Messstellennummer")) %>%
   add_label()
 
 
@@ -231,10 +282,10 @@ gwl_map <-  basemap %>%
 
 gwq_map <-  basemap %>%
   leaflet::addCircles(
-    data = gwq_master_stats,
+    data = gwq_chloride_master_stats,
     color = "orange",
     opacity = 0.4,
-    label = lapply(gwq_master_stats$label, htmltools::HTML)
+    label = lapply(gwq_chloride_master_stats$label, htmltools::HTML)
   ) %>%
   leaflet::addLegend(
     position = "topright",
@@ -292,7 +343,7 @@ htmlwidgets::saveWidget(
 
 * [https://kwb-r.github.io/kwb.geosalz/gwl_data_stats.json](../gwl_data_stats.json)
 
-* [https://kwb-r.github.io/kwb.geosalz/gwq_data_stats.json](../gwq_data_stats.json)
+* [https://kwb-r.github.io/kwb.geosalz/gwq_chloride_data_stats.json](../gwq_chloride_data_stats.json)
 
 ### Download CSV Format
 
@@ -300,7 +351,7 @@ htmlwidgets::saveWidget(
 
 * [https://kwb-r.github.io/kwb.geosalz/gwl_data_stats.csv](../gwl_data_stats.csv)
 
-* [https://kwb-r.github.io/kwb.geosalz/gwq_data_stats.csv](../gwq_data_stats.csv)
+* [https://kwb-r.github.io/kwb.geosalz/gwq_chloride_data_stats.csv](../gwq_chloride_data_stats.csv)
 
 ### Tables
 
@@ -321,6 +372,6 @@ DT::datatable(gwl_data_stats_export)
 stats for `Chloride`
 
 ```{r tbl_gwq}
-DT::datatable(gwq_data_stats_export)
+DT::datatable(gwq_chloride_data_stats_export)
 ```
 

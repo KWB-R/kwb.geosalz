@@ -81,6 +81,10 @@ foerdermengen_ww <- kwb.geosalz::get_foerdermengen(paths$foerdermengen)
 foerdermengen_fri_gal <- kwb.geosalz::get_foerdermengen_gal_fri(path = paths$foerdermengen) %>% 
   dplyr::filter(!is.na(!.data$foerdermenge_m3))
 
+readr::write_csv2(foerdermengen_fri_gal, 
+                 file = file.path(paths$figures_dir,
+                                  "foerdermengen_fri_gal.csv")
+                 )
 
 para_info <- kwb.geosalz::get_parameters_meta(paths$parameters)
 
@@ -89,7 +93,9 @@ labordaten_ww_timeseries <- labordaten_ww %>%
                   werk == "FRI") 
 
 readr::write_csv2(labordaten_ww_timeseries,
-                 file = file.path(paths$figures_dir, "Zeitreihen_FRI_Guete.csv"))
+                 file = file.path(paths$figures_dir,
+                                  "Zeitreihen_FRI_Guete_Rohwasser.csv")
+                 )
 
 
 labordaten_ww_stats <- labordaten_ww_timeseries %>%
@@ -106,7 +112,8 @@ labordaten_ww_stats <- labordaten_ww_timeseries %>%
   dplyr::arrange(.data$para_id, .data$galerie)
 
 readr::write_csv2(labordaten_ww_stats,
-                 file = file.path(paths$figures_dir, "Stats_FRI_Guete.csv"))
+                 file = file.path(paths$figures_dir,
+                                  "Stats_FRI_Guete_Rohwasser.csv"))
 
 
 
