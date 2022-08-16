@@ -73,7 +73,7 @@ crs_target <- 4326
 
 ### Load SVM Boundaries
 shp_svm_path <-
-  system.file("extdata/gis/shapefiles/svm.shp", package = "kwb.geosalz")
+  system.file("extdata/gis/shapefiles/svm_south.shp", package = "kwb.geosalz")
 
 
 svm <- sf::st_read(shp_svm_path) %>%
@@ -223,7 +223,7 @@ readr::write_csv2(gwq_chloride_master,
 gwq_chloride_data_stats <- gwq_chloride_data %>%
   get_data_stats()
 
-gwq_chloride_stats_export <- 
+gwq_chloride_data_stats_export <- 
   gwq_master %>% 
   remove_na_and_geometry() %>%
   dplyr::mutate(Nummer = as.integer(.data$Nummer)) %>% 
@@ -232,7 +232,7 @@ gwq_chloride_stats_export <-
   
 jsonlite::write_json(gwq_chloride_data_stats_export, 
                      "gwq_chloride_data_stats.json")
-readr::write_csv2(gwq_chloride_stats_export,
+readr::write_csv2(gwq_chloride_data_stats_export,
                   file = "gwq_chloride_data_stats.csv")
 
 gwq_chloride_master_stats <- gwq_chloride_master %>%
