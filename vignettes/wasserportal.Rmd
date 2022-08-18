@@ -91,16 +91,18 @@ swl_master <- wasserportal::get_wasserportal_masters_data(
   station_ids = stations$overview_list$surface_water.water_level %>%
     dplyr::filter(.data$Betreiber == "Land Berlin") %>%
     dplyr::pull(.data$Messstellennummer)
-)  %>%
+) 
+
+swl_master_sf <- swl_master %>%
   kwb.geosalz::convert_to_sf(crs_target = crs_target) %>%
   sf::st_filter(y = polygon_svm_fri) %>%
   add_label(columns = c("Nummer", "Gewaesser", "Auspraegung", "Betreiber"))
 
+swl_master <- swl_master %>% 
+  dplyr::filter(.data$Nummer %in% swl_master_sf$Nummer) 
+
 readr::write_csv2(swl_master,
                  file = "swl_master.csv")
-# readr::write_csv2(swl_master,
-#                  file = file.path(paths$figures_dir,
-#                                   "swl_master.csv"))
 
 swl_data_list <- stats::setNames(lapply(swl_master$Nummer, function(station) {
 wasserportal::read_wasserportal(station = station, 
@@ -118,35 +120,39 @@ swl_data <- stats::setNames(lapply(names(swl_data_list), function(name) {
 
 readr::write_csv2(swl_data,
                   file = "swl_data.csv")
-# readr::write_csv2(swl_data,
-#                  file = file.path(paths$figures_dir,
-#                                   "swl_data.csv"))
 
 swl_data_stats <- get_data_stats(swl_data)
 
 
 swl_data_stats_export <- 
-  swl_master %>% 
+  swl_master_sf %>% 
   remove_na_and_geometry() %>%
   dplyr::left_join(difftime_to_numeric(swl_data_stats),
                    by = c("Nummer" = "Messstellennummer"))
   
-jsonlite::write_json(swl_data_stats_export, 
-                     "swl_data_stats.json")
 readr::write_csv2(swl_data_stats_export,
                   file = "swl_data_stats.csv")
 
 
 gwl_master <-
-  jsonlite::fromJSON("https://kwb-r.github.io/wasserportal/stations_gwl_master.json") %>%
+  jsonlite::fromJSON("https://kwb-r.github.io/wasserportal/stations_gwl_master.json") %>%  
+  ### fix to remove 3 surface water stations from dataset 
+  ### ()
+  dplyr::filter(is.na(.data$Flusskilometer)) %>% 
+  dplyr::select(- .data$Name,
+                - .data$Flusskilometer, 
+                - .data$Gewaesser
+                )
+
+gwl_master_sf <- gwl_master %>%
   kwb.geosalz::convert_to_sf(crs_target = crs_target) %>%
   sf::st_filter(y = polygon_svm_fri)
 
+gwl_master <- gwl_master %>% 
+  dplyr::filter(.data$Nummer %in% gwl_master_sf$Nummer)
+
 readr::write_csv2(gwl_master,
                   file = "gwl_master.csv")
-# readr::write_csv2(gwl_master,
-#                  file = file.path(paths$figures_dir,
-#                                   "gwl_master.csv"))
 
 gwl_data <- data.table::rbindlist(lapply(gwl_master$Nummer,
                                          function(id) {
@@ -155,20 +161,14 @@ gwl_data <- data.table::rbindlist(lapply(gwl_master$Nummer,
 
 readr::write_csv2(gwl_data,
                   file = "gwl_data.csv")
-# readr::write_csv2(gwl_data,
-#                  file = file.path(paths$figures_dir,
-#                                   "gwl_data.csv"))
 
 gwl_data_stats <- get_data_stats(gwl_data) 
 
-gwl_data_stats_export <- 
-  gwl_master %>% 
+gwl_data_stats_export <- gwl_master_sf %>% 
   remove_na_and_geometry() %>%
   dplyr::left_join(difftime_to_numeric(gwl_data_stats),
                    by = c("Nummer" = "Messstellennummer"))
   
-jsonlite::write_json(gwl_data_stats_export, 
-                     "gwl_data_stats.json")
 readr::write_csv2(gwl_data_stats_export,
                   file = "gwl_data_stats.csv")
 
@@ -178,17 +178,19 @@ gwl_master_stats <- gwl_master %>%
   add_label()
 
 
-
 gwq_master <-
-  jsonlite::fromJSON("https://kwb-r.github.io/wasserportal/stations_gwq_master.json") %>%
+  jsonlite::fromJSON("https://kwb-r.github.io/wasserportal/stations_gwq_master.json")
+
+gwq_master_sf <- gwq_master %>%
   kwb.geosalz::convert_to_sf(crs_target = crs_target) %>%
   sf::st_filter(y = polygon_svm_fri)
 
-# readr::write_csv2(gwq_master,
-#                   file = "gwq_master.csv")
+gwq_master <- gwq_master %>% 
+  dplyr::filter(.data$Nummer %in% gwq_master_sf$Nummer)
+
 readr::write_csv2(gwq_master,
-                 file = file.path(paths$figures_dir,
-                                  "gwq_master.csv"))
+                  file = "gwq_master.csv")
+
 
 
 gwq_data <- jsonlite::fromJSON("https://kwb-r.github.io/wasserportal/stations_gwq_data.json") %>%
@@ -196,29 +198,20 @@ gwq_data <- jsonlite::fromJSON("https://kwb-r.github.io/wasserportal/stations_gw
 
 readr::write_csv2(gwq_data,
                   file = "gwq_data.csv")
-# readr::write_csv2(gwq_data,
-#                  file = file.path(paths$figures_dir,
-#                                   "gwq_data.csv"))
+
 
 gwq_chloride_data <- gwq_data %>%
   dplyr::filter(.data$Parameter == "Chlorid")
 
 readr::write_csv2(gwq_chloride_data,
                   file = "gwq_chloride_data.csv")
-# readr::write_csv2(gwq_chloride_data,
-#                  file = file.path(paths$figures_dir,
-#                                   "gwq_chloride_data.csv"))
+
 
 gwq_chloride_master <- gwq_master %>% 
   dplyr::filter(.data$Nummer %in% gwq_chloride_data$Messstellennummer)
 
-
 readr::write_csv2(gwq_chloride_master,
                   file = "gwq_chloride_master.csv")
-# readr::write_csv2(gwq_chloride_master,
-#                  file = file.path(paths$figures_dir,
-#                                   "gwq_chloride_master.csv"))
-
 
 gwq_chloride_data_stats <- gwq_chloride_data %>%
   get_data_stats()
@@ -230,8 +223,6 @@ gwq_chloride_data_stats_export <-
   dplyr::left_join(difftime_to_numeric(gwq_chloride_data_stats),
                    by = c("Nummer" = "Messstellennummer"))
   
-jsonlite::write_json(gwq_chloride_data_stats_export, 
-                     "gwq_chloride_data_stats.json")
 readr::write_csv2(gwq_chloride_data_stats_export,
                   file = "gwq_chloride_data_stats.csv")
 
@@ -240,6 +231,8 @@ gwq_chloride_master_stats <- gwq_chloride_master %>%
   dplyr::left_join(gwq_chloride_data_stats, by = c("Nummer" = "Messstellennummer")) %>%
   add_label()
 
+readr::write_csv2(gwq_chloride_master_stats,
+                  file = "gwq_chloride_master_stats.csv")
 
 
 # Print Map
@@ -252,10 +245,10 @@ basemap <- svm %>%
 
 swl_map <-  basemap %>%
   leaflet::addCircles(
-    data = swl_master,
+    data = swl_master_sf,
     color = "blue",
     opacity = 0.4,
-    label = lapply(swl_master$label, htmltools::HTML)
+    label = lapply(swl_master_sf$label, htmltools::HTML)
   ) %>%
   leaflet::addLegend(
     position = "topright",
@@ -337,21 +330,37 @@ htmlwidgets::saveWidget(
 ## Datasets
 
 
-### Download JSON Format
+### Surface Water
 
-* [https://kwb-r.github.io/kwb.geosalz/swl_data_stats.json](../swl_data_stats.json)
+* [https://kwb-r.github.io/kwb.geosalz/swl_master.csv](../swl_master.csv)
 
-* [https://kwb-r.github.io/kwb.geosalz/gwl_data_stats.json](../gwl_data_stats.json)
-
-* [https://kwb-r.github.io/kwb.geosalz/gwq_chloride_data_stats.json](../gwq_chloride_data_stats.json)
-
-### Download CSV Format
+* [https://kwb-r.github.io/kwb.geosalz/swl_data.csv](../swl_data.csv)
 
 * [https://kwb-r.github.io/kwb.geosalz/swl_data_stats.csv](../swl_data_stats.csv)
 
+### Groundwater
+
+#### Groundwater Levels
+
+* [https://kwb-r.github.io/kwb.geosalz/gwl_master.csv](../gwl_master.csv)
+
+* [https://kwb-r.github.io/kwb.geosalz/gwl_data.csv](../gwl_data.csv)
+
 * [https://kwb-r.github.io/kwb.geosalz/gwl_data_stats.csv](../gwl_data_stats.csv)
 
-* [https://kwb-r.github.io/kwb.geosalz/gwq_chloride_data_stats.csv](../gwq_chloride_data_stats.csv)
+#### Groundwater Quality 
+
+* [https://kwb-r.github.io/kwb.geosalz/gwq_master.csv](../gwq_master.csv)
+
+* [https://kwb-r.github.io/kwb.geosalz/gwq_data.csv](../gwq_data.csv)
+
+
+* [https://kwb-r.github.io/kwb.geosalz/gwq_chloride_master.csv](../gwq_chloride_master.csv)
+
+* [https://kwb-r.github.io/kwb.geosalz/gwq_chloride_master_stats.csv](../gwq_chloride_master_stats.csv)
+
+* [https://kwb-r.github.io/kwb.geosalz/gwq_chloride_data.csv](../gwq_chloride_data.csv)
+
 
 ### Tables
 
@@ -362,6 +371,8 @@ DT::datatable(swl_data_stats_export)
 ```
 
 #### GW Levels 
+
+stats for `groundwater levels`
 
 ```{r tbl_gwl}
 DT::datatable(gwl_data_stats_export)
