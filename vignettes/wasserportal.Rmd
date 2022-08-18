@@ -216,8 +216,8 @@ readr::write_csv2(gwq_chloride_master,
 gwq_chloride_data_stats <- gwq_chloride_data %>%
   get_data_stats()
 
-gwq_chloride_data_stats_export <- 
-  gwq_master %>% 
+gwq_chloride_data_stats_export <- gwq_chloride_master %>%
+  kwb.geosalz::convert_to_sf() %>% 
   remove_na_and_geometry() %>%
   dplyr::mutate(Nummer = as.integer(.data$Nummer)) %>% 
   dplyr::left_join(difftime_to_numeric(gwq_chloride_data_stats),
@@ -260,7 +260,7 @@ swl_map <-  basemap %>%
 
 gwl_map <-  basemap %>%
   leaflet::addCircles(
-    data = gwl_master_stats,
+    data = kwb.geosalz::convert_to_sf(gwl_master_stats),
     color = "blue",
     opacity = 0.4,
     label = lapply(gwl_master_stats$label, htmltools::HTML)
@@ -275,7 +275,7 @@ gwl_map <-  basemap %>%
 
 gwq_map <-  basemap %>%
   leaflet::addCircles(
-    data = gwq_chloride_master_stats,
+    data = kwb.geosalz::convert_to_sf(gwq_chloride_master_stats),
     color = "orange",
     opacity = 0.4,
     label = lapply(gwq_chloride_master_stats$label, htmltools::HTML)
