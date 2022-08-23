@@ -1,3 +1,21 @@
+# [kwb.geosalz 0.4.0](https://github.com/KWB-R/kwb.geosalz/releases/tag/v0.4.0) <small>2022-08-22</small>
+
+
+**Functions**
+
+* Add `read_lab_bwb()`: import lab data of BWB 
+
+* Add `read_isotopes()`: imports isotope data 
+
+**Articles**
+
+- Added [Wasserportal](../articles/wasserportal.html) data availability for southern 
+part of SVM Friedrichshagen
+
+- Added [Hydrochemistry](../articles/hydrochemistry.html) data preparation workflow 
+of lab data for PhreeqC  
+
+
 # [kwb.geosalz 0.3.0](https://github.com/KWB-R/kwb.geosalz/releases/tag/v0.3.0) <small>2022-06-20</small>
 
 Adding functionality for checking data availability for SVM Friedrichshagen based on available BWB data from pre-project phase (digitalised at KWB) and open-data from [Wasserportal Berlin](https://wasserportal.berlin.de)
