@@ -1,20 +1,6 @@
 Nummer;Name;Gewaesser;Betreiber;Auspraegung;Flusskilometer;Pegelnullpunkt_m;start;end;period_days;n;interval_days
-5865900;Allee der Kosmonauten;M.-H.-Grenzgr.;SenUVK;DMA (W-Q);4.10;45.62;1999-11-01;2022-06-20;8267;8268;1
-5827103;Allendestraße;Müggelspree;SenUVK;DMA (US);35.00;31.84;2006-02-01;2022-06-20;5983;5984;1
-5865300;Am Bahndamm;Wuhle;SenUVK;DMA (US);0.85;31.41;2002-06-01;2022-06-20;7324;7325;1
-5864801;Am Kienberg;Hellersdorfer Graben;SenUVK;DMA (US);0.26;43.91;2016-11-01;2022-06-20;2057;2058;1
-5861101;Am Reitweg;Neuenhagener Mühlenfließ;SenUVK;WMA;3.50;33.32;2013-09-01;2022-06-20;3214;3215;1
-5800317;Biesdorfer Baggersee;Biesdorfer Baggersee;SenUVK;WMA;;33.36;2005-03-01;2022-06-20;6320;6321;1
-5863000;Eisenacher Straße;Wuhle;SenUVK;WMA;;44.34;2015-11-01;2022-06-20;2423;2424;1
-5827101;Fähre Rahnsdorf;Müggelspree;SenUVK;DMA (US);8.51;31.79;1995-06-01;2022-06-20;9881;9882;1
-5860900;Fichtenau;Fredersdorfer Mühlenfließ;SenUVK;WMA;;37.14;2017-02-24;2022-06-20;1942;1943;1
-5826702;Gosener Landstraße;Gosener Graben;SenUVK;WMA;1.00;31.78;1999-11-01;2022-06-20;8267;8268;1
-5861000;Hegemeisterweg;Fredersdorfer Mühlenfließ;SenUVK;DMA (W-Q);1.80;35.58;1991-02-01;2022-06-20;11462;11463;1
-5864700;Hellersdorf;Wuhle;SenUVK;WMA;;44.36;2020-05-13;2022-06-20;768;769;1
-5865000;Honsfelder Brücke;Wuhle;SenUVK;Lattenpegel;5.80;34.66;2019-02-18;2022-06-20;1218;1219;1
-5865200;Hoppendorfer Straße;Wuhle;SenUVK;WMA;2.90;31.90;2017-02-27;2022-06-20;1939;1940;1
-5869700;Krummendammbrücke;Neuenhagener Mühlenfließ;SenUVK;DMA (W-Q);6.60;37.11;2015-09-01;2022-06-20;2484;2485;1
-5826701;Neue Fahlenbergbrücke;Gosener Kanal;SenUVK;DMA (US);1.00;31.80;1999-11-01;2022-06-20;8267;8268;1
-5862811;Schmöckwitz US;Zeuthener See;SenUVK;DMA (US);11.20;31.94;2005-01-01;2022-06-20;6379;6380;1
-5861200;Wiesengrund;Neuenhagener Mühlenfließ;SenUVK;DMA (US);3.00;32.34;1990-08-01;2022-06-20;11646;11647;1
-5864800;Wuhletal;Wuhle;SenUVK;DMA (US);8.04;39.08;2004-11-01;2022-06-20;6440;6441;1
+5827103;Allendestraße;Müggelspree;Land Berlin;DMA (US);35.00;31.84;2006-02-01;2022-08-22;6046;6047;1
+5827101;Fähre Rahnsdorf;Müggelspree;Land Berlin;DMA (US);8.51;31.79;1995-06-01;2022-08-22;9944;9945;1
+5826702;Gosener Landstraße;Gosener Graben;Land Berlin;WMA;1.00;31.78;1999-11-01;2022-08-22;8330;8331;1
+5826701;Neue Fahlenbergbrücke;Gosener Kanal;Land Berlin;DMA (US);1.00;31.80;1999-11-01;2022-08-22;8330;8331;1
+5862811;Schmöckwitz US;Zeuthener See;Land Berlin;DMA (US);11.20;31.94;2005-01-01;2022-08-22;6442;6443;1

@@ -1,11 +1,11 @@
 pandoc: 2.7.3
-pkgdown: 2.0.4
+pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
   data-availability_fri: data-availability_fri.html
   wasserportal: wasserportal.html
   workflow: workflow.html
-last_built: 2022-06-20T13:30Z
+last_built: 2022-08-23T10:14Z
 urls:
   reference: https://kwb-r.github.io/kwb.geosalz/reference
   article: https://kwb-r.github.io/kwb.geosalz/articles
