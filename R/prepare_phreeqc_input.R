@@ -24,7 +24,7 @@ get_phreeqc_data <- function(lab_bwb) {
 #' Prepare PhreeqC input
 #'
 #' @param lab_bwb_phreeqc selected BWB lab data as retrieved by \code{\link{get_phreeqc_data}}
-#' @param title user defined title (default: "Test Dataset") 
+#' @param title user defined title (default: "") 
 #' @return data frame with input structure for kwb.phreeqc
 #' @export
 #'
@@ -33,7 +33,7 @@ get_phreeqc_data <- function(lab_bwb) {
 #' @importFrom tidyr pivot_wider
 #' @importFrom geosalz.phreeqc prepare_solutions_input tidy_samples
 prepare_phreeqc_input <- function(lab_bwb_phreeqc,
-                                  title = "Test Dataset") {
+                                  title = "") {
   
 
   lab_bwb_phreeqc %>% 
@@ -46,7 +46,7 @@ prepare_phreeqc_input <- function(lab_bwb_phreeqc,
   dplyr::mutate(units = "ppm") %>% 
   dplyr::relocate(.data$units, .after = .data$solution) %>% 
   geosalz.phreeqc::tidy_samples() %>% 
-  dplyr::mutate(solution = as.character(solution), 
+  dplyr::mutate(solution = as.character(.data$solution), 
                 outOfLimit = "", 
                 numericValue = as.numeric(.data$value)) %>% 
   dplyr::filter(!is.na(.data$numericValue)) %>% 
@@ -56,9 +56,7 @@ prepare_phreeqc_input <- function(lab_bwb_phreeqc,
 
 #' Convert PhreeqC input to "wide" format
 #'
-#' @param phreeqc_input PhreeqC input as retrieved by \code{\link{get_phreeqc_dat}}
-
-#'
+#' @param phreeqc_input PhreeqC input as retrieved by \code{\link{get_phreeqc_data}}
 #' @return PhreeqC input in "wide" format
 #' @export
 #' @importFrom tidyr pivot_wider

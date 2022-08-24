@@ -7,7 +7,7 @@
 convert_phreeqc_input_to_wide(phreeqc_input)
 }
 \arguments{
-\item{phreeqc_input}{PhreeqC input as retrieved by \code{\link{get_phreeqc_dat}}}
+\item{phreeqc_input}{PhreeqC input as retrieved by \code{\link{get_phreeqc_data}}}
 }
 \value{
 PhreeqC input in "wide" format

@@ -4,12 +4,12 @@
 \alias{prepare_phreeqc_input}
 \title{Prepare PhreeqC input}
 \usage{
-prepare_phreeqc_input(lab_bwb_phreeqc, title = "Test Dataset")
+prepare_phreeqc_input(lab_bwb_phreeqc, title = "")
 }
 \arguments{
 \item{lab_bwb_phreeqc}{selected BWB lab data as retrieved by \code{\link{get_phreeqc_data}}}
 
-\item{title}{user defined title (default: "Test Dataset")}
+\item{title}{user defined title (default: "")}
 }
 \value{
 data frame with input structure for kwb.phreeqc

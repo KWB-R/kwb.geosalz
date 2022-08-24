@@ -25,12 +25,12 @@ Imports:
     kwb.base,
     kwb.utils (>= 0.4.0.9000),
     magrittr (>= 1.5),
-    readr,
+    readr(>= 1.4.0), 
     readxl (>= 1.2.0),
     rlang (>= 0.3.1),
     sf, 
     stringr (>= 1.4.0),
-    tibble,
+    tibble (>= 2.0.1),
     tidyr (>= 0.8.2),
     tidyselect (>= 1.1.2)
 Suggests: 
@@ -43,10 +43,8 @@ Suggests:
     knitr (>= 1.21),
     kwb.pkgbuild,
     phreeqc,
-    readr(>= 1.4.0), 
     rmarkdown (>= 1.11),
     sessioninfo (>= 1.1.1),
-    tibble (>= 2.0.1),
     wasserportal
 VignetteBuilder: 
     knitr
