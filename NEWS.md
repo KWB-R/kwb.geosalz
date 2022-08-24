@@ -3,9 +3,19 @@
 
 **Functions**
 
-* Add `read_lab_bwb()`: import lab data of BWB 
+* **Hydrochemistry**: 
 
-* Add `read_isotopes()`: imports isotope data 
+  - added `read_lab_bwb()` to import lab data of BWB and `read_isotopes()` to 
+  import isotope data analysed by UFZ
+  
+  - added `get_phreeqc_data()` to filter out parameters imported by `read_lab_bwb()`
+  which are required by PhreeqC. In order to transform these filtered data 
+  the function `convert_phreeqc_input_to_wide()` can be used. Finally the filtered 
+  data (as retrieved by `get_phreeqc_data()`) is used by `prepare_phreeqc_input()`
+  for creating the PhreeqC input file.
+
+* **Wasserportal**: added `convert_to_sf()` to convert xy-coordinates (i.e. UTM_33N 
+with crs = 25833) to a spatial feature object (with crs = 4326)
 
 **Articles**
 
