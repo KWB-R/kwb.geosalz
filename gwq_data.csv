@@ -27638,9 +27638,9 @@ Messstellennummer;Datum;Parameter;Einheit;Messwert
 10790;2018-11-23;Uran;µg/l;7,80
 10790;2018-11-23;Summe Na+Cl;mg/l;114,10
 10790;2019-06-26;Temperatur (Luft);grd Celsius;32,00
-10790;2019-06-26;pH-Wert (Feld);ohne Einheit;7,10
-10790;2019-06-26;Temperatur (Wasser);grd C;11,00
-10790;2019-06-26;Leitfähigkeit 25°C vor Ort;µS/cm;535,00
+10790;2019-06-26;pH-Wert (Feld);ohne Einheit;7,30
+10790;2019-06-26;Temperatur (Wasser);grd C;10,40
+10790;2019-06-26;Leitfähigkeit 25°C vor Ort;µS/cm;613,00
 10790;2019-06-26;Wasserst.(ROK) vor;m;3,85
 10790;2019-06-26;Wasserst.(ROK) nach;m;3,85
 10790;2019-06-26;Entnahmeteufe (ROK);m unter ROK;5,00
@@ -27650,55 +27650,55 @@ Messstellennummer;Datum;Parameter;Einheit;Messwert
 10790;2019-06-26;Redox Pumpende;mV;384,00
 10790;2019-06-26;pH Pumpende;ohne Einheit;7,10
 10790;2019-06-26;O2-Gehalt Pumpende;mg/l;0,00
-10790;2019-06-26;Chlorid;mg/l;48,00
-10790;2019-06-26;Fluorid;mg/l;0,33
-10790;2019-06-26;Hydrogenkarbonat;mg/l;376,50
-10790;2019-06-26;Nitrit (N);mg/l N;0,01
-10790;2019-06-26;Nitrat (N);mg/l N;0,99
-10790;2019-06-26;Ortho-Phosphat (P);mg/l P;0,08
-10790;2019-06-26;Sulfat;mg/l;214,00
+10790;2019-06-26;Chlorid;mg/l;49,00
+10790;2019-06-26;Fluorid;mg/l;0,30
+10790;2019-06-26;Hydrogenkarbonat;mg/l;378,30
+10790;2019-06-26;Nitrit (N);mg/l N;0,06
+10790;2019-06-26;Nitrat (N);mg/l N;1,10
+10790;2019-06-26;Ortho-Phosphat (P);mg/l P;0,05
+10790;2019-06-26;Sulfat;mg/l;215,00
 10790;2019-06-26;Cyanide (ges.);mg/l;0,00
 10790;2019-06-26;Bromid;mg/l;-0,10
 10790;2019-06-26;Nitrit;mg/l;0,04
 10790;2019-06-26;Nitrat;mg/l;4,38
 10790;2019-06-26;Ortho-Phosphat;mg/l;0,24
 10790;2019-06-26;Ammonium (N);mg/l N;-0,02
-10790;2019-06-26;Eisen-2;mg/l;0,06
+10790;2019-06-26;Eisen-2;mg/l;0,02
 10790;2019-06-26;Eisen (ges.);mg/l;0,47
 10790;2019-06-26;Kalium;mg/l;11,00
-10790;2019-06-26;Kalzium;mg/l;170,00
-10790;2019-06-26;Magnesium;mg/l;23,10
-10790;2019-06-26;Natrium;mg/l;40,20
-10790;2019-06-26;Mangan;mg/l;1,10
+10790;2019-06-26;Kalzium;mg/l;166,00
+10790;2019-06-26;Magnesium;mg/l;22,80
+10790;2019-06-26;Natrium;mg/l;40,40
+10790;2019-06-26;Mangan;mg/l;0,52
 10790;2019-06-26;Ammonium;mg/l;-0,03
-10790;2019-06-26;Leitfähigkeit /Lab. bei 25°C;µS/cm;1086,00
-10790;2019-06-26;UV-Adsorption (254);1/m;16,70
-10790;2019-06-26;CSV (KMNO4);mg/l O2;4,13
-10790;2019-06-26;Basenkap. bis 8.2;mmol/l;0,63
-10790;2019-06-26;Säure-Kap. bis 4.3;mmol/l;6,17
-10790;2019-06-26;Kohlenstoff (organ.);mg/l C;7,40
+10790;2019-06-26;Leitfähigkeit /Lab. bei 25°C;µS/cm;1092,00
+10790;2019-06-26;UV-Adsorption (254);1/m;16,00
+10790;2019-06-26;CSV (KMNO4);mg/l O2;4,20
+10790;2019-06-26;Basenkap. bis 8.2;mmol/l;0,66
+10790;2019-06-26;Säure-Kap. bis 4.3;mmol/l;6,20
+10790;2019-06-26;Kohlenstoff (organ.);mg/l C;8,00
 10790;2019-06-26;pH-Wert /Lab.;ohne Einheit;7,10
-10790;2019-06-26;Gesamthärte;mmol/l;5,20
-10790;2019-06-26;Karbonathärte;mmol/l;3,09
-10790;2019-06-26;AOX;µg/l;160,00
+10790;2019-06-26;Gesamthärte;mmol/l;5,09
+10790;2019-06-26;Karbonathärte;mmol/l;3,10
+10790;2019-06-26;AOX;µg/l;130,00
 10790;2019-06-26;Phenolindex (ges.);µg/l;-10,00
-10790;2019-06-26;Arsen;µg/l;1,30
-10790;2019-06-26;Barium;µg/l;103,00
+10790;2019-06-26;Arsen;µg/l;0,75
+10790;2019-06-26;Barium;µg/l;94,00
 10790;2019-06-26;Blei;µg/l;2,30
-10790;2019-06-26;Bor;µg/l;279,00
-10790;2019-06-26;Cadmium;µg/l;0,15
-10790;2019-06-26;Chrom;µg/l;0,86
-10790;2019-06-26;Kupfer;µg/l;4,40
-10790;2019-06-26;Aluminium-gelöst;µg/l;2,40
-10790;2019-06-26;Molybdän;µg/l;2,90
-10790;2019-06-26;Nickel;µg/l;4,00
+10790;2019-06-26;Bor;µg/l;263,00
+10790;2019-06-26;Cadmium;µg/l;0,12
+10790;2019-06-26;Chrom;µg/l;0,15
+10790;2019-06-26;Kupfer;µg/l;3,40
+10790;2019-06-26;Aluminium-gelöst;µg/l;2,50
+10790;2019-06-26;Molybdän;µg/l;3,50
+10790;2019-06-26;Nickel;µg/l;2,70
 10790;2019-06-26;Quecksilber;µg/l;-0,01
-10790;2019-06-26;Selen;µg/l;1,00
-10790;2019-06-26;Zink;µg/l;19,00
-10790;2019-06-26;Vanadium;µg/l;1,60
+10790;2019-06-26;Selen;µg/l;1,10
+10790;2019-06-26;Zink;µg/l;1,80
+10790;2019-06-26;Vanadium;µg/l;0,64
 10790;2019-06-26;Thallium;µg/l;-0,05
-10790;2019-06-26;Uran;µg/l;9,00
-10790;2019-06-26;Summe Na+Cl;mg/l;88,20
+10790;2019-06-26;Uran;µg/l;9,50
+10790;2019-06-26;Summe Na+Cl;mg/l;89,40
 10790;2019-06-26;Ionenbilanz (Labor);ohne Einheit;3,30
 10790;2019-10-18;Temperatur (Luft);grd Celsius;12,00
 10790;2019-10-18;pH-Wert (Feld);ohne Einheit;7,20
