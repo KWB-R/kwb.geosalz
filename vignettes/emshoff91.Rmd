@@ -40,7 +40,7 @@ paths_list <- list(
   project = "geosalz", 
   processing_dir = "//<servername>/processing/<project>",
   ods_dir = "<processing_dir>/archiv/precleaned-data/emshoff91/converted_ods", 
-  version = "0.1.0",
+  version = "0.2.0",
   export_xlsx_name = "emshoff91_v<version>.xlsx",
   export_xlsx_dir = "<processing_dir>/archiv/cleaned-data",
   export_xlsx_path = "<export_xlsx_dir>/<export_xlsx_name>"
@@ -79,6 +79,16 @@ samples_per_moni_id <- emshoff91_df %>%
   dplyr::count(.data$messstelle, 
                ) 
 
+samples_per_moni_id_master <- emshoff91_df %>%  
+  dplyr::count(.data$messstelle, 
+               .data$rohr,
+               .data$fi_mi, 
+               .data$strat,
+               .data$progr
+               ) 
+
+
+
 
                                             
 ```
@@ -88,6 +98,7 @@ samples_per_moni_id <- emshoff91_df %>%
 
 ```{r run_phreeqc_export, echo = TRUE}
 openxlsx::write.xlsx(list(samples_per_moni_id = samples_per_moni_id, 
+                          samples_per_moni_id_master = samples_per_moni_id_master,
                           data = emshoff91_df),
                      file = paths$export_xlsx_path,
                      overwrite = TRUE
