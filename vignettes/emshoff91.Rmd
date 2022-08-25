@@ -1,0 +1,132 @@
+---
+title: "Emshoff 91"
+author: "Michael Rustler"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Emshoff 91}
+%\VignetteEngine{knitr::rmarkdown}
+%\VignetteEncoding{UTF-8}
+---
+  
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(dplyr)
+library(tidyr)
+```
+
+# 1 Install R packages
+
+```{r eval=FALSE}
+if (! require("remotes")) {
+  install.packages("remotes", repos = "https://cloud.r-project.org")
+}
+
+remotes::install_github("kwb-r/kwb.geosalz", 
+                        dependencies = TRUE)
+```
+
+# 2 Setup the project 
+
+## 2.1 Define paths
+
+```{r eval=TRUE, echo = TRUE}
+# Define paths and resolve placeholders
+paths_list <- list(
+  servername = Sys.getenv("servername"),
+  project = "geosalz", 
+  processing_dir = "//<servername>/processing/<project>",
+  ods_dir = "<processing_dir>/archiv/precleaned-data/emshoff91/converted_ods", 
+  version = "0.1.0",
+  export_xlsx_name = "emshoff91_v<version>.xlsx",
+  export_xlsx_dir = "<processing_dir>/archiv/cleaned-data",
+  export_xlsx_path = "<export_xlsx_dir>/<export_xlsx_name>"
+)
+paths <- kwb.utils::resolve(paths_list)
+
+#paths <- kwb.utils::resolve(paths, root = "C:/projects")
+```
+
+```{r echo = FALSE}
+if(dir.exists(paths$root_project)) {
+  knitr::opts_chunk$set(eval=TRUE, message=FALSE, echo=TRUE)
+} else {
+  knitr::opts_chunk$set(eval=FALSE, message=FALSE, echo=TRUE)
+}
+```
+
+
+# 3 Data import
+
+
+```{r}
+emshoff91_import <- create_emshoff91_import(ods_dir = paths$ods_dir)
+
+emshoff91_list <- read_multiple_emshoff91_ods(emshoff91_import)
+
+emshoff91_df <- data.table::rbindlist(emshoff91_list, 
+                                      idcol = "ods_names_clean", 
+                                      fill = TRUE)
+
+emshoff91_df <- dplyr::right_join(emshoff91_import, emshoff91_df,
+                                  by = "ods_names_clean")
+
+
+samples_per_moni_id <- emshoff91_df %>%  
+  dplyr::count(.data$messstelle, 
+               ) 
+
+
+                                            
+```
+
+
+## 4 Export to Excel
+
+```{r run_phreeqc_export, echo = TRUE}
+openxlsx::write.xlsx(list(samples_per_moni_id = samples_per_moni_id, 
+                          data = emshoff91_df),
+                     file = paths$export_xlsx_path,
+                     overwrite = TRUE
+)
+```
+
+
+# 5 Session Info 
+
+## Plattform
+
+```{r plattform, eval = TRUE, echo= FALSE}
+environment <- sessioninfo::session_info()  
+
+knitr::kable(tibble::enframe(unlist(environment$platform)))
+
+```
+
+## Packages
+
+```{r packages, eval = TRUE, echo= FALSE}
+
+environment$packages
+
+```
+
+### Pandoc
+
+```{r pandoc, eval = TRUE, echo= FALSE}
+
+if(rmarkdown::pandoc_available()) {
+  data.frame(pandoc_directory = rmarkdown::pandoc_exec(),
+             pandoc_version = as.character(rmarkdown::pandoc_version()), 
+             stringsAsFactors = FALSE)
+} else {
+  print("No PANDOC installed!")
+}
+
+```
+
+
+

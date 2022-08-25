@@ -10,7 +10,9 @@
 read_isotopes <- function(path) {
   
   isotopes <- readr::read_delim(path, col_types = "ccdddcd", delim = ";") %>% 
-  janitor::clean_names() 
+  janitor::clean_names() %>% 
+  dplyr::mutate(sampling_date = as.Date(.data$sampling_date, format = "%d.%m.%Y")) %>% 
+  dplyr::select(- .data$fuk_masl)
   ### samples taken by KWB
   ### lab: UFZ
   # to to: fix date, add metadata join with BWB lab data

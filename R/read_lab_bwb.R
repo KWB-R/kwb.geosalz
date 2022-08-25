@@ -85,7 +85,8 @@ result <- kwb.utils::hsMatrixToListForm(as.data.frame(lab_bwb), keyFields,
   tidyr::separate(col = "key", 
                   into = c("par_name", "method", "par_name_phreeqc", "unit_org"),
                   sep = "@") %>% 
-  janitor::clean_names()
+  janitor::clean_names() %>% 
+  dplyr::mutate(probenahme_datum = as.Date(.data$probenahme_datum))
 
 result$par_val <- replace_nanb_with_na(result$par_val_org) 
 

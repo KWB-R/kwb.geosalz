@@ -1,7 +1,13 @@
-# [kwb.geosalz 0.4.0](https://github.com/KWB-R/kwb.geosalz/releases/tag/v0.4.0) <small>2022-08-22</small>
+# [kwb.geosalz 0.4.0](https://github.com/KWB-R/kwb.geosalz/releases/tag/v0.4.0) <small>2022-08-25</small>
 
 
 **Functions**
+
+* **Emshoff 91 .ods Import**: 
+  - `create_emshoff91_import()`
+  - `read_emshoff91_ods()` reads single `.ods` files
+  -  `read_multiple_emshoff91_ods()` wrapper around `read_emshoff91_ods()` 
+  reading multiple `.ods` files and returning a list
 
 * **Hydrochemistry**: 
 
@@ -19,11 +25,16 @@ with crs = 25833) to a spatial feature object (with crs = 4326)
 
 **Articles**
 
-- Added [Wasserportal](../articles/wasserportal.html) data availability for southern 
-part of SVM Friedrichshagen
+- Added [Emshoff 91](../articles/emshoff91.html) data import of ods files (formerly 
+saved in `Quattro Pro` (and converted with help of `LibreOffice (7.0)` on `Ubuntu` 
+to `.ods` and `.xlsx`. However, latter not used due to possible mis-translation!  
+
 
 - Added [Hydrochemistry](../articles/hydrochemistry.html) data preparation workflow 
 of lab data for PhreeqC  
+
+- Added [Wasserportal](../articles/wasserportal.html) data availability for southern 
+part of SVM Friedrichshagen
 
 
 # [kwb.geosalz 0.3.0](https://github.com/KWB-R/kwb.geosalz/releases/tag/v0.3.0) <small>2022-06-20</small>
