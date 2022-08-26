@@ -192,6 +192,14 @@ readr::write_csv2(gwq_master,
                   file = "gwq_master.csv")
 
 
+gw_master <- gwl_master %>%  
+  dplyr::full_join(gwq_master) %>% 
+  dplyr::mutate(Nummer = as.integer(.data$Nummer)) %>% 
+  dplyr::arrange(.data$Nummer)
+
+readr::write_csv2(gw_master,
+                  file = "gw_master.csv")
+
 
 gwq_data <- jsonlite::fromJSON("https://kwb-r.github.io/wasserportal/stations_gwq_data.json") %>%
   dplyr::filter(.data$Messstellennummer %in% gwq_master$Nummer)
@@ -339,6 +347,12 @@ htmlwidgets::saveWidget(
 * [https://kwb-r.github.io/kwb.geosalz/swl_data_stats.csv](../swl_data_stats.csv)
 
 ### Groundwater
+
+#### Master Data 
+
+for [Groundwater Levels](#groundwater-levels) and [Groundwater Levels](#groundwater-quality)
+
+* [https://kwb-r.github.io/kwb.geosalz/gw_master.csv](../gw_master.csv)
 
 #### Groundwater Levels
 
