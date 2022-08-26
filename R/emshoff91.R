@@ -21,8 +21,8 @@
 #' }
 create_emshoff91_import <- function(ods_dir,
                                     files_to_ignore = c("cl25",
-                                                        "gf_gm",
                                                         "clliste",
+                                                        "gf_gm",
                                                         "gwnguete",
                                                         "rupelauf",
                                                         "salzlast")) {
@@ -32,7 +32,7 @@ create_emshoff91_import <- function(ods_dir,
       pattern = "\\.ods$",
       full.names = TRUE
     ),
-    ods_files = basename(ods_files),
+    ods_files = basename(ods_paths),
     ods_names_clean = ods_files %>%
       stringr::str_remove(pattern = "\\.ods$") %>%
       janitor::make_clean_names()
@@ -82,16 +82,24 @@ read_emshoff91_ods <- function(emshoff91_import_selected) {
     janitor::clean_names() %>%
     #dplyr::rename("bemerkungen" = .data$x) %>%
     ### remove completely empty rows
-    dplyr::filter(dplyr::if_any(dplyr::everything(), ~ !is.na(.x)))
+    dplyr::filter(dplyr::if_any(dplyr::everything(), ~ !is.na(.x))) 
+    
   
-  
-  has_messstellen <- stringr::str_detect(names(tmp), "messstellen")
+  has_messstellen <- stringr::str_detect(names(tmp), "^messstellen$")
   
   if (any(has_messstellen)) {
     names(tmp)[has_messstellen] <- "messstelle"
   }
   
-  tmp <- tmp %>%
+  ### hack to remove duplicated header (in row 299 in "BM_H2.ods") 
+  has_datum <- stringr::str_detect(names(tmp), "^datum$")
+  
+  if (any(has_datum)) {
+    tmp <- tmp %>% 
+      dplyr::filter(.data$datum != "Datum")
+  }
+  
+    tmp <- tmp %>%
     dplyr::filter(!is.na(.data$messstelle))
   
   if (emshoff91_import_selected$skip_rows %in% 1:2) {
@@ -104,6 +112,8 @@ read_emshoff91_ods <- function(emshoff91_import_selected) {
         )[seq_len(emshoff91_import_selected$skip_rows), 1],
         collapse = "@"
       )
+  } else {
+    messprogramm <- NA_character_
   }
   
   dplyr::bind_cols(tmp, tibble::tibble("messprogramm" = messprogramm))

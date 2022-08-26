@@ -40,7 +40,7 @@ paths_list <- list(
   project = "geosalz", 
   processing_dir = "//<servername>/processing/<project>",
   ods_dir = "<processing_dir>/archiv/precleaned-data/emshoff91/converted_ods", 
-  version = "0.2.0",
+  version = "0.3.0",
   export_xlsx_name = "emshoff91_v<version>.xlsx",
   export_xlsx_dir = "<processing_dir>/archiv/cleaned-data",
   export_xlsx_path = "<export_xlsx_dir>/<export_xlsx_name>"
@@ -63,9 +63,9 @@ if(dir.exists(paths$ods_dir)) {
 
 
 ```{r data_import}
-emshoff91_import <- create_emshoff91_import(ods_dir = paths$ods_dir)
+emshoff91_import <- kwb.geosalz::create_emshoff91_import(ods_dir = paths$ods_dir)
 
-emshoff91_list <- read_multiple_emshoff91_ods(emshoff91_import)
+emshoff91_list <- kwb.geosalz::read_multiple_emshoff91_ods(emshoff91_import)
 
 emshoff91_df <- data.table::rbindlist(emshoff91_list, 
                                       idcol = "ods_names_clean", 
