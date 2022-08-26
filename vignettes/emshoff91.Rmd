@@ -51,7 +51,7 @@ paths <- kwb.utils::resolve(paths_list)
 ```
 
 ```{r echo = FALSE}
-if(dir.exists(paths$root_project)) {
+if(dir.exists(paths$ods_dir)) {
   knitr::opts_chunk$set(eval=TRUE, message=FALSE, echo=TRUE)
 } else {
   knitr::opts_chunk$set(eval=FALSE, message=FALSE, echo=TRUE)
@@ -62,7 +62,7 @@ if(dir.exists(paths$root_project)) {
 # 3 Data import
 
 
-```{r}
+```{r data_import}
 emshoff91_import <- create_emshoff91_import(ods_dir = paths$ods_dir)
 
 emshoff91_list <- read_multiple_emshoff91_ods(emshoff91_import)
@@ -96,7 +96,7 @@ samples_per_moni_id_master <- emshoff91_df %>%
 
 ## 4 Export to Excel
 
-```{r run_phreeqc_export, echo = TRUE}
+```{r excel_export}
 openxlsx::write.xlsx(list(samples_per_moni_id = samples_per_moni_id, 
                           samples_per_moni_id_master = samples_per_moni_id_master,
                           data = emshoff91_df),
