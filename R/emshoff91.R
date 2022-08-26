@@ -4,7 +4,7 @@
 #' ".wq1" files into LibreOffice 7.0 on Ubuntu with encoding (Western Europe
 #' (DOS/OS2-437/US)) and exporting to ".ods" format
 #' @param files_to_ignore tidied names of files to ignore due to complex data input
-#' structure not yet covered by importer (default: c("cl25", "gf_gm", "clliste",
+#' structure not yet covered by importer (default: c("cl25", "clliste", "gf_gm", 
 #' "gwnguete", "rupelauf", "salzlast"))
 #' @return data frame with columns "ods_paths" (full paths to ".ods" files),
 #' "ods_files" (their "basenames") and "ods_names_clean" (tidied names used as
@@ -32,8 +32,8 @@ create_emshoff91_import <- function(ods_dir,
       pattern = "\\.ods$",
       full.names = TRUE
     ),
-    ods_files = basename(ods_paths),
-    ods_names_clean = ods_files %>%
+    ods_files = basename(.data$ods_paths),
+    ods_names_clean = .data$ods_files %>%
       stringr::str_remove(pattern = "\\.ods$") %>%
       janitor::make_clean_names()
   ) %>%
@@ -66,7 +66,7 @@ create_emshoff91_import <- function(ods_dir,
 
 #' Reads a Single EMSHOFF 91 ODS File into Tibble
 #'
-#' @param emshoff91_import_selected a row as retrieved by \link{\code{create_emshoff91_import}}
+#' @param emshoff91_import_selected a row as retrieved by \code{\link{create_emshoff91_import}}
 #'
 #' @return imports ods file into tibble
 #' @export
@@ -122,7 +122,7 @@ read_emshoff91_ods <- function(emshoff91_import_selected) {
 
 #' Reads Multiple EMSHOFF 91 ODS Files into List
 #'
-#' @param emshoff91_import a tibble as retrieved by \link{\code{create_emshoff91_import}}
+#' @param emshoff91_import a tibble as retrieved by \code{\link{create_emshoff91_import}}
 #'
 #' @return imports mulitple ods files into a list of tibbles
 #' @export

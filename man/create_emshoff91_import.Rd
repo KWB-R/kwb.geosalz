@@ -6,7 +6,7 @@
 \usage{
 create_emshoff91_import(
   ods_dir,
-  files_to_ignore = c("cl25", "gf_gm", "clliste", "gwnguete", "rupelauf", "salzlast")
+  files_to_ignore = c("cl25", "clliste", "gf_gm", "gwnguete", "rupelauf", "salzlast")
 )
 }
 \arguments{
@@ -15,7 +15,7 @@ create_emshoff91_import(
 (DOS/OS2-437/US)) and exporting to ".ods" format}
 
 \item{files_to_ignore}{tidied names of files to ignore due to complex data input
-structure not yet covered by importer (default: c("cl25", "gf_gm", "clliste",
+structure not yet covered by importer (default: c("cl25", "clliste", "gf_gm", 
 "gwnguete", "rupelauf", "salzlast"))}
 }
 \value{

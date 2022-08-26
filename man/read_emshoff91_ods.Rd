@@ -7,7 +7,7 @@
 read_emshoff91_ods(emshoff91_import_selected)
 }
 \arguments{
-\item{emshoff91_import_selected}{a row as retrieved by \link{\code{create_emshoff91_import}}}
+\item{emshoff91_import_selected}{a row as retrieved by \code{\link{create_emshoff91_import}}}
 }
 \value{
 imports ods file into tibble

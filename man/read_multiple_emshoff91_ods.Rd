@@ -7,7 +7,7 @@
 read_multiple_emshoff91_ods(emshoff91_import)
 }
 \arguments{
-\item{emshoff91_import}{a tibble as retrieved by \link{\code{create_emshoff91_import}}}
+\item{emshoff91_import}{a tibble as retrieved by \code{\link{create_emshoff91_import}}}
 }
 \value{
 imports mulitple ods files into a list of tibbles
