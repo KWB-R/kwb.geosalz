@@ -13,6 +13,12 @@
     <loc>https://kwb-r.github.io/kwb.geosalz/articles/data-availability_fri.html</loc>
   </url>
   <url>
+    <loc>https://kwb-r.github.io/kwb.geosalz/articles/emshoff91.html</loc>
+  </url>
+  <url>
+    <loc>https://kwb-r.github.io/kwb.geosalz/articles/hydrochemistry.html</loc>
+  </url>
+  <url>
     <loc>https://kwb-r.github.io/kwb.geosalz/articles/index.html</loc>
   </url>
   <url>
@@ -79,6 +85,9 @@
     <loc>https://kwb-r.github.io/kwb.geosalz/reference/copy_xlsx_files.html</loc>
   </url>
   <url>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/create_emshoff91_import.html</loc>
+  </url>
+  <url>
     <loc>https://kwb-r.github.io/kwb.geosalz/reference/delete_registry.html</loc>
   </url>
   <url>
@@ -142,10 +151,16 @@
     <loc>https://kwb-r.github.io/kwb.geosalz/reference/read_bwb_header4.html</loc>
   </url>
   <url>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/read_emshoff91_ods.html</loc>
+  </url>
+  <url>
     <loc>https://kwb-r.github.io/kwb.geosalz/reference/read_isotopes.html</loc>
   </url>
   <url>
     <loc>https://kwb-r.github.io/kwb.geosalz/reference/read_lab_bwb.html</loc>
+  </url>
+  <url>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/read_multiple_emshoff91_ods.html</loc>
   </url>
   <url>
     <loc>https://kwb-r.github.io/kwb.geosalz/reference/replace_nanb_with_na.html</loc>

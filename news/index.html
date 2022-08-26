@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">kwb.geosalz</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,6 +25,8 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/data-availability_fri.html">Data Availability Waterworks Friedrichshagen</a>
+    <a class="dropdown-item" href="../articles/emshoff91.html">Emshoff 91</a>
+    <a class="dropdown-item" href="../articles/hydrochemistry.html">Hydrochemistry</a>
     <a class="dropdown-item" href="../articles/wasserportal.html">Wasserportal</a>
     <a class="dropdown-item" href="../articles/workflow.html">Workflow</a>
   </div>
@@ -53,15 +55,28 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.4.0" id="kwbgeosalz-040-2022-08-22">
-<a href="https://github.com/KWB-R/kwb.geosalz/releases/tag/v0.4.0" class="external-link">kwb.geosalz 0.4.0</a> <small>2022-08-22</small>
-<a class="anchor" aria-label="anchor" href="#kwbgeosalz-040-2022-08-22"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.4.0" id="kwbgeosalz-040-2022-08-25">
+<a href="https://github.com/KWB-R/kwb.geosalz/releases/tag/v0.4.0" class="external-link">kwb.geosalz 0.4.0</a> <small>2022-08-25</small>
+<a class="anchor" aria-label="anchor" href="#kwbgeosalz-040-2022-08-25"></a></h2>
 <p><strong>Functions</strong></p>
-<ul><li><p>Add <code><a href="../reference/read_lab_bwb.html">read_lab_bwb()</a></code>: import lab data of BWB</p></li>
-<li><p>Add <code><a href="../reference/read_isotopes.html">read_isotopes()</a></code>: imports isotope data</p></li>
+<ul><li>
+<p><strong>Emshoff 91 .ods Import</strong>:</p>
+<ul><li><code><a href="../reference/create_emshoff91_import.html">create_emshoff91_import()</a></code></li>
+<li>
+<code><a href="../reference/read_emshoff91_ods.html">read_emshoff91_ods()</a></code> reads single <code>.ods</code> files</li>
+<li>
+<code><a href="../reference/read_multiple_emshoff91_ods.html">read_multiple_emshoff91_ods()</a></code> wrapper around <code><a href="../reference/read_emshoff91_ods.html">read_emshoff91_ods()</a></code> reading multiple <code>.ods</code> files and returning a list</li>
+</ul></li>
+<li>
+<p><strong>Hydrochemistry</strong>:</p>
+<ul><li><p>added <code><a href="../reference/read_lab_bwb.html">read_lab_bwb()</a></code> to import lab data of BWB and <code><a href="../reference/read_isotopes.html">read_isotopes()</a></code> to import isotope data analysed by UFZ</p></li>
+<li><p>added <code><a href="../reference/get_phreeqc_data.html">get_phreeqc_data()</a></code> to filter out parameters imported by <code><a href="../reference/read_lab_bwb.html">read_lab_bwb()</a></code> which are required by PhreeqC. In order to transform these filtered data the function <code><a href="../reference/convert_phreeqc_input_to_wide.html">convert_phreeqc_input_to_wide()</a></code> can be used. Finally the filtered data (as retrieved by <code><a href="../reference/get_phreeqc_data.html">get_phreeqc_data()</a></code>) is used by <code><a href="../reference/prepare_phreeqc_input.html">prepare_phreeqc_input()</a></code> for creating the PhreeqC input file.</p></li>
+</ul></li>
+<li><p><strong>Wasserportal</strong>: added <code><a href="../reference/convert_to_sf.html">convert_to_sf()</a></code> to convert xy-coordinates (i.e. UTM_33N with crs = 25833) to a spatial feature object (with crs = 4326)</p></li>
 </ul><p><strong>Articles</strong></p>
-<ul><li><p>Added <a href="../articles/wasserportal.html">Wasserportal</a> data availability for southern part of SVM Friedrichshagen</p></li>
+<ul><li><p>Added <a href="../articles/emshoff91.html">Emshoff 91</a> data import of ods files (formerly saved in <code>Quattro Pro</code> (and converted with help of <code>LibreOffice (7.0)</code> on <code>Ubuntu</code> to <code>.ods</code> and <code>.xlsx</code>. However, latter not used due to possible mis-translation!</p></li>
 <li><p>Added <a href="../articles/hydrochemistry.html">Hydrochemistry</a> data preparation workflow of lab data for PhreeqC</p></li>
+<li><p>Added <a href="../articles/wasserportal.html">Wasserportal</a> data availability for southern part of SVM Friedrichshagen</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.0" id="kwbgeosalz-030-2022-06-20">
