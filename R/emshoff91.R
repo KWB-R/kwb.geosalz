@@ -4,7 +4,7 @@
 #' ".wq1" files into LibreOffice 7.0 on Ubuntu with encoding (Western Europe
 #' (DOS/OS2-437/US)) and exporting to ".ods" format
 #' @param files_to_ignore tidied names of files to ignore due to complex data input
-#' structure not yet covered by importer (default: c("cl25", "clliste", "gf_gm", 
+#' structure not yet covered by importer (default: c("cl25", "clliste",
 #' "gwnguete", "rupelauf", "salzlast"))
 #' @return data frame with columns "ods_paths" (full paths to ".ods" files),
 #' "ods_files" (their "basenames") and "ods_names_clean" (tidied names used as
@@ -22,8 +22,6 @@
 create_emshoff91_import <- function(ods_dir,
                                     files_to_ignore = c("cl25",
                                                         "clliste",
-                                                        "gf_gm",
-                                                        "gwnguete",
                                                         "rupelauf",
                                                         "salzlast")) {
   emshoff91 <- tibble::tibble(
@@ -48,6 +46,8 @@ create_emshoff91_import <- function(ods_dir,
         stringr::str_detect(.data$ods_files, "^KREIDE") ~ 1,
         stringr::str_detect(.data$ods_files, "^PRAERUP") ~ 1,
         stringr::str_detect(.data$ods_files, "^UF") ~ 1,
+        stringr::str_detect(.data$ods_files, "^GF-GM") ~ 1,
+        stringr::str_detect(.data$ods_files, "^GWMGUETE") ~ 1,
         stringr::str_detect(.data$ods_files, "^GWNMITTE") ~ 2,
         stringr::str_detect(.data$ods_files, "^GWNHOCH") ~ 2,
         stringr::str_detect(.data$ods_files, "^GWNTIEF") ~ 2,
@@ -76,11 +76,31 @@ create_emshoff91_import <- function(ods_dir,
 #' @importFrom dplyr everything filter if_any bind_cols
 #' @importFrom kwb.utils catAndRun
 read_emshoff91_ods <- function(emshoff91_import_selected) {
+  
+  
+  if (emshoff91_import_selected$ods_names_clean == "gwnguete") {
+    tmp <- readODS::read_ods(
+      path = emshoff91_import_selected$ods_paths,
+      col_names = FALSE,
+      range = "A6:Z168")
+    
+    tmp_header <- names(readODS::read_ods(emshoff91_import_selected$ods_paths,
+                                    col_names = TRUE,
+                                    range = "A2:Z2")) %>% 
+      stringr::str_replace(pattern = "^Kuppb\\.$", "Kupp. St.") %>% 
+      janitor::make_clean_names()
+    
+    names(tmp) <- tmp_header
+  } else {
+  
   tmp <-
     readODS::read_ods(path = emshoff91_import_selected$ods_paths,
                       skip = emshoff91_import_selected$skip_rows) %>%
-    janitor::clean_names() %>%
-    #dplyr::rename("bemerkungen" = .data$x) %>%
+    janitor::clean_names()
+  
+  } 
+  
+  tmp <- tmp %>%
     ### remove completely empty rows
     dplyr::filter(dplyr::if_any(dplyr::everything(), ~ !is.na(.x))) 
     
@@ -102,6 +122,11 @@ read_emshoff91_ods <- function(emshoff91_import_selected) {
     tmp <- tmp %>%
     dplyr::filter(!is.na(.data$messstelle))
   
+  if (emshoff91_import_selected$ods_names_clean == "gf_gm") {
+    message(sprintf("Only imported first 201 rows of '%s' due to messy data afterwards!!!", 
+            emshoff91_import_selected$ods_paths))
+  }
+    
   if (emshoff91_import_selected$skip_rows %in% 1:2) {
     messprogramm <-
       paste0(
@@ -117,6 +142,7 @@ read_emshoff91_ods <- function(emshoff91_import_selected) {
   }
   
   dplyr::bind_cols(tmp, tibble::tibble("messprogramm" = messprogramm))
+  
 }
 
 
