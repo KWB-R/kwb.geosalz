@@ -40,7 +40,7 @@ paths_list <- list(
   project = "geosalz", 
   processing_dir = "//<servername>/processing/<project>",
   ods_dir = "<processing_dir>/archiv/precleaned-data/emshoff91/converted_ods", 
-  version = "0.5.0",
+  version = "0.6.0",
   export_xlsx_name = "emshoff91_v<version>.xlsx",
   export_xlsx_dir = "<processing_dir>/archiv/cleaned-data",
   export_xlsx_path = "<export_xlsx_dir>/<export_xlsx_name>"
@@ -67,29 +67,26 @@ emshoff91_import <- kwb.geosalz::create_emshoff91_import(ods_dir = paths$ods_dir
 
 emshoff91_list <- kwb.geosalz::read_multiple_emshoff91_ods(emshoff91_import)
 
-emshoff91_df <- data.table::rbindlist(emshoff91_list, 
-                                      idcol = "ods_names_clean", 
-                                      fill = TRUE)
+emshoff91_df <- kwb.geosalz::emshoff91_list_to_df(emshoff91_list)
 
-emshoff91_df <- dplyr::right_join(emshoff91_import, emshoff91_df,
-                                  by = "ods_names_clean")
+emshoff91_df_remapped <- kwb.geosalz::emshoff91_remap_values(emshoff91_df)
+
+emshoff91_df_remapped <- emshoff91_import %>%  
+  dplyr::right_join(emshoff91_df_remapped,
+                    by = "ods_names_clean")
 
 
-samples_per_moni_id <- emshoff91_df %>%  
+samples_per_moni_id <- emshoff91_df_remapped %>%  
   dplyr::count(.data$messstelle, 
                ) 
 
-samples_per_moni_id_master <- emshoff91_df %>%  
+samples_per_moni_id_master <- emshoff91_df_remapped %>%  
   dplyr::count(.data$messstelle, 
                .data$rohr,
                .data$fi_mi, 
                .data$strat,
                .data$progr
                ) 
-
-
-
-
                                             
 ```
 
@@ -99,7 +96,7 @@ samples_per_moni_id_master <- emshoff91_df %>%
 ```{r excel_export}
 openxlsx::write.xlsx(list(samples_per_moni_id = samples_per_moni_id, 
                           samples_per_moni_id_master = samples_per_moni_id_master,
-                          data = emshoff91_df),
+                          data = emshoff91_df_remapped),
                      file = paths$export_xlsx_path,
                      overwrite = TRUE
 )
