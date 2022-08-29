@@ -109,7 +109,7 @@
 <span>  project <span class="op">=</span> <span class="st">"geosalz"</span>, </span>
 <span>  processing_dir <span class="op">=</span> <span class="st">"//&lt;servername&gt;/processing/&lt;project&gt;"</span>,</span>
 <span>  ods_dir <span class="op">=</span> <span class="st">"&lt;processing_dir&gt;/archiv/precleaned-data/emshoff91/converted_ods"</span>, </span>
-<span>  version <span class="op">=</span> <span class="st">"0.3.0"</span>,</span>
+<span>  version <span class="op">=</span> <span class="st">"0.6.0"</span>,</span>
 <span>  export_xlsx_name <span class="op">=</span> <span class="st">"emshoff91_v&lt;version&gt;.xlsx"</span>,</span>
 <span>  export_xlsx_dir <span class="op">=</span> <span class="st">"&lt;processing_dir&gt;/archiv/cleaned-data"</span>,</span>
 <span>  export_xlsx_path <span class="op">=</span> <span class="st">"&lt;export_xlsx_dir&gt;/&lt;export_xlsx_name&gt;"</span></span>
@@ -127,26 +127,26 @@
 <span></span>
 <span><span class="va">emshoff91_list</span> <span class="op">&lt;-</span> <span class="fu">kwb.geosalz</span><span class="fu">::</span><span class="fu"><a href="../reference/read_multiple_emshoff91_ods.html">read_multiple_emshoff91_ods</a></span><span class="op">(</span><span class="va">emshoff91_import</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">emshoff91_df</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/rbindlist.html" class="external-link">rbindlist</a></span><span class="op">(</span><span class="va">emshoff91_list</span>, </span>
-<span>                                      idcol <span class="op">=</span> <span class="st">"ods_names_clean"</span>, </span>
-<span>                                      fill <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">emshoff91_df</span> <span class="op">&lt;-</span> <span class="fu">kwb.geosalz</span><span class="fu">::</span><span class="fu"><a href="../reference/emshoff91_list_to_df.html">emshoff91_list_to_df</a></span><span class="op">(</span><span class="va">emshoff91_list</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">emshoff91_df</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">right_join</a></span><span class="op">(</span><span class="va">emshoff91_import</span>, <span class="va">emshoff91_df</span>,</span>
-<span>                                  by <span class="op">=</span> <span class="st">"ods_names_clean"</span><span class="op">)</span></span>
+<span><span class="va">emshoff91_df_remapped</span> <span class="op">&lt;-</span> <span class="fu">kwb.geosalz</span><span class="fu">::</span><span class="fu"><a href="../reference/emshoff91_remap_values.html">emshoff91_remap_values</a></span><span class="op">(</span><span class="va">emshoff91_df</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">emshoff91_df_remapped</span> <span class="op">&lt;-</span> <span class="va">emshoff91_import</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>  </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">right_join</a></span><span class="op">(</span><span class="va">emshoff91_df_remapped</span>,</span>
+<span>                    by <span class="op">=</span> <span class="st">"ods_names_clean"</span><span class="op">)</span></span>
 <span></span>
 <span></span>
-<span><span class="va">samples_per_moni_id</span> <span class="op">&lt;-</span> <span class="va">emshoff91_df</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>  </span>
+<span><span class="va">samples_per_moni_id</span> <span class="op">&lt;-</span> <span class="va">emshoff91_df_remapped</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>  </span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">messstelle</span>, </span>
 <span>               <span class="op">)</span> </span>
 <span></span>
-<span><span class="va">samples_per_moni_id_master</span> <span class="op">&lt;-</span> <span class="va">emshoff91_df</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>  </span>
+<span><span class="va">samples_per_moni_id_master</span> <span class="op">&lt;-</span> <span class="va">emshoff91_df_remapped</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>  </span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">messstelle</span>, </span>
 <span>               <span class="va">.data</span><span class="op">$</span><span class="va">rohr</span>,</span>
 <span>               <span class="va">.data</span><span class="op">$</span><span class="va">fi_mi</span>, </span>
 <span>               <span class="va">.data</span><span class="op">$</span><span class="va">strat</span>,</span>
 <span>               <span class="va">.data</span><span class="op">$</span><span class="va">progr</span></span>
 <span>               <span class="op">)</span> </span>
-<span></span>
 <span>                                            </span></code></pre></div>
 <div class="section level3">
 <h3 id="export-to-excel">4 Export to Excel<a class="anchor" aria-label="anchor" href="#export-to-excel"></a>
@@ -154,7 +154,7 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">openxlsx</span><span class="fu">::</span><span class="fu">write.xlsx</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>samples_per_moni_id <span class="op">=</span> <span class="va">samples_per_moni_id</span>, </span>
 <span>                          samples_per_moni_id_master <span class="op">=</span> <span class="va">samples_per_moni_id_master</span>,</span>
-<span>                          data <span class="op">=</span> <span class="va">emshoff91_df</span><span class="op">)</span>,</span>
+<span>                          data <span class="op">=</span> <span class="va">emshoff91_df_remapped</span><span class="op">)</span>,</span>
 <span>                     file <span class="op">=</span> <span class="va">paths</span><span class="op">$</span><span class="va">export_xlsx_path</span>,</span>
 <span>                     overwrite <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
