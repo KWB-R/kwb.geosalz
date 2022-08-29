@@ -36,12 +36,12 @@ emshoff91_remap_values <- function(emshoff91_df,
                                                       strat = "stratigr",
                                                       uv254 = "uv_ext"
                                     ),
-                                   delete_cols = TRUE
-) {
+                                   delete_cols = TRUE) {
   
   tmp <- emshoff91_df
 
 for(i in seq_len(length(remap_list))) {
+
 col_old <- names(remap_list[i])
 col_new <- remap_list[[i]]
 rows_to_replace <- which(is.na(tmp[,col_old]) & !is.na(tmp[, col_new]))
@@ -54,11 +54,14 @@ if(length(rows_to_replace) > 0) {
                  col_new)
   kwb.utils::catAndRun(msg, expr = {
   tmp[rows_to_replace,col_old] <- tmp[rows_to_replace,col_new] 
+
   if(delete_cols) {
     tmp <- tmp %>% dplyr::select(- .data[[col_new]])
   }
   })
 }}
+
+
 
 tmp
 }
