@@ -116,7 +116,8 @@ swl_data <- stats::setNames(lapply(names(swl_data_list), function(name) {
   swl_data_list[[name]][[1]]}),
   names(swl_data_list)) %>% 
   dplyr::bind_rows(.id = "Messstellennummer") %>% 
-  dplyr::mutate(Datum = as.Date(.data$Datum, format = "%d.%m.%Y"))
+  dplyr::mutate(Datum = as.Date(.data$Datum, format = "%d.%m.%Y")) %>% 
+  dplyr::rename(Tagesmittelwert_cm = .data$Tagesmittelwert)
 
 readr::write_csv2(swl_data,
                   file = "swl_data.csv")
