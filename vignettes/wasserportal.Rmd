@@ -116,7 +116,13 @@ swl_data <- stats::setNames(lapply(names(swl_data_list), function(name) {
   swl_data_list[[name]][[1]]}),
   names(swl_data_list)) %>% 
   dplyr::bind_rows(.id = "Messstellennummer") %>% 
-  dplyr::mutate(Datum = as.Date(.data$Datum, format = "%d.%m.%Y"))
+  dplyr::mutate(Datum = as.Date(.data$Datum, format = "%d.%m.%Y")) %>% 
+  dplyr::filter(.data$Tagesmittelwert != -777) %>% 
+  dplyr::rename(Tagesmittelwert_cm_ueber_Pegelnullpunkt = .data$Tagesmittelwert) %>% 
+  dplyr::left_join(swl_master[, c("Nummer", "Pegelnullpunkt_m")],
+                   by = c("Messstellennummer" = "Nummer")) %>%  
+  dplyr::mutate(Tagesmittelwert_Pegelstand_mNN = as.numeric(.data$Pegelnullpunkt_m) + .data$Tagesmittelwert_cm_ueber_Pegelnullpunkt/100) %>% 
+  dplyr::select(- .data$Pegelnullpunkt_m)
 
 readr::write_csv2(swl_data,
                   file = "swl_data.csv")
