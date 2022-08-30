@@ -112,6 +112,7 @@
 <span>  monitoring <span class="op">=</span> <span class="st">"&lt;root_project&gt;/Work-packages/AP2_Monitoring"</span>,</span>
 <span>  samples_bwb_dir <span class="op">=</span> <span class="st">"&lt;monitoring&gt;/Beprobung/BWB-lab"</span>,</span>
 <span>  samples_bwb <span class="op">=</span> <span class="st">"&lt;samples_bwb_dir&gt;/Hydrochemie_Gesamt_Geosalz_v1.0.4.xlsx"</span>,</span>
+<span>  master_data <span class="op">=</span> <span class="st">"&lt;samples_bwb&gt;"</span>,</span>
 <span>  isotopes_dir <span class="op">=</span>  <span class="st">"&lt;monitoring&gt;/Isotope"</span>,</span>
 <span>  isotopes <span class="op">=</span> <span class="st">"&lt;isotopes_dir&gt;/Isotope.csv"</span></span>
 <span><span class="op">)</span></span>
@@ -124,13 +125,22 @@
 <h2 id="data-import">3 Data import<a class="anchor" aria-label="anchor" href="#data-import"></a>
 </h2>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">lab_bwb</span> <span class="op">&lt;-</span> <span class="fu">kwb.geosalz</span><span class="fu">::</span><span class="fu"><a href="../reference/read_lab_bwb.html">read_lab_bwb</a></span><span class="op">(</span><span class="va">paths</span><span class="op">$</span><span class="va">samples_bwb</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">master_data</span> <span class="op">&lt;-</span> <span class="fu">kwb.geosalz</span><span class="fu">::</span><span class="fu"><a href="../reference/read_master_data.html">read_master_data</a></span><span class="op">(</span><span class="va">paths</span><span class="op">$</span><span class="va">master_data</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/View.html" class="external-link">View</a></span><span class="op">(</span><span class="va">lab_bwb</span><span class="op">[</span><span class="va">lab_bwb</span><span class="op">$</span><span class="va">messstelle</span> <span class="op">==</span> <span class="st">"FRI1008"</span>,<span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">lab_bwb</span> <span class="op">&lt;-</span> <span class="fu">kwb.geosalz</span><span class="fu">::</span><span class="fu"><a href="../reference/read_lab_bwb.html">read_lab_bwb</a></span><span class="op">(</span><span class="va">paths</span><span class="op">$</span><span class="va">samples_bwb</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">isotopes</span> <span class="op">&lt;-</span> <span class="fu">kwb.geosalz</span><span class="fu">::</span><span class="fu"><a href="../reference/read_isotopes.html">read_isotopes</a></span><span class="op">(</span><span class="va">paths</span><span class="op">$</span><span class="va">isotopes</span><span class="op">)</span></span>
+<span><span class="va">lab_ufz</span> <span class="op">&lt;-</span> <span class="fu">kwb.geosalz</span><span class="fu">::</span><span class="fu"><a href="../reference/read_isotopes.html">read_isotopes</a></span><span class="op">(</span><span class="va">paths</span><span class="op">$</span><span class="va">isotopes</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">isotopes</span></span></code></pre></div>
+<span><span class="va">lab_data</span> <span class="op">&lt;-</span> <span class="va">lab_bwb</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>probe_nr <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">probe_nr</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="va">lab_ufz</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>  </span>
+<span>                     <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>par_val_org <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">par_val_org</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">lab_data</span></span>
+<span></span>
+<span><span class="va">lab_data_master</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">lab_data</span>, </span>
+<span>                                    <span class="va">master_data</span>,</span>
+<span>                                    by <span class="op">=</span> <span class="st">"messstelle"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="phreeqc">4 PhreeqC<a class="anchor" aria-label="anchor" href="#phreeqc"></a>
@@ -139,7 +149,7 @@
 <h3 id="prepare-phreeqc-input-file">4.1 Prepare PHREEQC Input File<a class="anchor" aria-label="anchor" href="#prepare-phreeqc-input-file"></a>
 </h3>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">phreeqc_input</span> <span class="op">&lt;-</span> <span class="fu">kwb.geosalz</span><span class="fu">::</span><span class="fu"><a href="../reference/get_phreeqc_data.html">get_phreeqc_data</a></span><span class="op">(</span><span class="va">lab_bwb</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">phreeqc_input</span> <span class="op">&lt;-</span> <span class="fu">kwb.geosalz</span><span class="fu">::</span><span class="fu"><a href="../reference/get_phreeqc_data.html">get_phreeqc_data</a></span><span class="op">(</span><span class="va">lab_data_master</span><span class="op">)</span></span>
 <span><span class="va">phreeqc_input</span></span>
 <span></span>
 <span><span class="va">phreeqc_input_wide</span> <span class="op">&lt;-</span> <span class="fu">kwb.geosalz</span><span class="fu">::</span><span class="fu"><a href="../reference/convert_phreeqc_input_to_wide.html">convert_phreeqc_input_to_wide</a></span><span class="op">(</span><span class="va">phreeqc_input</span><span class="op">)</span></span>
@@ -173,7 +183,28 @@
 <code class="sourceCode R"><span><span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu">geosalz.phreeqc</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/geosalz.phreeqc/man/read_simulations.html" class="external-link">read_simulations</a></span><span class="op">(</span><span class="va">phreeqc_output</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">sims</span><span class="op">)</span></span>
 <span><span class="va">sims_list</span> <span class="op">&lt;-</span> <span class="fu">geosalz.phreeqc</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/geosalz.phreeqc/man/convert_simulations_to_list.html" class="external-link">convert_simulations_to_list</a></span><span class="op">(</span><span class="va">sims</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">sims_list</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">sims_list</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">n_components</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">sims_list</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">masters_lab</span> <span class="op">&lt;-</span>     <span class="va">lab_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">probe_nr</span>, </span>
+<span>                   <span class="va">.data</span><span class="op">$</span><span class="va">messstelle</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span> <span class="va">.data</span><span class="op">$</span><span class="va">n</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">master_data</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">sims_list_master</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="va">n_components</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw">if</span><span class="op">(</span><span class="va">i</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">sims_list</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span></span>
+<span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>    </span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">sims_list</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>                     <span class="va">masters_lab</span>,</span>
+<span>                     by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"solution_name"</span> <span class="op">=</span> <span class="st">"probe_nr"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">}</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">sims_list</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/View.html" class="external-link">View</a></span><span class="op">(</span><span class="va">sims_list_master</span><span class="op">$</span><span class="va">solution_composition</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="export-to-excel">5 Export to Excel<a class="anchor" aria-label="anchor" href="#export-to-excel"></a>
