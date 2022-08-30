@@ -162,7 +162,8 @@ result <- result %>%
                 ) %>% 
   dplyr::relocate(.data$character_value, .before = .data$numeric_value) %>% 
   tibble::as_tibble() %>% 
-  dplyr::mutate(labor = "BWB") 
+  dplyr::mutate(labor = "BWB") %>% 
+  dplyr::select(- .data$par_val)
 
 
 return(result)

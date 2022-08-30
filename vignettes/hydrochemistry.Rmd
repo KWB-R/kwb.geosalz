@@ -42,10 +42,14 @@ paths_list <- list(
   root_project = "<root_server>/<project>",
   monitoring = "<root_project>/Work-packages/AP2_Monitoring",
   samples_bwb_dir = "<monitoring>/Beprobung/BWB-lab",
-  samples_bwb = "<samples_bwb_dir>/Hydrochemie_Gesamt_Geosalz_v1.0.4.xlsx",
+  version = "1.0.4",
+  samples_bwb = "<samples_bwb_dir>/Hydrochemie_Gesamt_Geosalz_v<version>.xlsx",
   master_data = "<samples_bwb>",
   isotopes_dir =  "<monitoring>/Isotope",
-  isotopes = "<isotopes_dir>/Isotope.csv"
+  isotopes = "<isotopes_dir>/Isotope.csv",
+  phreeqc_dir = "<samples_bwb_dir>/phreeqc",
+  phreeqc_txt = "<phreeqc_dir>/phreeqc_output_v%s.txt",
+  phreeqc_xlsx = "<phreeqc_dir>/phreeqc_output_v%s.xlsx"
 )
 
 paths <- kwb.utils::resolve(paths_list)
@@ -76,11 +80,13 @@ lab_data <- lab_bwb %>%
   dplyr::bind_rows(lab_ufz %>%  
                      dplyr::mutate(par_val_org = as.character(.data$par_val_org)))
 
-lab_data
+str(lab_data)
 
 lab_data_master <- dplyr::left_join(lab_data, 
                                     master_data,
                                     by = "messstelle")
+
+str(lab_data_master)
 ```
 
 # 4 PhreeqC
@@ -111,6 +117,8 @@ cat(solutions_input)
 ## 4.2 Run PHREEQC 
 
 ```{r run_phreeqc_run, echo = TRUE}
+fs::dir_create(paths$phreeqc_dir)
+
 ### Load PHREEQC database "phreeqc.dat"
 phreeqc::phrLoadDatabaseString(phreeqc::minteq.dat)
 ### Capture PHREEQC output normally sent to output file into a buffer
@@ -119,7 +127,7 @@ phreeqc::phrSetOutputStringsOn(TRUE)
 phreeqc::phrRunString(input = solutions_input)
 ### Retrieves the phreeqc output as a character vector
 phreeqc_output <- phreeqc::phrGetOutputStrings()
-writeLines(phreeqc_output, "phreeqc_output.txt")
+writeLines(phreeqc_output, paths$phreeqc_output_txt)
 ```
 
 Here is the content of `phreeqc_output`
@@ -139,7 +147,8 @@ str(sims_list)
 n_components <- length(names(sims_list))
 
 masters_lab <-     lab_data %>% 
-      dplyr::count(.data$probe_nr, 
+      dplyr::count(.data$probe_nr,
+                   .data$probenahme_datum, 
                    .data$messstelle) %>% 
       dplyr::select(- .data$n) %>% 
       dplyr::left_join(master_data)
@@ -155,21 +164,27 @@ sims_list_master <- stats::setNames(lapply(seq_len(n_components), function(i) {
 }}), names(sims_list))
 
 
-View(sims_list_master$solution_composition)
+# View(sims_list_master$solution_composition)
+# View(sims_list_master$description_of_solution)
+# View(sims_list_master$redox_couples)
+# View(sims_list_master$distribution_of_species)
+# View(sims_list_master$saturation_indices)
+
 
 ```
 
 ## 5 Export to Excel
 
 ```{r run_phreeqc_export, echo = TRUE}
-export_data <- c(list("lab_bwb" = lab_bwb,
-                    "isotopes" = isotopes, 
-                    "phreeqc_input" = phreeqc_input_wide),
-                 sims_list)
+export_data <- c(list("master_data" = master_data, 
+                      "lab_bwb" = lab_bwb,
+                      "lab_ufz" = lab_ufz,
+                      "phreeqc_input" = phreeqc_input_wide),
+                      sims_list)
 
 
 openxlsx::write.xlsx(x = export_data,
-  file = "hydrochemistry.xlsx",
+  file = paths$phreeqc_xlsx,
   overwrite = TRUE
 )
 ```

@@ -28,13 +28,15 @@ read_isotopes <- function(path) {
                       cols = tidyselect::contains(c("isotope", "cond"))) 
   
   isotopes_long  <-   dplyr::bind_cols(isotopes_long, 
-                                       kwb.base::hsLabValToVal(tmp$par_val_org, 
+                                       kwb.base::hsLabValToVal(isotopes_long$par_val_org, 
                                                                country = "en")) %>% 
   ### samples taken by KWB
   ### lab: UFZ
   # to to: fix date, add metadata join with BWB lab data
   dplyr::mutate(probenahme = "KWB", 
-                labor = "UFZ")
+                labor = "UFZ") %>% 
+  dplyr::rename(numeric_value = .data$numericValue,
+                out_of_limit = .data$outOfLimit)
 
   isotopes_long
 }
