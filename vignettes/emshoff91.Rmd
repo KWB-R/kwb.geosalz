@@ -81,7 +81,48 @@ emshoff91_df_remapped <- emshoff91_import %>%
                                      "O"))
 
 
+messstelle_split <- stringr::str_split_fixed(emshoff91_df_remapped$messstelle, 
+                         pattern = "\\s{1,9}",
+                         n = 3) %>% 
+  as.data.frame()
 
+
+
+names(messstelle_split) <- c("objekt", "bhrgs_nr-jahr", "rohr")  
+
+messstelle_split <- messstelle_split %>% 
+  tibble::as_tibble() %>% 
+  tidyr::separate(col = "bhrgs_nr-jahr", 
+                  into = c("bhrgs_nr", "jahr"),
+                  sep = "/",
+                  remove = FALSE) %>% 
+  dplyr::mutate(rohr = stringr::str_replace(.data$rohr, 
+                                     "^0", 
+                                     "O"), 
+                ms = kwb.utils::multiSubstitute(messstelle_split$objekt,
+                           replacements = list("GF|F-Gal." = "Gal_F",
+                                               "GE|E-Gal" = "Gal_E",
+                                               "GI|I-Gal." = "Gal_I",
+                                               "GG|G-Gal.|G-Gal" = "Gal_G",
+                                               "GK|K-Gal." = "Gal_K",
+                                               "^Go$" = "Gal_O",
+                                               "GH|H-Gal." = "Gal_H", 
+                                               "GO" = "Gal_O",
+                                               "GL|L-Gal." = "Gal_L", 
+                                               "GM|M-Gal." = "Gal_M",
+                                               ",," = ","))) 
+
+  messstelle_split2 <- stringr::str_split_fixed(messstelle_split$ms, pattern = ",", n = 2) %>%  
+    as.data.frame()
+ names(messstelle_split2) <- c("brunnen_galerie", "brunnen_id")
+
+ messstelle_split2 <- messstelle_split2 %>% 
+   dplyr::mutate(brunnen_id = stringr::str_remove(.data$brunnen_id, pattern = "^Br"))
+
+ ms_split <- dplyr::bind_cols(messstelle_split, messstelle_split2)
+
+ ms_split
+ 
 samples_per_moni_id <- emshoff91_df_remapped %>%  
   dplyr::count(.data$messstelle, 
                ) 
