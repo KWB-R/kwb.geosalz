@@ -7,7 +7,7 @@
 emshoff91_list_to_df(emshoff91_list)
 }
 \arguments{
-\item{emshoff91_df}{tibble as retrieved by \code{\link{read_multiple_emshoff91_ods }}}
+\item{emshoff91_list}{list as retrieved by \code{\link{read_multiple_emshoff91_ods}}}
 }
 \value{
 tibble

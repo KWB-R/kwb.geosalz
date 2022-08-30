@@ -1,6 +1,6 @@
 #' Emshoff 91: list to data frame
 #'
-#' @param emshoff91_df  tibble as retrieved by \code{\link{read_multiple_emshoff91_ods }}
+#' @param emshoff91_list  list as retrieved by \code{\link{read_multiple_emshoff91_ods}}
 #' @return tibble
 #' @export
 #' @importFrom data.table rbindlist
