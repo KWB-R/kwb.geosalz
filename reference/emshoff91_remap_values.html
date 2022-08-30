@@ -63,8 +63,9 @@
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">emshoff91_remap_values</span><span class="op">(</span></span>
 <span>  <span class="va">emshoff91_df</span>,</span>
-<span>  remap_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>fi_mi <span class="op">=</span> <span class="st">"fi_mi_m_nn"</span>, ku_sto <span class="op">=</span> <span class="st">"kupp_st"</span>, lf <span class="op">=</span> <span class="st">"el_lf"</span>, strat <span class="op">=</span></span>
-<span>    <span class="st">"stratigr"</span>, uv254 <span class="op">=</span> <span class="st">"uv_ext"</span><span class="op">)</span></span>
+<span>  remap_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>fi_mi <span class="op">=</span> <span class="st">"fi_mi_m_nn"</span>, ku_sto <span class="op">=</span> <span class="st">"kupp_st"</span>, lf <span class="op">=</span> <span class="st">"el_lf"</span>, progr <span class="op">=</span></span>
+<span>    <span class="st">"beprob_progr"</span>, strat <span class="op">=</span> <span class="st">"stratigr"</span>, uv254 <span class="op">=</span> <span class="st">"uv_ext"</span><span class="op">)</span>,</span>
+<span>  delete_cols <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -77,7 +78,13 @@
 <dt>remap_list</dt>
 <dd><p>list with values to be remapped. Names of the list are columns 
 values contained in list values should be mapped to (default: list(fi_mi = "fi_mi_m_nn", 
-ku_sto = "kupp_st", lf = "el_lf", strat = "stratigr", uv254 = "uv_ext")),</p></dd>
+ku_sto = "kupp_st", lf = "el_lf", progr = "beprob_progr", strat = "stratigr", 
+uv254 = "uv_ext"))</p></dd>
+
+
+<dt>delete_cols</dt>
+<dd><p>should unneeded columns be deleted, i.e. the ones where data 
+where mapped from (default: TRUE)</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -85,7 +92,7 @@ ku_sto = "kupp_st", lf = "el_lf", strat = "stratigr", uv254 = "uv_ext")),</p></d
     
 
 <p>data frame with remapped values and deleted columns were this values 
-were copied from</p>
+were copied from (default: TRUE)</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
