@@ -181,7 +181,7 @@
 <span><span class="fu">phreeqc</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/phreeqc/man/phrRunString.html" class="external-link">phrRunString</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">solutions_input</span><span class="op">)</span></span>
 <span><span class="co">### Retrieves the phreeqc output as a character vector</span></span>
 <span><span class="va">phreeqc_output</span> <span class="op">&lt;-</span> <span class="fu">phreeqc</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/phreeqc/man/phrGetOutputStrings.html" class="external-link">phrGetOutputStrings</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/writeLines.html" class="external-link">writeLines</a></span><span class="op">(</span><span class="va">phreeqc_output</span>, <span class="va">paths</span><span class="op">$</span><span class="va">phreeqc_output_txt</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/writeLines.html" class="external-link">writeLines</a></span><span class="op">(</span><span class="va">phreeqc_output</span>, <span class="va">paths</span><span class="op">$</span><span class="va">phreeqc_txt</span><span class="op">)</span></span></code></pre></div>
 <p>Here is the content of <code>phreeqc_output</code></p>
 </div>
 <div class="section level3">
@@ -230,7 +230,7 @@
 <span>                      <span class="va">sims_list</span><span class="op">)</span></span>
 <span></span>
 <span></span>
-<span><span class="fu">openxlsx</span><span class="fu">::</span><span class="fu">write.xlsx</span><span class="op">(</span>x <span class="op">=</span> <span class="va">export_data</span>,</span>
+<span><span class="fu">openxlsx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/openxlsx/man/write.xlsx.html" class="external-link">write.xlsx</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">export_data</span>,</span>
 <span>  file <span class="op">=</span> <span class="va">paths</span><span class="op">$</span><span class="va">phreeqc_xlsx</span>,</span>
 <span>  overwrite <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -310,8 +310,8 @@
 <span><span class="co">#&gt;  htmltools     0.5.3   <span style="color: #555555;">2022-07-18</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
 <span><span class="co">#&gt;  jquerylib     0.1.4   <span style="color: #555555;">2021-04-26</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
 <span><span class="co">#&gt;  jsonlite      1.8.0   <span style="color: #555555;">2022-02-22</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
-<span><span class="co">#&gt;  knitr         1.40    <span style="color: #555555;">2022-08-24</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.2.1)</span></span></span>
-<span><span class="co">#&gt;  kwb.utils     0.13.0  <span style="color: #555555;">2022-08-23</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">Github (kwb-r/kwb.utils@2a6faaa)</span></span></span>
+<span><span class="co">#&gt;  knitr         1.40    <span style="color: #555555;">2022-08-24</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">#&gt;  kwb.utils     0.13.0  <span style="color: #555555;">2022-08-30</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">Github (kwb-r/kwb.utils@2a6faaa)</span></span></span>
 <span><span class="co">#&gt;  lifecycle     1.0.1   <span style="color: #555555;">2021-09-24</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
 <span><span class="co">#&gt;  magrittr      2.0.3   <span style="color: #555555;">2022-03-30</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
 <span><span class="co">#&gt;  memoise       2.0.1   <span style="color: #555555;">2021-11-26</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
@@ -322,7 +322,7 @@
 <span><span class="co">#&gt;  R6            2.5.1   <span style="color: #555555;">2021-08-19</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
 <span><span class="co">#&gt;  ragg          1.2.2   <span style="color: #555555;">2022-02-21</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
 <span><span class="co">#&gt;  rlang         1.0.4   <span style="color: #555555;">2022-07-12</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
-<span><span class="co">#&gt;  rmarkdown     2.16    <span style="color: #555555;">2022-08-24</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.2.1)</span></span></span>
+<span><span class="co">#&gt;  rmarkdown     2.16    <span style="color: #555555;">2022-08-24</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
 <span><span class="co">#&gt;  rprojroot     2.0.3   <span style="color: #555555;">2022-04-02</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
 <span><span class="co">#&gt;  sass          0.4.2   <span style="color: #555555;">2022-07-16</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
 <span><span class="co">#&gt;  sessioninfo   1.2.2   <span style="color: #555555;">2021-12-06</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
