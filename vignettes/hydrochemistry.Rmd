@@ -1,0 +1,227 @@
+---
+title: "Hydrochemistry"
+author: "Michael Rustler"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Hydrochemistry}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(dplyr)
+library(tidyr)
+```
+
+# 1 Install R packages
+
+```{r eval=FALSE}
+if (! require("remotes")) {
+  install.packages("remotes", repos = "https://cloud.r-project.org")
+}
+
+remotes::install_github("kwb-r/kwb.geosalz", 
+                         dependencies = TRUE)
+```
+
+# 2 Setup the project 
+
+## 2.1 Define paths
+
+```{r eval=TRUE, echo = TRUE}
+# Define paths and resolve placeholders
+paths_list <- list(
+  servername = Sys.getenv("servername"),
+  root_server = "//<servername>/projekte$/GRW_Department/PROJECTS",
+  project = "geosalz",
+  root_project = "<root_server>/<project>",
+  monitoring = "<root_project>/Work-packages/AP2_Monitoring",
+  samples_bwb_dir = "<monitoring>/Beprobung/BWB-lab",
+  version = "1.0.4",
+  samples_bwb = "<samples_bwb_dir>/Hydrochemie_Gesamt_Geosalz_v<version>.xlsx",
+  master_data = "<samples_bwb>",
+  isotopes_dir =  "<monitoring>/Isotope",
+  isotopes = "<isotopes_dir>/Isotope.csv",
+  phreeqc_dir = "<samples_bwb_dir>/phreeqc",
+  phreeqc_txt = "<phreeqc_dir>/phreeqc_output_v%s.txt",
+  phreeqc_xlsx = "<phreeqc_dir>/phreeqc_output_v%s.xlsx"
+)
+
+paths <- kwb.utils::resolve(paths_list)
+#paths <- kwb.utils::resolve(paths, root = "C:/projects")
+```
+
+```{r echo = FALSE}
+if(dir.exists(paths$root_project)) {
+  knitr::opts_chunk$set(eval=TRUE, message=FALSE, echo=TRUE)
+} else {
+ knitr::opts_chunk$set(eval=FALSE, message=FALSE, echo=TRUE)
+}
+```
+
+
+# 3 Data import
+
+
+```{r}
+master_data <- kwb.geosalz::read_master_data(paths$master_data)
+
+lab_bwb <- kwb.geosalz::read_lab_bwb(paths$samples_bwb)
+
+lab_ufz <- kwb.geosalz::read_isotopes(paths$isotopes)
+
+lab_data <- lab_bwb %>% 
+  dplyr::mutate(probe_nr = as.character(.data$probe_nr)) %>%
+  dplyr::bind_rows(lab_ufz %>%  
+                     dplyr::mutate(par_val_org = as.character(.data$par_val_org)))
+
+str(lab_data)
+
+lab_data_master <- dplyr::left_join(lab_data, 
+                                    master_data,
+                                    by = "messstelle")
+
+str(lab_data_master)
+```
+
+# 4 PhreeqC
+
+## 4.1 Prepare PHREEQC Input File
+
+```{r prepare_phreeqc_input}
+phreeqc_input <- kwb.geosalz::get_phreeqc_data(lab_data_master)
+phreeqc_input
+
+phreeqc_input_wide <- kwb.geosalz::convert_phreeqc_input_to_wide(phreeqc_input)
+phreeqc_input_wide 
+
+solutions_input <-  kwb.geosalz::prepare_phreeqc_input(
+  phreeqc_input,
+  title = sprintf("Based on '%s'", paths$samples_bwb)
+  )
+
+
+```
+
+Content of `solutions_input` is shown below:
+
+```{r prepare_phreeqc_input_show, echo = FALSE, comment=NA}
+cat(solutions_input)
+```
+
+## 4.2 Run PHREEQC 
+
+```{r run_phreeqc_run, echo = TRUE}
+fs::dir_create(paths$phreeqc_dir)
+
+### Load PHREEQC database "phreeqc.dat"
+phreeqc::phrLoadDatabaseString(phreeqc::minteq.dat)
+### Capture PHREEQC output normally sent to output file into a buffer
+phreeqc::phrSetOutputStringsOn(TRUE)
+## Run PHREEQC with "solutions_input"
+phreeqc::phrRunString(input = solutions_input)
+### Retrieves the phreeqc output as a character vector
+phreeqc_output <- phreeqc::phrGetOutputStrings()
+writeLines(phreeqc_output, paths$phreeqc_output_txt)
+```
+
+Here is the content of `phreeqc_output`
+
+```{r prepare_phreeqc_output, echo = FALSE, comment=NA}
+cat(paste0(phreeqc_output, collapse = "\n"))
+```
+
+## 4.3 Get Results
+
+```{r run_phreeqc_results, echo = TRUE}
+sims <- geosalz.phreeqc::read_simulations(phreeqc_output)
+str(sims)
+sims_list <- geosalz.phreeqc::convert_simulations_to_list(sims)
+str(sims_list)
+
+n_components <- length(names(sims_list))
+
+masters_lab <-     lab_data %>% 
+      dplyr::count(.data$probe_nr,
+                   .data$probenahme_datum, 
+                   .data$messstelle) %>% 
+      dplyr::select(- .data$n) %>% 
+      dplyr::left_join(master_data)
+
+sims_list_master <- stats::setNames(lapply(seq_len(n_components), function(i) {
+  if(i %in% 1:2) {
+    sims_list[[i]]
+  } else {
+    
+    dplyr::left_join(sims_list[[i]],
+                     masters_lab,
+                     by = c("solution_name" = "probe_nr"))
+}}), names(sims_list))
+
+
+# View(sims_list_master$solution_composition)
+# View(sims_list_master$description_of_solution)
+# View(sims_list_master$redox_couples)
+# View(sims_list_master$distribution_of_species)
+# View(sims_list_master$saturation_indices)
+
+
+```
+
+## 5 Export to Excel
+
+```{r run_phreeqc_export, echo = TRUE}
+export_data <- c(list("master_data" = master_data, 
+                      "lab_bwb" = lab_bwb,
+                      "lab_ufz" = lab_ufz,
+                      "phreeqc_input" = phreeqc_input_wide),
+                      sims_list)
+
+
+openxlsx::write.xlsx(x = export_data,
+  file = paths$phreeqc_xlsx,
+  overwrite = TRUE
+)
+```
+
+
+# 6 Session Info 
+
+## Plattform
+
+```{r plattform, eval = TRUE, echo= FALSE}
+environment <- sessioninfo::session_info()  
+
+knitr::kable(tibble::enframe(unlist(environment$platform)))
+
+```
+
+## Packages
+
+```{r packages, eval = TRUE, echo= FALSE}
+
+environment$packages
+
+```
+
+### Pandoc
+
+```{r pandoc, eval = TRUE, echo= FALSE}
+
+if(rmarkdown::pandoc_available()) {
+data.frame(pandoc_directory = rmarkdown::pandoc_exec(),
+           pandoc_version = as.character(rmarkdown::pandoc_version()), 
+           stringsAsFactors = FALSE)
+} else {
+  print("No PANDOC installed!")
+}
+
+```
+
+
+

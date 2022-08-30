@@ -41,6 +41,13 @@ jobs:
           r-version: ${{ matrix.config.r }}
 
       - uses: r-lib/actions/setup-pandoc@master
+      
+      - name: Install sf libraries on macOS
+        if: runner.os == 'macOS'
+        run: | 
+          brew install proj
+          brew install geos
+          brew install gdal
 
       - name: Query dependencies
         run: |

@@ -1,3 +1,42 @@
+# [kwb.geosalz 0.4.0](https://github.com/KWB-R/kwb.geosalz/releases/tag/v0.4.0) <small>2022-08-25</small>
+
+
+**Functions**
+
+* **Emshoff 91 .ods Import**: 
+  - `create_emshoff91_import()`
+  - `read_emshoff91_ods()` reads single `.ods` files
+  -  `read_multiple_emshoff91_ods()` wrapper around `read_emshoff91_ods()` 
+  reading multiple `.ods` files and returning a list
+
+* **Hydrochemistry**: 
+
+  - added `read_lab_bwb()` to import lab data of BWB and `read_isotopes()` to 
+  import isotope data analysed by UFZ
+  
+  - added `get_phreeqc_data()` to filter out parameters imported by `read_lab_bwb()`
+  which are required by PhreeqC. In order to transform these filtered data 
+  the function `convert_phreeqc_input_to_wide()` can be used. Finally the filtered 
+  data (as retrieved by `get_phreeqc_data()`) is used by `prepare_phreeqc_input()`
+  for creating the PhreeqC input file.
+
+* **Wasserportal**: added `convert_to_sf()` to convert xy-coordinates (i.e. UTM_33N 
+with crs = 25833) to a spatial feature object (with crs = 4326)
+
+**Articles**
+
+- Added [Emshoff 91](../articles/emshoff91.html) data import of ods files (formerly 
+saved in `Quattro Pro` (and converted with help of `LibreOffice (7.0)` on `Ubuntu` 
+to `.ods` and `.xlsx`. However, latter not used due to possible mis-translation!  
+
+
+- Added [Hydrochemistry](../articles/hydrochemistry.html) data preparation workflow 
+of lab data for PhreeqC  
+
+- Added [Wasserportal](../articles/wasserportal.html) data availability for southern 
+part of SVM Friedrichshagen
+
+
 # [kwb.geosalz 0.3.0](https://github.com/KWB-R/kwb.geosalz/releases/tag/v0.3.0) <small>2022-06-20</small>
 
 Adding functionality for checking data availability for SVM Friedrichshagen based on available BWB data from pre-project phase (digitalised at KWB) and open-data from [Wasserportal Berlin](https://wasserportal.berlin.de)
