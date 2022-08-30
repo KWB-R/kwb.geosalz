@@ -43,6 +43,7 @@ paths_list <- list(
   monitoring = "<root_project>/Work-packages/AP2_Monitoring",
   samples_bwb_dir = "<monitoring>/Beprobung/BWB-lab",
   samples_bwb = "<samples_bwb_dir>/Hydrochemie_Gesamt_Geosalz_v1.0.4.xlsx",
+  master_data = "<samples_bwb>",
   isotopes_dir =  "<monitoring>/Isotope",
   isotopes = "<isotopes_dir>/Isotope.csv"
 )
@@ -64,13 +65,22 @@ if(dir.exists(paths$root_project)) {
 
 
 ```{r}
+master_data <- kwb.geosalz::read_master_data(paths$master_data)
+
 lab_bwb <- kwb.geosalz::read_lab_bwb(paths$samples_bwb)
 
-View(lab_bwb[lab_bwb$messstelle == "FRI1008",])
+lab_ufz <- kwb.geosalz::read_isotopes(paths$isotopes)
 
-isotopes <- kwb.geosalz::read_isotopes(paths$isotopes)
+lab_data <- lab_bwb %>% 
+  dplyr::mutate(probe_nr = as.character(.data$probe_nr)) %>%
+  dplyr::bind_rows(lab_ufz %>%  
+                     dplyr::mutate(par_val_org = as.character(.data$par_val_org)))
 
-isotopes
+lab_data
+
+lab_data_master <- dplyr::left_join(lab_data, 
+                                    master_data,
+                                    by = "messstelle")
 ```
 
 # 4 PhreeqC
@@ -78,7 +88,7 @@ isotopes
 ## 4.1 Prepare PHREEQC Input File
 
 ```{r prepare_phreeqc_input}
-phreeqc_input <- kwb.geosalz::get_phreeqc_data(lab_bwb)
+phreeqc_input <- kwb.geosalz::get_phreeqc_data(lab_data_master)
 phreeqc_input
 
 phreeqc_input_wide <- kwb.geosalz::convert_phreeqc_input_to_wide(phreeqc_input)
@@ -125,6 +135,28 @@ sims <- geosalz.phreeqc::read_simulations(phreeqc_output)
 str(sims)
 sims_list <- geosalz.phreeqc::convert_simulations_to_list(sims)
 str(sims_list)
+
+n_components <- length(names(sims_list))
+
+masters_lab <-     lab_data %>% 
+      dplyr::count(.data$probe_nr, 
+                   .data$messstelle) %>% 
+      dplyr::select(- .data$n) %>% 
+      dplyr::left_join(master_data)
+
+sims_list_master <- stats::setNames(lapply(seq_len(n_components), function(i) {
+  if(i %in% 1:2) {
+    sims_list[[i]]
+  } else {
+    
+    dplyr::left_join(sims_list[[i]],
+                     masters_lab,
+                     by = c("solution_name" = "probe_nr"))
+}}), names(sims_list))
+
+
+View(sims_list_master$solution_composition)
+
 ```
 
 ## 5 Export to Excel

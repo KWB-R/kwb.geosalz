@@ -19,6 +19,37 @@ stringr::str_replace(string,
 
 }
 
+#' Read Master Data
+#'
+#' @param path path to file with master data (currently in file: lab BWB data)
+#' @return imported master data contained in sheet "Stammdaten"
+#' @export
+#'
+#' @importFrom readxl excel_sheets read_xlsx
+#' @importFrom janitor clean_names
+
+
+read_master_data <- function(path) {
+  
+  sheets_needed <- "Stammdaten"
+  
+  sheets_available <- readxl::excel_sheets(path)
+  
+  is_available <- sheets_needed %in% sheets_available
+  if(!all(is_available)) {
+    msg <- sprintf("The following sheets are not available the Excel file %s:\n%s",
+                   path,
+                   paste0("'", sheets_needed[!is_available], "'", collapse = ", "))
+    stop(msg)
+  }
+  
+  
+ readxl::read_xlsx(path,
+                   sheet =  sheets_needed) %>%
+   janitor::clean_names() %>% 
+   dplyr::rename(messstelle = .data$name)
+
+}  
 
 #' Read Lab BWB
 #'
@@ -53,10 +84,6 @@ if(!all(is_available)) {
 }
 
 
-
-master_data <- readxl::read_xlsx(path,
-                                 sheet = "Stammdaten") %>% 
-  janitor::clean_names()
 
 rows_to_skip <- 5
 
@@ -135,7 +162,7 @@ result <- result %>%
                 ) %>% 
   dplyr::relocate(.data$character_value, .before = .data$numeric_value) %>% 
   tibble::as_tibble() %>% 
-  dplyr::left_join(master_data, by = c("messstelle" = "name"))
+  dplyr::mutate(labor = "BWB") 
 
 
 return(result)
