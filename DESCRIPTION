@@ -43,6 +43,7 @@ Suggests:
     leaflet,
     knitr (>= 1.21),
     kwb.pkgbuild,
+    openxlsx,
     phreeqc,
     rmarkdown (>= 1.11),
     sessioninfo (>= 1.1.1),

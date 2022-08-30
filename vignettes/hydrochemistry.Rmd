@@ -127,7 +127,7 @@ phreeqc::phrSetOutputStringsOn(TRUE)
 phreeqc::phrRunString(input = solutions_input)
 ### Retrieves the phreeqc output as a character vector
 phreeqc_output <- phreeqc::phrGetOutputStrings()
-writeLines(phreeqc_output, paths$phreeqc_output_txt)
+writeLines(phreeqc_output, paths$phreeqc_txt)
 ```
 
 Here is the content of `phreeqc_output`
