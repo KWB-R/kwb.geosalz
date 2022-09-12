@@ -1,0 +1,45 @@
+---
+title: "Measurement Chains"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+con_vars <- sprintf("MESSKETTEN_%s", c("SERVER", "USER", "PASSWORD"))
+  con <- list(server = Sys.getenv(con_vars[1]),
+       user = Sys.getenv(con_vars[2]),
+       pw = Sys.getenv(con_vars[3])
+       )
+  
+is_defined <- sapply(con, stringr::str_length) > 0
+
+env_vars_defined <- all(is_defined)
+
+```
+
+```{r setup,  eval=env_vars_defined }
+library(kwb.geosalz)
+
+mc_files <- kwb.geosalz::get_monitoringchains_files()
+
+str(mc_files)
+
+head(mc_files)
+
+
+
+target_directoy <- tempdir()
+
+csv_paths <- download_monitoringchains_data(sftp_paths = mc_files$sftp_path,
+                                            target_directory = target_directory)
+
+
+
+mc_data <- read_monitoringchains_data(csv_paths)
+
+str(mc_data)
+head(mc_data)
+
+```

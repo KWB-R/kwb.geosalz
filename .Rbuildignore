@@ -11,3 +11,4 @@
 ^\.Rproj\.user$
 ^index\.Rmd$
 ^\.github$
+^vignettes/articles$
