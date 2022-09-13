@@ -25,6 +25,7 @@ Imports:
     kwb.base,
     kwb.utils (>= 0.4.0.9000),
     magrittr (>= 1.5),
+    parallel,
     readODS,
     readr(>= 1.4.0), 
     readxl (>= 1.2.0),

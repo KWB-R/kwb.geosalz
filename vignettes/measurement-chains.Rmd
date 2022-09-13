@@ -41,11 +41,12 @@ head(mc_files)
 
 target_directory <- tempdir()
 
-system.time(csv_paths <- download_measurementchains_data(sftp_paths = mc_files$sftp_path,
-                                             target_directory)
+system.time(csv_paths <- kwb.geosalz::download_measurementchains_data(
+  sftp_paths = mc_files$sftp_path[1:10],
+  target_directory)
 )
 
-system.time(mc_data <- read_measurementchains_data(csv_paths))
+system.time(mc_data <- kwb.geosalz::read_measurementchains_data(csv_paths))
 
 str(mc_data)
 head(mc_data)

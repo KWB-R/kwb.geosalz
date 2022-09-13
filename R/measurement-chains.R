@@ -18,7 +18,7 @@ readr::read_csv(
 )
 }
 
-#' measurement Chains: Create an SFTP Connection
+#' Measurement Chains: Create an SFTP Connection
 #'
 #' @return sftp connection
 #' @export
@@ -100,33 +100,80 @@ files %>%
 #' @param target_directory target directory  
 #' @param sftp_connection an SFTP connnection as retrieved by 
 #' \code{\link{create_sftp_connection}}
+#' @param run_parallel default: TRUE
 #' @param debug show debug messages (default: FALSE)
 #'
 #' @return paths to downloaded files
 #' @export
 #' @importFrom fs dir_create
+#' @importFrom kwb.utils catAndRun isTryError
+#' @importFrom parallel detectCores makeCluster stopCluster
 #' @importFrom sftp sftp_download
 #' @examples 
 #' \dontrun{
 #' mc_files <- kwb.geosalz::get_measurementchains_files()
 #' target_directory <- tempdir()
-#' local_paths <- download_measurementchains_data(sftp_paths = mc_files$sftp_path,
+#' local_paths <- kwb.geosalz::download_measurementchains_data(
+#' sftp_paths = mc_files$sftp_path,
 #' target_directory)
 #' }
 download_measurementchains_data <- function(sftp_paths,
                                            target_directory = tempdir(),
                                            sftp_connection = create_sftp_connection(),
+                                           run_parallel = TRUE,
                                            debug = FALSE) {
 
 fs::dir_create(target_directory)
-
-try(sftp::sftp_download(file = sftp_paths,
-                    sftp_connection = sftp_connection,
-                    tofolder = target_directory, 
-                    verbose = debug)
-    )
   
-sapply(sftp_paths, function(sftp_path) {
+  msg <- sprintf(
+    "Importing %d measurement chains files",
+    length(sftp_paths)
+  )  
+  
+  if (run_parallel) {
+    
+    ncores <- parallel::detectCores() - 1L
+    
+    cl <- parallel::makeCluster(ncores)
+    
+    dl_list <- kwb.utils::catAndRun(
+      messageText = msg,
+      expr = parallel::parLapply(
+        cl, sftp_paths, function(sftp_path) {
+          try(sftp::sftp_download(file = sftp_path,
+                              sftp_connection = sftp_connection,
+                              tofolder = target_directory, 
+                              verbose = FALSE)
+              )
+        }),
+      dbg = debug
+    )
+    
+    parallel::stopCluster(cl)
+    
+  } else {
+    
+    dl_list <- kwb.utils::catAndRun(
+      messageText = msg,
+      expr = lapply(sftp_paths, function(sftp_path) {
+      try(sftp::sftp_download(file = sftp_path,
+                            sftp_connection = sftp_connection,
+                            tofolder = target_directory, 
+                            verbose = debug))}),
+      dbg = debug)
+    
+  }
+  
+  failed <- sapply(dl_list, kwb.utils::isTryError)
+  
+  if (any(failed)) {
+    message("Failed downloading data from the following FTP path(s):")
+    message(paste0(sftp_paths[failed], collapse = "\n"))
+  }  
+
+
+  
+sapply(sftp_paths[!failed], function(sftp_path) {
   fs::path_join(parts = c(target_directory, sftp_path))
 })
 }
@@ -148,9 +195,10 @@ sapply(sftp_paths, function(sftp_path) {
 #' \dontrun{
 #' mc_files <- kwb.geosalz::get_measurementchains_files()
 #' target_directory <- tempdir()
-#' csv_paths <- download_measurementchains_data(sftp_paths = mc_files$sftp_path,
+#' csv_paths <- kwb.geosalz::download_measurementchains_data(
+#' sftp_paths = mc_files$sftp_path,
 #' target_directory)
-#' mc_data <- read_measurementchains_data(csv_paths)
+#' mc_data <- kwb.geosalz::read_measurementchains_data(csv_paths)
 #' 
 #' }
 read_measurementchains_data <- function(csv_paths,
