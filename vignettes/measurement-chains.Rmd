@@ -41,10 +41,11 @@ head(mc_files)
 
 target_directory <- tempdir()
 
-csv_paths <- download_measurementchains_data(sftp_paths = mc_files$sftp_path,
+system.time(csv_paths <- download_measurementchains_data(sftp_paths = mc_files$sftp_path,
                                              target_directory)
+)
 
-mc_data <- read_measurementchains_data(csv_paths)
+system.time(mc_data <- read_measurementchains_data(csv_paths))
 
 str(mc_data)
 head(mc_data)
