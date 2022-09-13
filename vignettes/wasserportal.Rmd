@@ -88,9 +88,9 @@ stations <- wasserportal::get_stations()
 
 
 swl_master <- wasserportal::get_wasserportal_masters_data(
-  station_ids = stations$overview_list$surface_water.water_level %>%
+  master_urls = stations$overview_list$surface_water.water_level %>%
     dplyr::filter(.data$Betreiber == "Land Berlin") %>%
-    dplyr::pull(.data$Messstellennummer)
+    dplyr::pull(.data$stammdaten_link)
 ) 
 
 swl_master_sf <- swl_master %>%
@@ -141,14 +141,7 @@ readr::write_csv2(swl_data_stats_export,
 
 
 gwl_master <-
-  jsonlite::fromJSON("https://kwb-r.github.io/wasserportal/stations_gwl_master.json") %>%  
-  ### fix to remove 3 surface water stations from dataset 
-  ### ()
-  dplyr::filter(is.na(.data$Flusskilometer)) %>% 
-  dplyr::select(- .data$Name,
-                - .data$Flusskilometer, 
-                - .data$Gewaesser
-                )
+  jsonlite::fromJSON("https://kwb-r.github.io/wasserportal/stations_gwl_master.json")
 
 gwl_master_sf <- gwl_master %>%
   kwb.geosalz::convert_to_sf(crs_target = crs_target) %>%
