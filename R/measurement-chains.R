@@ -172,10 +172,19 @@ fs::dir_create(target_directory)
   }  
 
 
-  
+if(all(failed)) {
+  msg <- sprintf(
+    "Download for all %d measurement chains files failed!",
+    length(sftp_paths)
+  )
+  stop(msg)
+}
+    
 sapply(sftp_paths[!failed], function(sftp_path) {
   fs::path_join(parts = c(target_directory, sftp_path))
 })
+
+
 }
 
 
