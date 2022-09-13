@@ -31,7 +31,7 @@ jobs:
           brew install proj
           brew install geos
           brew install gdal
-          
+
       - name: Export latest curl path for sftp support on macOS # https://apple.stackexchange.com/questions/406604/curl-not-bring-installed-to-usr-local-bin-with-homebrew
         if: runner.os == 'macOS'
         run: | 
