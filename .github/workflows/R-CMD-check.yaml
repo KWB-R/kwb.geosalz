@@ -55,8 +55,10 @@ jobs:
       - name: Export latest curl path for sftp support on macOS # https://apple.stackexchange.com/questions/406604/curl-not-bring-installed-to-usr-local-bin-with-homebrew
         if: runner.os == 'macOS'
         run: | 
-          echo 'export PATH="/usr/local/opt/curl/bin:$PATH"' >> ~/.zshrc
-          which /usr/local/bin/curl
+          echo 'export PATH="/usr/local/opt/curl/bin:$PATH"' >> $HOME/.bash_profile
+          export LDFLAGS="-L/usr/local/opt/curl/lib" #For compilers to find curl
+          export CPPFLAGS="-I/usr/local/opt/curl/include" #For compilers to find curl
+          export PKG_CONFIG_PATH="/usr/local/opt/curl/lib/pkgconfig" # For pkg-config to find curl 
 
       - name: Query dependencies
         run: |
