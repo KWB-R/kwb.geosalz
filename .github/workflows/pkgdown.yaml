@@ -29,10 +29,11 @@ jobs:
           brew install geos
           brew install gdal
           
-      - name: Install sftp libraries on macOS # https://www.r-bloggers.com/2022/04/sftp-in-r-on-a-mac/
+      - name: Export latest curl path for sftp support on macOS # https://apple.stackexchange.com/questions/406604/curl-not-bring-installed-to-usr-local-bin-with-homebrew
         if: runner.os == 'macOS'
         run: | 
-          brew install curl-openssl
+          echo 'export PATH="/usr/local/opt/curl/bin:$PATH"' >> ~/.zshrc
+          which /usr/local/bin/curl
 
 
       - name: Query dependencies
