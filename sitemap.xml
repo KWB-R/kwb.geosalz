@@ -4,12 +4,6 @@
     <loc>https://kwb-r.github.io/kwb.geosalz/404.html</loc>
   </url>
   <url>
-    <loc>https://kwb-r.github.io/kwb.geosalz/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://kwb-r.github.io/kwb.geosalz/LICENSE.html</loc>
-  </url>
-  <url>
     <loc>https://kwb-r.github.io/kwb.geosalz/articles/data-availability_fri.html</loc>
   </url>
   <url>
@@ -31,6 +25,9 @@
     <loc>https://kwb-r.github.io/kwb.geosalz/articles/map_swl.html</loc>
   </url>
   <url>
+    <loc>https://kwb-r.github.io/kwb.geosalz/articles/measurement-chains.html</loc>
+  </url>
+  <url>
     <loc>https://kwb-r.github.io/kwb.geosalz/articles/wasserportal.html</loc>
   </url>
   <url>
@@ -41,6 +38,12 @@
   </url>
   <url>
     <loc>https://kwb-r.github.io/kwb.geosalz/index.html</loc>
+  </url>
+  <url>
+    <loc>https://kwb-r.github.io/kwb.geosalz/LICENSE-text.html</loc>
+  </url>
+  <url>
+    <loc>https://kwb-r.github.io/kwb.geosalz/LICENSE.html</loc>
   </url>
   <url>
     <loc>https://kwb-r.github.io/kwb.geosalz/map_gwl.html</loc>
@@ -88,7 +91,13 @@
     <loc>https://kwb-r.github.io/kwb.geosalz/reference/create_emshoff91_import.html</loc>
   </url>
   <url>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/create_sftp_connection.html</loc>
+  </url>
+  <url>
     <loc>https://kwb-r.github.io/kwb.geosalz/reference/delete_registry.html</loc>
+  </url>
+  <url>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/download_measurementchains_data.html</loc>
   </url>
   <url>
     <loc>https://kwb-r.github.io/kwb.geosalz/reference/emshoff91_list_to_df.html</loc>
@@ -116,6 +125,12 @@
   </url>
   <url>
     <loc>https://kwb-r.github.io/kwb.geosalz/reference/get_foerdermengen_gal_fri.html</loc>
+  </url>
+  <url>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/get_measurementchains_files.html</loc>
+  </url>
+  <url>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/get_measurementchains_metadata.html</loc>
   </url>
   <url>
     <loc>https://kwb-r.github.io/kwb.geosalz/reference/get_meta_sheet_or_stop.html</loc>
@@ -167,6 +182,9 @@
   </url>
   <url>
     <loc>https://kwb-r.github.io/kwb.geosalz/reference/read_master_data.html</loc>
+  </url>
+  <url>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/read_measurementchains_data.html</loc>
   </url>
   <url>
     <loc>https://kwb-r.github.io/kwb.geosalz/reference/read_multiple_emshoff91_ods.html</loc>
