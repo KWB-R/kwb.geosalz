@@ -1,14 +1,14 @@
-#' Monitoring Chains: Get Metadata
+#' Measurement Chains: Get Metadata
 #'
-#' @param file path to monitoring chains metadata file (default: 
+#' @param file path to measurement chains metadata file (default: 
 #' system.file("extdata/metadata_messketten.csv", package = "kwb.geosalz"))
-#' @return tibble with monitoring chains metadata
+#' @return tibble with measurement chains metadata
 #' @export
 #'
 #' @examples
-#' mc_metadata <- kwb.geosalz::get_monitoringchains_metadata()
-#' str(mc_metdata)
-get_monitoringchains_metadata <- function(
+#' mc_metadata <- kwb.geosalz::get_measurementchains_metadata()
+#' str(mc_metadata)
+get_measurementchains_metadata <- function(
     file = system.file("extdata/metadata_messketten.csv",
                        package = "kwb.geosalz")) {
 
@@ -18,12 +18,12 @@ readr::read_csv(
 )
 }
 
-#' Monitoring Chains: Create an SFTP Connection
+#' measurement Chains: Create an SFTP Connection
 #'
 #' @return sftp connection
 #' @export
 #' @importFrom sftp sftp_connect
-#' 
+#' @importFrom stringr str_length
 create_sftp_connection <- function()  {
   
   con_vars <- sprintf("MESSKETTEN_%s", c("SERVER", "USER", "PASSWORD"))
@@ -39,15 +39,15 @@ create_sftp_connection <- function()  {
     stop(msg)
   }
   
-  sftp::sftp_connect(server = sftp_variables$server,
-                     username = sftp_variables$user,
-                     password = sftp_variables$pw)
+  sftp::sftp_connect(server = con$server,
+                     username = con$user,
+                     password = con$pw)
 }
 
 
 
 
-#' Monitoring Chains: Get Tidied Files Metadata
+#' Measurement Chains: Get Tidied Files Metadata
 #'
 #' @param sftp_connection an SFTP connnection as retrieved by 
 #' \code{\link{create_sftp_connection}}
@@ -63,10 +63,10 @@ create_sftp_connection <- function()  {
 #' @importFrom stringr str_extract str_remove
 #' @examples 
 #' \dontrun{
-#' mc_files <- kwb.geosalz::get_monitoringchains_files()
+#' mc_files <- kwb.geosalz::get_measurementchains_files()
 #' str(mc_files)
 #' }
-get_monitoringchains_files <- function(sftp_connection = create_sftp_connection(),
+get_measurementchains_files <- function(sftp_connection = create_sftp_connection(),
                                        debug = FALSE) {
   
 
@@ -93,10 +93,10 @@ files %>%
 }
 
 
-#' Monitoring Chains: download data 
+#' Measurement Chains: download data 
 #'
 #' @param sftp_paths character vector with paths to files to be downloaded. As 
-#' retrieved by \code{\link{get_monitoringchains_files}} column "sftp_path"
+#' retrieved by \code{\link{get_measurementchains_files}} column "sftp_path"
 #' @param target_directory target directory  
 #' @param sftp_connection an SFTP connnection as retrieved by 
 #' \code{\link{create_sftp_connection}}
@@ -108,12 +108,12 @@ files %>%
 #' @importFrom sftp sftp_download
 #' @examples 
 #' \dontrun{
-#' mc_files <- kwb.geosalz::get_monitoringchains_files()
-#' target_directoy <- tempdir()
-#' local_paths <- download_monitoringchains_data(sftp_paths = mc_files$sftp_path,
+#' mc_files <- kwb.geosalz::get_measurementchains_files()
+#' target_directory <- tempdir()
+#' local_paths <- download_measurementchains_data(sftp_paths = mc_files$sftp_path,
 #' target_directory)
 #' }
-download_monitoringchains_data <- function(sftp_paths,
+download_measurementchains_data <- function(sftp_paths,
                                            target_directory = tempdir(),
                                            sftp_connection = create_sftp_connection(),
                                            debug = FALSE) {
@@ -132,10 +132,10 @@ sapply(sftp_paths, function(sftp_path) {
 }
 
 
-#' Monitoring Chains: read csv data 
+#' Measurement Chains: read csv data 
 #'
 #' @param csv_paths character vector with paths to downloaded csv files. As 
-#' retrieved by \code{\link{download_monitoringchains_data}} 
+#' retrieved by \code{\link{download_measurementchains_data}} 
 #' @param debug show debug messages (default: FALSE)
 #' @return data frame with imported data from csv files
 #' @export
@@ -146,14 +146,14 @@ sapply(sftp_paths, function(sftp_path) {
 #' @importFrom tidyselect all_of
 #' @examples 
 #' \dontrun{
-#' mc_files <- kwb.geosalz::get_monitoringchains_files()
-#' target_directoy <- tempdir()
-#' csv_paths <- download_monitoringchains_data(sftp_paths = mc_files$sftp_path,
+#' mc_files <- kwb.geosalz::get_measurementchains_files()
+#' target_directory <- tempdir()
+#' csv_paths <- download_measurementchains_data(sftp_paths = mc_files$sftp_path,
 #' target_directory)
-#' mc_data <- read_monitoringchains_data(csv_paths)
+#' mc_data <- read_measurementchains_data(csv_paths)
 #' 
 #' }
-read_monitoringchains_data <- function(csv_paths,
+read_measurementchains_data <- function(csv_paths,
                                        debug = FALSE) {
   
   

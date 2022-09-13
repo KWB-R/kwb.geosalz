@@ -2,7 +2,7 @@
 % Please edit documentation in R/monitoringchains.R
 \name{create_sftp_connection}
 \alias{create_sftp_connection}
-\title{Monitoring Chains: Create an SFTP Connection}
+\title{measurement Chains: Create an SFTP Connection}
 \usage{
 create_sftp_connection()
 }
@@ -10,5 +10,5 @@ create_sftp_connection()
 sftp connection
 }
 \description{
-Monitoring Chains: Create an SFTP Connection
+measurement Chains: Create an SFTP Connection
 }

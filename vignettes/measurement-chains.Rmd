@@ -1,0 +1,52 @@
+---
+title: "Measurement Chains"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Measurement Chains}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+con_vars <- sprintf("MESSKETTEN_%s", c("SERVER", "USER", "PASSWORD"))
+con <- list(server = Sys.getenv(con_vars[1]),
+            user = Sys.getenv(con_vars[2]),
+            pw = Sys.getenv(con_vars[3])
+            )
+  
+is_defined <- sapply(con, stringr::str_length) > 0
+
+con_defined <- all(is_defined)
+  
+```
+
+```{r setup,  eval = con_defined}
+library(kwb.geosalz)
+
+
+mc_metadata <- kwb.geosalz::get_measurementchains_metadata()
+
+str(mc_metadata)
+head(mc_metadata)
+
+mc_files <- kwb.geosalz::get_measurementchains_files()
+
+str(mc_files)
+head(mc_files)
+
+target_directory <- tempdir()
+
+csv_paths <- download_measurementchains_data(sftp_paths = mc_files$sftp_path,
+                                             target_directory)
+
+mc_data <- read_measurementchains_data(csv_paths)
+
+str(mc_data)
+head(mc_data)
+ 
+```
