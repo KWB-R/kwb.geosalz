@@ -132,7 +132,7 @@ fs::dir_create(target_directory)
   
   if (run_parallel) {
     
-    ncores <- parallel::detectCores() - 1L
+    ncores <- parallel::detectCores()
     
     cl <- parallel::makeCluster(ncores)
     
