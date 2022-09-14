@@ -6,18 +6,19 @@
 #' @export
 #' @importFrom dplyr rename select  
 
-get_phreeqc_data <- function(lab_bwb) {
-  
+get_phreeqc_data <- function(lab_bwb)
+{
   dat <- lab_bwb %>%
     dplyr::filter(!kwb.utils::isNaOrEmpty(.data$par_name_phreeqc))
-  
   
   stopifnot(all(dat$unit[!dat$par_name_phreeqc %in% c("temp", "pH")] == "mg/l"))
   
   dat %>% 
-    dplyr::select(.data$probe_nr, 
-                  .data$par_name_phreeqc, 
-                  .data$numeric_value)
+    dplyr::select(
+      .data$probe_nr, 
+      .data$par_name_phreeqc, 
+      .data$numeric_value
+    )
 }
 
 
@@ -32,27 +33,36 @@ get_phreeqc_data <- function(lab_bwb) {
 #' @importFrom dplyr mutate select relocate rename 
 #' @importFrom tidyr pivot_wider
 #' @importFrom geosalz.phreeqc prepare_solutions_input tidy_samples
-prepare_phreeqc_input <- function(lab_bwb_phreeqc,
-                                  title = "") {
-  
-
+prepare_phreeqc_input <- function(lab_bwb_phreeqc, title = "")
+{
   lab_bwb_phreeqc %>% 
-  dplyr::rename(solution = .data$probe_nr) %>% 
-  dplyr::select(.data$solution, 
-                .data$par_name_phreeqc, 
-                .data$numeric_value) %>%
-  tidyr::pivot_wider(names_from = .data$par_name_phreeqc, 
-                      values_from = .data$numeric_value) %>% 
-  dplyr::mutate(units = "ppm") %>% 
-  dplyr::relocate(.data$units, .after = .data$solution) %>% 
-  geosalz.phreeqc::tidy_samples() %>% 
-  dplyr::mutate(solution = as.character(.data$solution), 
-                outOfLimit = "", 
-                numericValue = as.numeric(.data$value)) %>% 
-  dplyr::filter(!is.na(.data$numericValue)) %>% 
-  geosalz.phreeqc::prepare_solutions_input(title = title)
-
+    dplyr::rename(solution = .data$probe_nr) %>% 
+    dplyr::select(
+      .data$solution, 
+      .data$par_name_phreeqc, 
+      .data$numeric_value
+    ) %>%
+    pivot_wider_by_par_name() %>% 
+    dplyr::mutate(units = "ppm") %>% 
+    dplyr::relocate(.data$units, .after = .data$solution) %>% 
+    geosalz.phreeqc::tidy_samples() %>% 
+    dplyr::mutate(
+      solution = as.character(.data$solution), 
+      outOfLimit = "", 
+      numericValue = as.numeric(.data$value)
+    ) %>% 
+    dplyr::filter(!is.na(.data$numericValue)) %>% 
+    geosalz.phreeqc::prepare_solutions_input(title = title)
 } 
+
+pivot_wider_by_par_name <- function(data)
+{
+  tidyr::pivot_wider(
+    data,
+    names_from = .data$par_name_phreeqc, 
+    values_from = .data$numeric_value
+  )
+}
 
 #' Convert PhreeqC input to "wide" format
 #'
@@ -61,10 +71,9 @@ prepare_phreeqc_input <- function(lab_bwb_phreeqc,
 #' @export
 #' @importFrom tidyr pivot_wider
 #' @importFrom dplyr rename
-convert_phreeqc_input_to_wide <- function(phreeqc_input) {
-
-phreeqc_input %>% 
-    tidyr::pivot_wider(names_from = .data$par_name_phreeqc,
-                       values_from = .data$numeric_value) %>%
+convert_phreeqc_input_to_wide <- function(phreeqc_input)
+{
+  phreeqc_input %>% 
+    pivot_wider_by_par_name() %>%
     dplyr::rename(solution = .data$probe_nr)
 }
