@@ -42,7 +42,7 @@ paths_list <- list(
   root_project = "<root_server>/<project>",
   monitoring = "<root_project>/Work-packages/AP2_Monitoring",
   samples_bwb_dir = "<monitoring>/Beprobung/BWB-lab",
-  version = "1.0.4",
+  version = "1.0.6",
   samples_bwb = "<samples_bwb_dir>/Hydrochemie_Gesamt_Geosalz_v<version>.xlsx",
   master_data = "<samples_bwb>",
   isotopes_dir =  "<monitoring>/Isotope",
