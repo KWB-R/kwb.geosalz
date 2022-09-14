@@ -21,4 +21,5 @@ Measurement Chains: Get Metadata
 \examples{
 mc_metadata <- kwb.geosalz::get_measurementchains_metadata()
 str(mc_metadata)
+mc_metadata
 }

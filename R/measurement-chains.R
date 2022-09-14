@@ -4,18 +4,30 @@
 #' system.file("extdata/metadata_messketten.csv", package = "kwb.geosalz"))
 #' @return tibble with measurement chains metadata
 #' @export
-#'
+#' @importFrom readr cols col_character col_integer col_double read_csv 
 #' @examples
 #' mc_metadata <- kwb.geosalz::get_measurementchains_metadata()
 #' str(mc_metadata)
+#' mc_metadata
 get_measurementchains_metadata <- function(
     file = system.file("extdata/metadata_messketten.csv",
                        package = "kwb.geosalz")) {
 
 readr::read_csv(
   file = file,
-  show_col_types = FALSE
-)
+  col_types = readr::cols(
+    "galerie" = readr::col_character(), 
+    "brunnen_nummer" = readr::col_integer(), 
+    "dn" = readr::col_integer(), 
+    "einbau_pumpe" = readr::col_character(),
+    "einbau_messkette" = readr::col_character(),
+    "filteroberkante_muGOK" = readr::col_double(),
+    "filterunterkante_muGOK" = readr::col_double(),
+    "sensor_id" = readr::col_integer(),
+    "sensor_endnummer" = readr::col_integer(),
+    "einbau_sensor_muGOK" = readr::col_double()
+    )
+  )
 }
 
 #' Measurement Chains: Create an SFTP Connection
@@ -60,6 +72,7 @@ create_sftp_connection <- function()  {
 #' @importFrom sftp sftp_list
 #' @importFrom dplyr filter rename mutate select 
 #' @importFrom tidyr separate 
+#' @importFrom tibble as_tibble
 #' @importFrom stringr str_extract str_remove
 #' @examples 
 #' \dontrun{
@@ -76,20 +89,26 @@ files <- sftp::sftp_list(sftp_connection,
 
 files %>%
   dplyr::filter(.data$type != "dir") %>% 
-  tidyr::separate(.data$name,into = c("galerywellid", "deviceid_datetime"), sep = "/", 
+  tidyr::separate(.data$name,into = c("galerywellid", "sensorid_datetime"), sep = "/", 
                   remove = FALSE) %>%
   dplyr::rename(sftp_path = .data$name) %>% 
   dplyr::mutate(galerie = stringr::str_extract(.data$galerywellid, "^[A-Z]"),
                 brunnen_nummer = stringr::str_extract(.data$galerywellid, "[0-9]{1,3}$") %>% 
-                  as.numeric()) %>% 
-  dplyr::mutate(deviceid_datetime = stringr::str_replace(.data$deviceid_datetime, 
+                  as.integer()) %>% 
+  dplyr::mutate(sensorid_datetime = stringr::str_replace(.data$sensorid_datetime, 
                                                          pattern = "-202", "_202")) %>%
-  tidyr::separate(.data$deviceid_datetime,into = c("deviceid", "datum_uhrzeit"), sep = "_") %>% 
-  dplyr::mutate(endnummer_sensor = stringr::str_extract(.data$deviceid, "[0-9]$"),  
+  tidyr::separate(.data$sensorid_datetime,into = c("sensor_id", "datum_uhrzeit"), sep = "_") %>% 
+  dplyr::mutate(sensor_endnummer = stringr::str_extract(.data$sensor_id, "[0-9]$") %>% 
+                  as.integer(),  
+                sensor_id = as.integer(.data$sensor_id), 
                 datum_uhrzeit = stringr::str_remove(.data$datum_uhrzeit, "\\.csv$")) %>%  
   dplyr::mutate(datum_uhrzeit = as.POSIXct(.data$datum_uhrzeit, 
-                                           format = "%Y-%m-%d-%H%M")) %>% 
-  dplyr::select(- .data$galerywellid)
+                                           format = "%Y-%m-%d-%H%M", 
+                                           #data is always CET without switching
+                                           #https://stackoverflow.com/a/38333522                                           
+                                           tz = "Etc/GMT-1")) %>% 
+  dplyr::select(- .data$galerywellid) %>% 
+  tibble::as_tibble()
 }
 
 
@@ -195,7 +214,7 @@ sapply(sftp_paths[!failed], function(sftp_path) {
 #' @param debug show debug messages (default: FALSE)
 #' @return data frame with imported data from csv files
 #' @export
-#' @importFrom readr read_csv
+#' @importFrom readr read_csv col_datetime
 #' @importFrom dplyr mutate bind_rows
 #' @importFrom tidyr pivot_longer
 #' @importFrom stringr str_extract
@@ -218,12 +237,23 @@ read_measurementchains_data <- function(csv_paths,
   data_list <- lapply(csv_paths, function(csv_path) {
          readr::read_csv(file = csv_path,
                          id = "csv_path",
-                         show_col_types = debug)
-  })
+                         locale = readr::locale(
+                           #data is always CET without switching
+                           #https://stackoverflow.com/a/38333522                                           
+                           tz = "Etc/GMT-1"),
+                         col_types = readr::cols(
+                           "Geraet" = readr::col_integer(), 
+                           "DatumUhrzeit" = readr::col_datetime(), 
+                           "Leitfaehigkeit" = readr::col_double(),
+                           "Temperatur" = readr::col_double())
+                         )}
+         )
   
   
   dplyr::bind_rows(data_list) %>% 
-  dplyr::mutate(endnummer_sensor = stringr::str_extract(.data$Geraet, "[0-9]$")) %>% 
+  dplyr::rename(sensor_id = .data$Geraet,
+                datum_uhrzeit = .data$DatumUhrzeit) %>% 
+  dplyr::mutate(sensor_endnummer = stringr::str_extract(.data$sensor_id, "[0-9]$")) %>% 
   tidyr::pivot_longer(names_to = "parameter", 
                       values_to = "messwert", 
                       cols = tidyselect::all_of(c("Leitfaehigkeit", "Temperatur")))
