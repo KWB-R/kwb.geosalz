@@ -14,17 +14,20 @@
 #' gwl_master <- jsonlite::fromJSON("https://kwb-r.github.io/wasserportal/stations_gwl_master.json")
 #' convert_to_sf(gwl_master)
 #' 
-convert_to_sf <- function(df, 
-                          crs_source = 25833, 
-                          crs_target = 4326,
-                          col_coord_x = "Rechtswert_UTM_33_N",
-                          col_cood_y = "Hochwert_UTM_33_N") {
-  
-
+convert_to_sf <- function(
+    df, 
+    crs_source = 25833, 
+    crs_target = 4326,
+    col_coord_x = "Rechtswert_UTM_33_N",
+    col_cood_y = "Hochwert_UTM_33_N"
+)
+{
   df %>% 
-    sf::st_as_sf(coords = c(col_coord_x, col_cood_y),
-             crs =  crs_source) %>%
-    sf::st_transform(crs = crs_target)
-  
+    sf::st_as_sf(
+      coords = c(col_coord_x, col_cood_y), 
+      crs =  crs_source
+    ) %>%
+    sf::st_transform(
+      crs = crs_target
+    )
 }
-
