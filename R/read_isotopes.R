@@ -22,6 +22,11 @@ read_isotopes <- function(path) {
                                           replacement = "isotope_")  
   
   
+  stop_if_duplicated_samples_found(df = isotopes, 
+                                   col_sampleid = "probe_nr", 
+                                   sheet = "")
+  
+  
   isotopes_long <- tidyr::pivot_longer(isotopes, 
                       names_to = "par_name", 
                       values_to = "par_val_org", 

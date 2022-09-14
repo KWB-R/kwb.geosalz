@@ -4,6 +4,10 @@
 (see here for [fix](https://github.com/KWB-R/kwb.geosalz/commit/9ea71f2eecaa1ba31ea34d780447969e47d317a8])
 
 
+* Add `stop_if_duplicated_samples_found()` for `read_lab_bwb()` and `read_isotopes()` to 
+throw error in case imported dataset contains duplicated `sample_id` 
+
+
 **Articles**
 
 - Added [Measurement Chains](../articles/measurement-chains.html) data import 

@@ -98,6 +98,10 @@ read_lab_bwb <- function(path)
   #   range = cellranger::cell_limits(ul = c(5L, 1L), lr = c(NA, 211L))
   # )
   
+  stop_if_duplicated_samples_found(df = lab_bwb, 
+                                 col_sampleid = "Probe-Nr.", 
+                                 sheet = sheet)
+  
   keyFields <- grep("@", names(lab_bwb), invert = TRUE, value = TRUE)
   
   result <- kwb.utils::hsMatrixToListForm(
