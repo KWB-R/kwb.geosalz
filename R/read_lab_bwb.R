@@ -100,6 +100,11 @@ lab_bwb_02 <- readxl::read_xlsx(path = path,
 lab_bwb <- dplyr::bind_cols(lab_bwb_01, lab_bwb_02) 
 
 
+stop_if_duplicated_samples_found(df = lab_bwb, 
+                                 col_sampleid = "Probe-Nr.", 
+                                 sheet = sheet)
+
+
 # lab_bwb <- readxl::read_xlsx(path = path,
 #                              sheet = "Analysen",
 #                              range = cellranger::cell_limits(ul = c(5,1), 
