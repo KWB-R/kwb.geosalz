@@ -273,7 +273,8 @@ read_measurementchains_data <- function(csv_paths, debug = FALSE)
       datum_uhrzeit = .data$DatumUhrzeit
     ) %>% 
     dplyr::mutate(
-      sensor_endnummer = stringr::str_extract(.data$sensor_id, "[0-9]$")) %>% 
+      sensor_endnummer = stringr::str_extract(.data$sensor_id, "[0-9]$") %>% 
+        as.integer()) %>% 
     tidyr::pivot_longer(
       names_to = "parameter", 
       values_to = "messwert", 
