@@ -81,13 +81,19 @@ read_lab_bwb <- function(path)
   lab_bwb_01 <- readxl::read_xlsx(
     path = path,
     sheet = "Analysen",
-    range = cellranger::cell_limits(ul = c(rows_to_skip,1L), lr = c(NA, 53L))
+    range = cellranger::cell_limits(
+      ul = c(rows_to_skip,1L), 
+      lr = c(NA, 53L)
+    )
   )
   
   lab_bwb_02 <- readxl::read_xlsx(
     path = path,
     sheet = "Analysen",
-    range = cellranger::cell_limits(ul = c(rows_to_skip, 210L), lr = c(NA, 211L))
+    range = cellranger::cell_limits(
+      ul = c(rows_to_skip, 210L), 
+      lr = c(NA, 211L)
+    )
   )
   
   lab_bwb <- dplyr::bind_cols(lab_bwb_01, lab_bwb_02) 
@@ -98,9 +104,11 @@ read_lab_bwb <- function(path)
   #   range = cellranger::cell_limits(ul = c(5L, 1L), lr = c(NA, 211L))
   # )
   
-  stop_if_duplicated_samples_found(df = lab_bwb, 
-                                 col_sampleid = "Probe-Nr.", 
-                                 sheet = sheet)
+  stop_if_duplicated_samples_found(
+    df = lab_bwb, 
+    col_sampleid = "Probe-Nr.", 
+    sheet = sheet
+  )
   
   keyFields <- grep("@", names(lab_bwb), invert = TRUE, value = TRUE)
   

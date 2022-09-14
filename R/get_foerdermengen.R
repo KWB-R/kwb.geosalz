@@ -11,16 +11,19 @@
 #' @importFrom stringr str_sub
 #' @import dplyr
 #' @export
-get_foerdermengen <- function(xlsx_path,
-                              sheet_name = "WW Q Rhow ",
-                              sheet_range = "A4:S127") {
+get_foerdermengen <- function(
+    xlsx_path,
+    sheet_name = "WW Q Rhow ",
+    sheet_range = "A4:S127"
+)
+{
   q_ww <- readxl::read_xlsx(
     xlsx_path,
     sheet = sheet_name,
     range = sheet_range
   ) %>%
     dplyr::select(-dplyr::starts_with(".."))
-
+  
   q_ww <- q_ww %>%
     tidyr::gather_(
       key_col = "Wasserwerk",
@@ -29,7 +32,7 @@ get_foerdermengen <- function(xlsx_path,
     ) %>%
     dplyr::rename(year = .data$Jahr) %>%
     dplyr::filter(!is.na(.data$Foerdermenge_m3))
-
+  
   lookup_werk <- data.frame(
     Wasserwerk = unique(q_ww$Wasserwerk),
     werk = stringr::str_to_upper(
@@ -37,7 +40,7 @@ get_foerdermengen <- function(xlsx_path,
     ),
     stringsAsFactors = FALSE
   )
-
+  
   q_ww %>%
     dplyr::left_join(y = lookup_werk, by = "Wasserwerk")
 }
