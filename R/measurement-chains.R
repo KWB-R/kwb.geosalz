@@ -10,22 +10,25 @@
 #' str(mc_metadata)
 #' mc_metadata
 get_measurementchains_metadata <- function(
-    file = system.file("extdata/metadata_messketten.csv",
-                       package = "kwb.geosalz")) {
-
-readr::read_csv(
-  file = file,
-  col_types = readr::cols(
-    "galerie" = readr::col_character(), 
-    "brunnen_nummer" = readr::col_integer(), 
-    "dn" = readr::col_integer(), 
-    "einbau_pumpe" = readr::col_character(),
-    "einbau_messkette" = readr::col_character(),
-    "filteroberkante_muGOK" = readr::col_double(),
-    "filterunterkante_muGOK" = readr::col_double(),
-    "sensor_id" = readr::col_integer(),
-    "sensor_endnummer" = readr::col_integer(),
-    "einbau_sensor_muGOK" = readr::col_double()
+    file = system.file(
+      "extdata/metadata_messketten.csv", 
+      package = "kwb.geosalz"
+    )
+)
+{
+  readr::read_csv(
+    file = file,
+    col_types = readr::cols(
+      "galerie" = readr::col_character(), 
+      "brunnen_nummer" = readr::col_integer(), 
+      "dn" = readr::col_integer(), 
+      "einbau_pumpe" = readr::col_character(),
+      "einbau_messkette" = readr::col_character(),
+      "filteroberkante_muGOK" = readr::col_double(),
+      "filterunterkante_muGOK" = readr::col_double(),
+      "sensor_id" = readr::col_integer(),
+      "sensor_endnummer" = readr::col_integer(),
+      "einbau_sensor_muGOK" = readr::col_double()
     )
   )
 }
@@ -34,30 +37,30 @@ readr::read_csv(
 #'
 #' @return sftp connection
 #' @export
+#' @importFrom kwb.utils stopFormatted
 #' @importFrom sftp sftp_connect
 #' @importFrom stringr str_length
-create_sftp_connection <- function()  {
-  
+create_sftp_connection <- function()
+{
   con_vars <- sprintf("MESSKETTEN_%s", c("SERVER", "USER", "PASSWORD"))
-  con <- list(server = Sys.getenv(con_vars[1]),
-       user = Sys.getenv(con_vars[2]),
-       pw = Sys.getenv(con_vars[3])
-       )
   
-  is_defined <- sapply(con, stringr::str_length) > 0
-  if(any(!is_defined)) {
-    msg <- sprintf("The following required environment variables are undefined/empty:\n%s",
-                   paste0(con_vars[!is_defined], collapse = ", "))
-    stop(msg)
+  con <- list(
+    server = Sys.getenv(con_vars[1L]),
+    username = Sys.getenv(con_vars[2L]),
+    password = Sys.getenv(con_vars[3L])
+  )
+  
+  not_defined <- sapply(con, stringr::str_length) == 0L
+  
+  if (any(not_defined)) {
+    kwb.utils::stopFormatted(
+      "The following required environment variables are undefined/empty:\n%s",
+      paste0(con_vars[not_defined], collapse = ", ")
+    )
   }
   
-  sftp::sftp_connect(server = con$server,
-                     username = con$user,
-                     password = con$pw)
+  do.call(sftp::sftp_connect, con)
 }
-
-
-
 
 #' Measurement Chains: Get Tidied Files Metadata
 #'
@@ -79,38 +82,57 @@ create_sftp_connection <- function()  {
 #' mc_files <- kwb.geosalz::get_measurementchains_files()
 #' str(mc_files)
 #' }
-get_measurementchains_files <- function(sftp_connection = create_sftp_connection(),
-                                       debug = FALSE) {
+get_measurementchains_files <- function(
+    sftp_connection = create_sftp_connection(),
+    debug = FALSE
+)
+{
+  files <- sftp::sftp_list(sftp_connection, recurse = TRUE, verbose = debug) 
   
-
-files <- sftp::sftp_list(sftp_connection,
-                         recurse = TRUE,
-                         verbose = debug) 
-
-files %>%
-  dplyr::filter(.data$type != "dir") %>% 
-  tidyr::separate(.data$name,into = c("galerywellid", "sensorid_datetime"), sep = "/", 
-                  remove = FALSE) %>%
-  dplyr::rename(sftp_path = .data$name) %>% 
-  dplyr::mutate(galerie = stringr::str_extract(.data$galerywellid, "^[A-Z]"),
-                brunnen_nummer = stringr::str_extract(.data$galerywellid, "[0-9]{1,3}$") %>% 
-                  as.integer()) %>% 
-  dplyr::mutate(sensorid_datetime = stringr::str_replace(.data$sensorid_datetime, 
-                                                         pattern = "-202", "_202")) %>%
-  tidyr::separate(.data$sensorid_datetime,into = c("sensor_id", "datum_uhrzeit"), sep = "_") %>% 
-  dplyr::mutate(sensor_endnummer = stringr::str_extract(.data$sensor_id, "[0-9]$") %>% 
-                  as.integer(),  
-                sensor_id = as.integer(.data$sensor_id), 
-                datum_uhrzeit = stringr::str_remove(.data$datum_uhrzeit, "\\.csv$")) %>%  
-  dplyr::mutate(datum_uhrzeit = as.POSIXct(.data$datum_uhrzeit, 
-                                           format = "%Y-%m-%d-%H%M", 
-                                           #data is always CET without switching
-                                           #https://stackoverflow.com/a/38333522                                           
-                                           tz = "Etc/GMT-1")) %>% 
-  dplyr::select(- .data$galerywellid) %>% 
-  tibble::as_tibble()
+  files %>%
+    dplyr::filter(.data$type != "dir") %>% 
+    tidyr::separate(
+      .data$name,
+      into = c("galerywellid", "sensorid_datetime"), 
+      sep = "/", 
+      remove = FALSE
+    ) %>%
+    dplyr::rename(sftp_path = .data$name) %>% 
+    dplyr::mutate(
+      galerie = stringr::str_extract(.data$galerywellid, "^[A-Z]"),
+      brunnen_nummer = stringr::str_extract(.data$galerywellid, "[0-9]{1,3}$") %>% 
+        as.integer()
+    ) %>% 
+    dplyr::mutate(
+      sensorid_datetime = stringr::str_replace(
+        .data$sensorid_datetime, 
+        pattern = "-202", 
+        "_202"
+      )
+    ) %>%
+    tidyr::separate(
+      .data$sensorid_datetime,
+      into = c("sensor_id", "datum_uhrzeit"),
+      sep = "_"
+    ) %>% 
+    dplyr::mutate(
+      sensor_endnummer = stringr::str_extract(.data$sensor_id, "[0-9]$") %>% 
+        as.integer(),  
+      sensor_id = as.integer(.data$sensor_id), 
+      datum_uhrzeit = stringr::str_remove(.data$datum_uhrzeit, "\\.csv$")
+    ) %>%  
+    dplyr::mutate(
+      datum_uhrzeit = as.POSIXct(
+        .data$datum_uhrzeit, 
+        format = "%Y-%m-%d-%H%M", 
+        #data is always CET without switching
+        #https://stackoverflow.com/a/38333522                                           
+        tz = "Etc/GMT-1"
+      )
+    ) %>% 
+    dplyr::select(- .data$galerywellid) %>% 
+    tibble::as_tibble()
 }
-
 
 #' Measurement Chains: download data 
 #'
@@ -125,7 +147,7 @@ files %>%
 #' @return paths to downloaded files
 #' @export
 #' @importFrom fs dir_create
-#' @importFrom kwb.utils catAndRun isTryError
+#' @importFrom kwb.utils catAndRun isTryError stopFormatted
 #' @importFrom parallel detectCores makeCluster stopCluster
 #' @importFrom sftp sftp_download
 #' @examples 
@@ -136,18 +158,17 @@ files %>%
 #' sftp_paths = mc_files$sftp_path,
 #' target_directory)
 #' }
-download_measurementchains_data <- function(sftp_paths,
-                                           target_directory = tempdir(),
-                                           sftp_connection = create_sftp_connection(),
-                                           run_parallel = TRUE,
-                                           debug = FALSE) {
-
-fs::dir_create(target_directory)
+download_measurementchains_data <- function(
+    sftp_paths,
+    target_directory = tempdir(),
+    sftp_connection = create_sftp_connection(),
+    run_parallel = TRUE,
+    debug = FALSE
+)
+{
+  fs::dir_create(target_directory)
   
-  msg <- sprintf(
-    "Importing %d measurement chains files",
-    length(sftp_paths)
-  )  
+  msg <- sprintf("Importing %d measurement chains files", length(sftp_paths))  
   
   if (run_parallel) {
     
@@ -159,11 +180,12 @@ fs::dir_create(target_directory)
       messageText = msg,
       expr = parallel::parLapply(
         cl, sftp_paths, function(sftp_path) {
-          try(sftp::sftp_download(file = sftp_path,
-                              sftp_connection = sftp_connection,
-                              tofolder = target_directory, 
-                              verbose = FALSE)
-              )
+          try(sftp::sftp_download(
+            file = sftp_path,
+            sftp_connection = sftp_connection,
+            tofolder = target_directory, 
+            verbose = FALSE
+          ))
         }),
       dbg = debug
     )
@@ -175,12 +197,15 @@ fs::dir_create(target_directory)
     dl_list <- kwb.utils::catAndRun(
       messageText = msg,
       expr = lapply(sftp_paths, function(sftp_path) {
-      try(sftp::sftp_download(file = sftp_path,
-                            sftp_connection = sftp_connection,
-                            tofolder = target_directory, 
-                            verbose = debug))}),
-      dbg = debug)
-    
+        try(sftp::sftp_download(
+          file = sftp_path,
+          sftp_connection = sftp_connection,
+          tofolder = target_directory, 
+          verbose = debug
+        ))
+      }),
+      dbg = debug
+    )
   }
   
   failed <- sapply(dl_list, kwb.utils::isTryError)
@@ -189,23 +214,17 @@ fs::dir_create(target_directory)
     message("Failed downloading data from the following FTP path(s):")
     message(paste0(sftp_paths[failed], collapse = "\n"))
   }  
-
-
-if(all(failed)) {
-  msg <- sprintf(
-    "Download for all %d measurement chains files failed!",
-    length(sftp_paths)
-  )
-  stop(msg)
+  
+  if (all(failed)) {
+    kwb.utils::stopFormatted(
+      "Download for all %d measurement chains files failed!",
+      length(sftp_paths))
+  }
+  
+  sapply(sftp_paths[!failed], function(sftp_path) {
+    fs::path_join(parts = c(target_directory, sftp_path))
+  })
 }
-    
-sapply(sftp_paths[!failed], function(sftp_path) {
-  fs::path_join(parts = c(target_directory, sftp_path))
-})
-
-
-}
-
 
 #' Measurement Chains: read csv data 
 #'
@@ -229,34 +248,35 @@ sapply(sftp_paths[!failed], function(sftp_path) {
 #' mc_data <- kwb.geosalz::read_measurementchains_data(csv_paths)
 #' 
 #' }
-read_measurementchains_data <- function(csv_paths,
-                                       debug = FALSE) {
-  
-  
-  
+read_measurementchains_data <- function(csv_paths, debug = FALSE)
+{
   data_list <- lapply(csv_paths, function(csv_path) {
-         readr::read_csv(file = csv_path,
-                         id = "csv_path",
-                         locale = readr::locale(
-                           #data is always CET without switching
-                           #https://stackoverflow.com/a/38333522                                           
-                           tz = "Etc/GMT-1"),
-                         col_types = readr::cols(
-                           "Geraet" = readr::col_integer(), 
-                           "DatumUhrzeit" = readr::col_datetime(), 
-                           "Leitfaehigkeit" = readr::col_double(),
-                           "Temperatur" = readr::col_double())
-                         )}
-         )
-  
+    readr::read_csv(
+      file = csv_path,
+      id = "csv_path",
+      locale = readr::locale(
+        #data is always CET without switching
+        #https://stackoverflow.com/a/38333522                                           
+        tz = "Etc/GMT-1"),
+      col_types = readr::cols(
+        "Geraet" = readr::col_integer(), 
+        "DatumUhrzeit" = readr::col_datetime(), 
+        "Leitfaehigkeit" = readr::col_double(),
+        "Temperatur" = readr::col_double()
+      )
+    )
+  })
   
   dplyr::bind_rows(data_list) %>% 
-  dplyr::rename(sensor_id = .data$Geraet,
-                datum_uhrzeit = .data$DatumUhrzeit) %>% 
-  dplyr::mutate(sensor_endnummer = stringr::str_extract(.data$sensor_id, "[0-9]$")) %>% 
-  tidyr::pivot_longer(names_to = "parameter", 
-                      values_to = "messwert", 
-                      cols = tidyselect::all_of(c("Leitfaehigkeit", "Temperatur")))
-}  
-  
-
+    dplyr::rename(
+      sensor_id = .data$Geraet,
+      datum_uhrzeit = .data$DatumUhrzeit
+    ) %>% 
+    dplyr::mutate(
+      sensor_endnummer = stringr::str_extract(.data$sensor_id, "[0-9]$")) %>% 
+    tidyr::pivot_longer(
+      names_to = "parameter", 
+      values_to = "messwert", 
+      cols = tidyselect::all_of(c("Leitfaehigkeit", "Temperatur"))
+    )
+}
