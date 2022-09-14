@@ -126,7 +126,7 @@ idx_style_german <- idx_below_or_above_detection_limit[which(stringr::str_detect
                                         pattern = ","))]
 
 if (length(idx_style_german) > 0) {
-  result$parVal[idx_style_german] <- stringr::str_replace(result$par_val[idx_style_german], ",", ".")
+  result$par_val[idx_style_german] <- stringr::str_replace(result$par_val[idx_style_german], ",", ".")
 }
 
 
@@ -137,7 +137,7 @@ idx_style_english <- idx_below_or_above_detection_limit[which(stringr::str_detec
 stopifnot(length(idx_style_english) == length(idx_below_or_above_detection_limit))
 
 result <- result %>%  
-  dplyr::bind_cols(kwb.base::hsLabValToVal(result$par_val_org,
+  dplyr::bind_cols(kwb.base::hsLabValToVal(result$par_val,
                                            country = "en",
                                            detLimFactorBelow = 0.5,
                                            stopOnError = FALSE)
