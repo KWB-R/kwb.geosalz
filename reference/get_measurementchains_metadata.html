@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">kwb.geosalz</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.5.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,29 +85,56 @@ system.file("extdata/metadata_messketten.csv", package = "kwb.geosalz"))</p></dd
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">mc_metadata</span> <span class="op">&lt;-</span> <span class="fu">kwb.geosalz</span><span class="fu">::</span><span class="fu">get_measurementchains_metadata</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">mc_metadata</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> spec_tbl_df [18 × 9] (S3: spec_tbl_df/tbl_df/tbl/data.frame)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> spec_tbl_df [18 × 10] (S3: spec_tbl_df/tbl_df/tbl/data.frame)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ galerie               : chr [1:18] "K" "K" "K" "K" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ brunnen_nummer        : num [1:18] 9 9 9 9 9 9 10 10 10 10 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ dn                    : num [1:18] 400 400 400 400 400 400 600 600 600 600 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ brunnen_nummer        : int [1:18] 9 9 9 9 9 9 10 10 10 10 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ dn                    : int [1:18] 400 400 400 400 400 400 600 600 600 600 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ einbau_pumpe          : chr [1:18] "über Filter" "über Filter" "über Filter" "über Filter" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ einbau_messkette      : chr [1:18] "unter Pumpe" "unter Pumpe" "unter Pumpe" "unter Pumpe" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ filteroberkante_muGOK : num [1:18] 21 21 21 21 21 21 11 11 11 11 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ filterunterkante_muGOK: num [1:18] 27 27 27 27 27 27 18 18 18 18 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ endnummer_sensor      : num [1:18] 6 5 4 3 2 1 6 5 4 3 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ sensor_id             : int [1:18] NA NA NA NA NA NA 4182006 4182005 4182004 4182003 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ sensor_endnummer      : int [1:18] 6 5 4 3 2 1 6 5 4 3 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ einbau_sensor_muGOK   : num [1:18] 21.5 22.5 23.5 24.5 25.5 26.5 11.5 12.7 13.9 15.1 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "spec")=</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. cols(</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..   galerie = <span style="color: #BB0000;">col_character()</span>,</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..   brunnen_nummer = <span style="color: #00BB00;">col_double()</span>,</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..   dn = <span style="color: #00BB00;">col_double()</span>,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..   brunnen_nummer = <span style="color: #00BB00;">col_integer()</span>,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..   dn = <span style="color: #00BB00;">col_integer()</span>,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..   einbau_pumpe = <span style="color: #BB0000;">col_character()</span>,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..   einbau_messkette = <span style="color: #BB0000;">col_character()</span>,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..   filteroberkante_muGOK = <span style="color: #00BB00;">col_double()</span>,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..   filterunterkante_muGOK = <span style="color: #00BB00;">col_double()</span>,</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..   endnummer_sensor = <span style="color: #00BB00;">col_double()</span>,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..   sensor_id = <span style="color: #00BB00;">col_integer()</span>,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..   sensor_endnummer = <span style="color: #00BB00;">col_integer()</span>,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..   einbau_sensor_muGOK = <span style="color: #00BB00;">col_double()</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "problems")=&lt;externalptr&gt; </span>
+<span class="r-in"><span><span class="va">mc_metadata</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 18 × 10</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    galerie brunn…¹    dn einba…² einba…³ filte…⁴ filte…⁵ senso…⁶ senso…⁷ einba…⁸</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> K             9   400 über F… unter …      21      27      <span style="color: #BB0000;">NA</span>       6    21.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> K             9   400 über F… unter …      21      27      <span style="color: #BB0000;">NA</span>       5    22.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> K             9   400 über F… unter …      21      27      <span style="color: #BB0000;">NA</span>       4    23.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> K             9   400 über F… unter …      21      27      <span style="color: #BB0000;">NA</span>       3    24.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> K             9   400 über F… unter …      21      27      <span style="color: #BB0000;">NA</span>       2    25.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> K             9   400 über F… unter …      21      27      <span style="color: #BB0000;">NA</span>       1    26.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> K            10   600 unter … über P…      11      18 4<span style="text-decoration: underline;">182</span>006       6    11.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> K            10   600 unter … über P…      11      18 4<span style="text-decoration: underline;">182</span>005       5    12.7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> K            10   600 unter … über P…      11      18 4<span style="text-decoration: underline;">182</span>004       4    13.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> K            10   600 unter … über P…      11      18 4<span style="text-decoration: underline;">182</span>003       3    15.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> K            10   600 unter … über P…      11      18 4<span style="text-decoration: underline;">182</span>002       2    16.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> K            10   600 unter … über P…      11      18 4<span style="text-decoration: underline;">182</span>001       1    17.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">13</span> K            11   600 unter … über P…      12      20      <span style="color: #BB0000;">NA</span>       6    12.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">14</span> K            11   600 unter … über P…      12      20      <span style="color: #BB0000;">NA</span>       5    13.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">15</span> K            11   600 unter … über P…      12      20      <span style="color: #BB0000;">NA</span>       4    15.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">16</span> K            11   600 unter … über P…      12      20      <span style="color: #BB0000;">NA</span>       3    16.7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">17</span> K            11   600 unter … über P…      12      20      <span style="color: #BB0000;">NA</span>       2    18.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">18</span> K            11   600 unter … über P…      12      20      <span style="color: #BB0000;">NA</span>       1    19.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with abbreviated variable names ¹​brunnen_nummer, ²​einbau_pumpe,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   ³​einbau_messkette, ⁴​filteroberkante_muGOK, ⁵​filterunterkante_muGOK,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   ⁶​sensor_id, ⁷​sensor_endnummer, ⁸​einbau_sensor_muGOK</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

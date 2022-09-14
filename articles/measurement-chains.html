@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">kwb.geosalz</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.5.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -73,7 +73,11 @@
 
 
 
-<script src="measurement-chains_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+<script src="measurement-chains_files/accessible-code-block-0.0.1/empty-anchor.js"></script><script src="measurement-chains_files/htmlwidgets-1.5.4/htmlwidgets.js"></script><link href="measurement-chains_files/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
+<script src="measurement-chains_files/datatables-binding-0.25/datatables.js"></script><link href="measurement-chains_files/dt-core-1.11.3/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="measurement-chains_files/dt-core-1.11.3/css/jquery.dataTables.extra.css" rel="stylesheet">
+<script src="measurement-chains_files/dt-core-1.11.3/js/jquery.dataTables.min.js"></script><link href="measurement-chains_files/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet">
+<script src="measurement-chains_files/crosstalk-1.2.0/js/crosstalk.min.js"></script><div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Measurement Chains</h1>
             
@@ -91,118 +95,92 @@
 <span><span class="va">mc_metadata</span> <span class="op">&lt;-</span> <span class="fu">kwb.geosalz</span><span class="fu">::</span><span class="fu"><a href="../reference/get_measurementchains_metadata.html">get_measurementchains_metadata</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">mc_metadata</span><span class="op">)</span></span>
-<span><span class="co">#&gt; spec_tbl_df [18 × 9] (S3: spec_tbl_df/tbl_df/tbl/data.frame)</span></span>
+<span><span class="co">#&gt; spec_tbl_df [18 × 10] (S3: spec_tbl_df/tbl_df/tbl/data.frame)</span></span>
 <span><span class="co">#&gt;  $ galerie               : chr [1:18] "K" "K" "K" "K" ...</span></span>
-<span><span class="co">#&gt;  $ brunnen_nummer        : num [1:18] 9 9 9 9 9 9 10 10 10 10 ...</span></span>
-<span><span class="co">#&gt;  $ dn                    : num [1:18] 400 400 400 400 400 400 600 600 600 600 ...</span></span>
+<span><span class="co">#&gt;  $ brunnen_nummer        : int [1:18] 9 9 9 9 9 9 10 10 10 10 ...</span></span>
+<span><span class="co">#&gt;  $ dn                    : int [1:18] 400 400 400 400 400 400 600 600 600 600 ...</span></span>
 <span><span class="co">#&gt;  $ einbau_pumpe          : chr [1:18] "über Filter" "über Filter" "über Filter" "über Filter" ...</span></span>
 <span><span class="co">#&gt;  $ einbau_messkette      : chr [1:18] "unter Pumpe" "unter Pumpe" "unter Pumpe" "unter Pumpe" ...</span></span>
 <span><span class="co">#&gt;  $ filteroberkante_muGOK : num [1:18] 21 21 21 21 21 21 11 11 11 11 ...</span></span>
 <span><span class="co">#&gt;  $ filterunterkante_muGOK: num [1:18] 27 27 27 27 27 27 18 18 18 18 ...</span></span>
-<span><span class="co">#&gt;  $ endnummer_sensor      : num [1:18] 6 5 4 3 2 1 6 5 4 3 ...</span></span>
+<span><span class="co">#&gt;  $ sensor_id             : int [1:18] NA NA NA NA NA NA 4182006 4182005 4182004 4182003 ...</span></span>
+<span><span class="co">#&gt;  $ sensor_endnummer      : int [1:18] 6 5 4 3 2 1 6 5 4 3 ...</span></span>
 <span><span class="co">#&gt;  $ einbau_sensor_muGOK   : num [1:18] 21.5 22.5 23.5 24.5 25.5 26.5 11.5 12.7 13.9 15.1 ...</span></span>
 <span><span class="co">#&gt;  - attr(*, "spec")=</span></span>
 <span><span class="co">#&gt;   .. cols(</span></span>
 <span><span class="co">#&gt;   ..   galerie = <span style="color: #BB0000;">col_character()</span>,</span></span>
-<span><span class="co">#&gt;   ..   brunnen_nummer = <span style="color: #00BB00;">col_double()</span>,</span></span>
-<span><span class="co">#&gt;   ..   dn = <span style="color: #00BB00;">col_double()</span>,</span></span>
+<span><span class="co">#&gt;   ..   brunnen_nummer = <span style="color: #00BB00;">col_integer()</span>,</span></span>
+<span><span class="co">#&gt;   ..   dn = <span style="color: #00BB00;">col_integer()</span>,</span></span>
 <span><span class="co">#&gt;   ..   einbau_pumpe = <span style="color: #BB0000;">col_character()</span>,</span></span>
 <span><span class="co">#&gt;   ..   einbau_messkette = <span style="color: #BB0000;">col_character()</span>,</span></span>
 <span><span class="co">#&gt;   ..   filteroberkante_muGOK = <span style="color: #00BB00;">col_double()</span>,</span></span>
 <span><span class="co">#&gt;   ..   filterunterkante_muGOK = <span style="color: #00BB00;">col_double()</span>,</span></span>
-<span><span class="co">#&gt;   ..   endnummer_sensor = <span style="color: #00BB00;">col_double()</span>,</span></span>
+<span><span class="co">#&gt;   ..   sensor_id = <span style="color: #00BB00;">col_integer()</span>,</span></span>
+<span><span class="co">#&gt;   ..   sensor_endnummer = <span style="color: #00BB00;">col_integer()</span>,</span></span>
 <span><span class="co">#&gt;   ..   einbau_sensor_muGOK = <span style="color: #00BB00;">col_double()</span></span></span>
 <span><span class="co">#&gt;   .. )</span></span>
 <span><span class="co">#&gt;  - attr(*, "problems")=&lt;externalptr&gt;</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mc_metadata</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 9</span></span></span>
-<span><span class="co">#&gt;   galerie brunnen_nummer    dn einbau_…¹ einba…² filte…³ filte…⁴ endnu…⁵ einba…⁶</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> K                    9   400 über Fil… unter …      21      27       6    21.5</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> K                    9   400 über Fil… unter …      21      27       5    22.5</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> K                    9   400 über Fil… unter …      21      27       4    23.5</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> K                    9   400 über Fil… unter …      21      27       3    24.5</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> K                    9   400 über Fil… unter …      21      27       2    25.5</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> K                    9   400 über Fil… unter …      21      27       1    26.5</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with abbreviated variable names ¹​einbau_pumpe, ²​einbau_messkette,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   ³​filteroberkante_muGOK, ⁴​filterunterkante_muGOK, ⁵​endnummer_sensor,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   ⁶​einbau_sensor_muGOK</span></span></span>
-<span></span>
-<span><span class="va">mc_files</span> <span class="op">&lt;-</span> <span class="fu">kwb.geosalz</span><span class="fu">::</span><span class="fu"><a href="../reference/get_measurementchains_files.html">get_measurementchains_files</a></span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">mc_files</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 'data.frame':    366 obs. of  15 variables:</span></span>
-<span><span class="co">#&gt;  $ rights          : chr  "-rw-r--r--" "-rw-r--r--" "-rw-r--r--" "-rw-r--r--" ...</span></span>
-<span><span class="co">#&gt;  $ links           : chr  "1" "1" "1" "1" ...</span></span>
-<span><span class="co">#&gt;  $ ownername       : chr  "1011" "1011" "1011" "1011" ...</span></span>
-<span><span class="co">#&gt;  $ ownergroup      : chr  "1002" "1002" "1002" "1002" ...</span></span>
-<span><span class="co">#&gt;  $ filesize        : chr  "235" "235" "238" "239" ...</span></span>
-<span><span class="co">#&gt;  $ t1              : chr  "Jul" "Jul" "Jul" "Jul" ...</span></span>
-<span><span class="co">#&gt;  $ t2              : chr  "8" "9" "10" "11" ...</span></span>
-<span><span class="co">#&gt;  $ t3              : chr  "09:20" "06:00" "06:00" "06:00" ...</span></span>
-<span><span class="co">#&gt;  $ sftp_path       : chr  "K10/4182001-2022-07-08-0506.csv" "K10/4182001-2022-07-09-0506.csv" "K10/4182001-2022-07-10-0507.csv" "K10/4182001-2022-07-11-0507.csv" ...</span></span>
-<span><span class="co">#&gt;  $ deviceid        : chr  "4182001" "4182001" "4182001" "4182001" ...</span></span>
-<span><span class="co">#&gt;  $ datum_uhrzeit   : POSIXct, format: "2022-07-08 05:06:00" "2022-07-09 05:06:00" ...</span></span>
-<span><span class="co">#&gt;  $ type            : chr  "file" "file" "file" "file" ...</span></span>
-<span><span class="co">#&gt;  $ galerie         : chr  "K" "K" "K" "K" ...</span></span>
-<span><span class="co">#&gt;  $ brunnen_nummer  : num  10 10 10 10 10 10 10 10 10 10 ...</span></span>
-<span><span class="co">#&gt;  $ endnummer_sensor: chr  "1" "1" "1" "1" ...</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mc_files</span><span class="op">)</span></span>
-<span><span class="co">#&gt;         rights links ownername ownergroup filesize  t1 t2    t3</span></span>
-<span><span class="co">#&gt; 158 -rw-r--r--     1      1011       1002      235 Jul  8 09:20</span></span>
-<span><span class="co">#&gt; 193 -rw-r--r--     1      1011       1002      235 Jul  9 06:00</span></span>
-<span><span class="co">#&gt; 203 -rw-r--r--     1      1011       1002      238 Jul 10 06:00</span></span>
-<span><span class="co">#&gt; 123 -rw-r--r--     1      1011       1002      239 Jul 11 06:00</span></span>
-<span><span class="co">#&gt; 150 -rw-r--r--     1      1011       1002      239 Jul 12 06:00</span></span>
-<span><span class="co">#&gt; 81  -rw-r--r--     1      1011       1002      239 Jul 13 06:00</span></span>
-<span><span class="co">#&gt;                           sftp_path deviceid       datum_uhrzeit type galerie</span></span>
-<span><span class="co">#&gt; 158 K10/4182001-2022-07-08-0506.csv  4182001 2022-07-08 05:06:00 file       K</span></span>
-<span><span class="co">#&gt; 193 K10/4182001-2022-07-09-0506.csv  4182001 2022-07-09 05:06:00 file       K</span></span>
-<span><span class="co">#&gt; 203 K10/4182001-2022-07-10-0507.csv  4182001 2022-07-10 05:07:00 file       K</span></span>
-<span><span class="co">#&gt; 123 K10/4182001-2022-07-11-0507.csv  4182001 2022-07-11 05:07:00 file       K</span></span>
-<span><span class="co">#&gt; 150 K10/4182001-2022-07-12-0506.csv  4182001 2022-07-12 05:06:00 file       K</span></span>
-<span><span class="co">#&gt; 81  K10/4182001-2022-07-13-0506.csv  4182001 2022-07-13 05:06:00 file       K</span></span>
-<span><span class="co">#&gt;     brunnen_nummer endnummer_sensor</span></span>
-<span><span class="co">#&gt; 158             10                1</span></span>
-<span><span class="co">#&gt; 193             10                1</span></span>
-<span><span class="co">#&gt; 203             10                1</span></span>
-<span><span class="co">#&gt; 123             10                1</span></span>
-<span><span class="co">#&gt; 150             10                1</span></span>
-<span><span class="co">#&gt; 81              10                1</span></span>
-<span></span>
-<span><span class="va">target_directory</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="va">csv_paths</span> <span class="op">&lt;-</span> <span class="fu">kwb.geosalz</span><span class="fu">::</span><span class="fu"><a href="../reference/download_measurementchains_data.html">download_measurementchains_data</a></span><span class="op">(</span></span>
-<span>  sftp_paths <span class="op">=</span> <span class="va">mc_files</span><span class="op">$</span><span class="va">sftp_path</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>,</span>
-<span>  <span class="va">target_directory</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;    0.02    0.00   17.62</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="va">mc_data</span> <span class="op">&lt;-</span> <span class="fu">kwb.geosalz</span><span class="fu">::</span><span class="fu"><a href="../reference/read_measurementchains_data.html">read_measurementchains_data</a></span><span class="op">(</span><span class="va">csv_paths</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;    0.08    0.03    0.11</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">mc_data</span><span class="op">)</span></span>
-<span><span class="co">#&gt; tibble [80 × 6] (S3: tbl_df/tbl/data.frame)</span></span>
-<span><span class="co">#&gt;  $ csv_path        : chr [1:80] "C:/Users/RUNNER~1/AppData/Local/Temp/Rtmp0424lg/K10/4182001-2022-07-08-0506.csv" "C:/Users/RUNNER~1/AppData/Local/Temp/Rtmp0424lg/K10/4182001-2022-07-08-0506.csv" "C:/Users/RUNNER~1/AppData/Local/Temp/Rtmp0424lg/K10/4182001-2022-07-08-0506.csv" "C:/Users/RUNNER~1/AppData/Local/Temp/Rtmp0424lg/K10/4182001-2022-07-08-0506.csv" ...</span></span>
-<span><span class="co">#&gt;  $ Geraet          : num [1:80] 4182001 4182001 4182001 4182001 4182001 ...</span></span>
-<span><span class="co">#&gt;  $ DatumUhrzeit    : POSIXct[1:80], format: "2022-07-07 04:00:00" "2022-07-07 04:00:00" ...</span></span>
-<span><span class="co">#&gt;  $ endnummer_sensor: chr [1:80] "1" "1" "1" "1" ...</span></span>
-<span><span class="co">#&gt;  $ parameter       : chr [1:80] "Leitfaehigkeit" "Temperatur" "Leitfaehigkeit" "Temperatur" ...</span></span>
-<span><span class="co">#&gt;  $ messwert        : num [1:80] 971 23.9 974 23.7 982 24.1 983 24.3 982 23.9 ...</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mc_data</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 6</span></span></span>
-<span><span class="co">#&gt;   csv_path                    Geraet DatumUhrzeit        endnu…¹ param…² messw…³</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> C:/Users/RUNNER~1/AppData/… 4.18<span style="color: #949494;">e</span>6 2022-07-07 <span style="color: #949494;">04:00:00</span> 1       Leitfa…   971  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> C:/Users/RUNNER~1/AppData/… 4.18<span style="color: #949494;">e</span>6 2022-07-07 <span style="color: #949494;">04:00:00</span> 1       Temper…    23.9</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> C:/Users/RUNNER~1/AppData/… 4.18<span style="color: #949494;">e</span>6 2022-07-07 <span style="color: #949494;">10:00:00</span> 1       Leitfa…   974  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> C:/Users/RUNNER~1/AppData/… 4.18<span style="color: #949494;">e</span>6 2022-07-07 <span style="color: #949494;">10:00:00</span> 1       Temper…    23.7</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> C:/Users/RUNNER~1/AppData/… 4.18<span style="color: #949494;">e</span>6 2022-07-07 <span style="color: #949494;">16:00:00</span> 1       Leitfa…   982  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> C:/Users/RUNNER~1/AppData/… 4.18<span style="color: #949494;">e</span>6 2022-07-07 <span style="color: #949494;">16:00:00</span> 1       Temper…    24.1</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># … with abbreviated variable names ¹​endnummer_sensor, ²​parameter, ³​messwert</span></span></span></code></pre></div>
-  </main>
+<span><span class="fu">DT</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/DT/man/datatable.html" class="external-link">datatable</a></span><span class="op">(</span><span class="va">mc_metadata</span><span class="op">)</span></span></code></pre></div>
+<div id="htmlwidget-e49d6792a7b8a26d1b3a" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-e49d6792a7b8a26d1b3a">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18"],["K","K","K","K","K","K","K","K","K","K","K","K","K","K","K","K","K","K"],[9,9,9,9,9,9,10,10,10,10,10,10,11,11,11,11,11,11],[400,400,400,400,400,400,600,600,600,600,600,600,600,600,600,600,600,600],["über Filter","über Filter","über Filter","über Filter","über Filter","über Filter","unter Filter","unter Filter","unter Filter","unter Filter","unter Filter","unter Filter","unter Filter","unter Filter","unter Filter","unter Filter","unter Filter","unter Filter"],["unter Pumpe","unter Pumpe","unter Pumpe","unter Pumpe","unter Pumpe","unter Pumpe","über Pumpe (am Steigrohr)","über Pumpe (am Steigrohr)","über Pumpe (am Steigrohr)","über Pumpe (am Steigrohr)","über Pumpe (am Steigrohr)","über Pumpe (am Steigrohr)","über Pumpe (am Steigrohr)","über Pumpe (am Steigrohr)","über Pumpe (am Steigrohr)","über Pumpe (am Steigrohr)","über Pumpe (am Steigrohr)","über Pumpe (am Steigrohr)"],[21,21,21,21,21,21,11,11,11,11,11,11,12,12,12,12,12,12],[27,27,27,27,27,27,18,18,18,18,18,18,20,20,20,20,20,20],[null,null,null,null,null,null,4182006,4182005,4182004,4182003,4182002,4182001,null,null,null,null,null,null],[6,5,4,3,2,1,6,5,4,3,2,1,6,5,4,3,2,1],[21.5,22.5,23.5,24.5,25.5,26.5,11.5,12.7,13.9,15.1,16.3,17.5,12.5,13.9,15.3,16.7,18.1,19.5]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>galerie<\/th>\n      <th>brunnen_nummer<\/th>\n      <th>dn<\/th>\n      <th>einbau_pumpe<\/th>\n      <th>einbau_messkette<\/th>\n      <th>filteroberkante_muGOK<\/th>\n      <th>filterunterkante_muGOK<\/th>\n      <th>sensor_id<\/th>\n      <th>sensor_endnummer<\/th>\n      <th>einbau_sensor_muGOK<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[2,3,6,7,8,9,10]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+
+mc_files  tibble [366 × 15] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ rights          : chr [1:366] "-rw-r--r--" "-rw-r--r--" "-rw-r--r--" "-rw-r--r--" ...
+#&gt;  $ links           : chr [1:366] "1" "1" "1" "1" ...
+#&gt;  $ ownername       : chr [1:366] "1011" "1011" "1011" "1011" ...
+#&gt;  $ ownergroup      : chr [1:366] "1002" "1002" "1002" "1002" ...
+#&gt;  $ filesize        : chr [1:366] "235" "235" "238" "239" ...
+#&gt;  $ t1              : chr [1:366] "Jul" "Jul" "Jul" "Jul" ...
+#&gt;  $ t2              : chr [1:366] "8" "9" "10" "11" ...
+#&gt;  $ t3              : chr [1:366] "09:20" "06:00" "06:00" "06:00" ...
+#&gt;  $ sftp_path       : chr [1:366] "K10/4182001-2022-07-08-0506.csv" "K10/4182001-2022-07-09-0506.csv" "K10/4182001-2022-07-10-0507.csv" "K10/4182001-2022-07-11-0507.csv" ...
+#&gt;  $ sensor_id       : int [1:366] 4182001 4182001 4182001 4182001 4182001 4182001 4182001 4182001 4182001 4182001 ...
+#&gt;  $ datum_uhrzeit   : POSIXct[1:366], format: "2022-07-08 05:06:00" "2022-07-09 05:06:00" ...
+#&gt;  $ type            : chr [1:366] "file" "file" "file" "file" ...
+#&gt;  $ galerie         : chr [1:366] "K" "K" "K" "K" ...
+#&gt;  $ brunnen_nummer  : int [1:366] 10 10 10 10 10 10 10 10 10 10 ...
+#&gt;  $ sensor_endnummer: int [1:366] 1 1 1 1 1 1 1 1 1 1 ...
+head(mc_files)
+#&gt;  [38;5;246m# A tibble: 6 × 15 [39m
+#&gt;   rights     links ownername ownergr…¹ files…² t1    t2    t3    sftp_…³ senso…⁴
+#&gt;    [3m [38;5;246m<chr> [39m [23m       [3m [38;5;246m<chr> [39m [23m  [3m [38;5;246m<chr> [39m [23m      [3m [38;5;246m<chr> [39m [23m      [3m [38;5;246m<chr> [39m [23m    [3m [38;5;246m<chr> [39m [23m  [3m [38;5;246m<chr> [39m [23m  [3m [38;5;246m<chr> [39m [23m  [3m [38;5;246m<chr> [39m [23m      [3m [38;5;246m<int> [39m [23m
+#&gt;  [38;5;250m1 [39m -rw-r--r-- 1     1011      1002      235     Jul   8     09:20 K10/41… 4 [4m1 [24m [4m8 [24m [4m2 [24m001
+#&gt;  [38;5;250m2 [39m -rw-r--r-- 1     1011      1002      235     Jul   9     06:00 K10/41… 4 [4m1 [24m [4m8 [24m [4m2 [24m001
+#&gt;  [38;5;250m3 [39m -rw-r--r-- 1     1011      1002      238     Jul   10    06:00 K10/41… 4 [4m1 [24m [4m8 [24m [4m2 [24m001
+#&gt;  [38;5;250m4 [39m -rw-r--r-- 1     1011      1002      239     Jul   11    06:00 K10/41… 4 [4m1 [24m [4m8 [24m [4m2 [24m001
+#&gt;  [38;5;250m5 [39m -rw-r--r-- 1     1011      1002      239     Jul   12    06:00 K10/41… 4 [4m1 [24m [4m8 [24m [4m2 [24m001
+#&gt;  [38;5;250m6 [39m -rw-r--r-- 1     1011      1002      239     Jul   13    06:00 K10/41… 4 [4m1 [24m [4m8 [24m [4m2 [24m001
+#&gt;  [38;5;246m# … with 5 more variables: datum_uhrzeit <dttm>, type <chr>, galerie <chr>, [39m
+#&gt;  [38;5;246m#   brunnen_nummer <int>, sensor_endnummer <int>, and abbreviated variable [39m
+#&gt;  [38;5;246m#   names ¹​ownergroup, ²​filesize, ³​sftp_path, ⁴​sensor_id [39m
+
+target_directory     user  system elapsed 
+#&gt;    0.02    0.00   20.95
+
+system.time(mc_data     user  system elapsed 
+#&gt;    0.18    0.00    0.18
+
+str(mc_data)
+#&gt; tibble [80 × 6] (S3: tbl_df/tbl/data.frame)
+#&gt;  $ csv_path        : chr [1:80] "C:/Users/RUNNER~1/AppData/Local/Temp/RtmpIp1eof/K10/4182001-2022-07-08-0506.csv" "C:/Users/RUNNER~1/AppData/Local/Temp/RtmpIp1eof/K10/4182001-2022-07-08-0506.csv" "C:/Users/RUNNER~1/AppData/Local/Temp/RtmpIp1eof/K10/4182001-2022-07-08-0506.csv" "C:/Users/RUNNER~1/AppData/Local/Temp/RtmpIp1eof/K10/4182001-2022-07-08-0506.csv" ...
+#&gt;  $ sensor_id       : int [1:80] 4182001 4182001 4182001 4182001 4182001 4182001 4182001 4182001 4182001 4182001 ...
+#&gt;  $ datum_uhrzeit   : POSIXct[1:80], format: "2022-07-07 05:00:00" "2022-07-07 05:00:00" ...
+#&gt;  $ sensor_endnummer: int [1:80] 1 1 1 1 1 1 1 1 1 1 ...
+#&gt;  $ parameter       : chr [1:80] "Leitfaehigkeit" "Temperatur" "Leitfaehigkeit" "Temperatur" ...
+#&gt;  $ messwert        : num [1:80] 971 23.9 974 23.7 982 24.1 983 24.3 982 23.9 ...
+head(mc_data)
+#&gt;  [38;5;246m# A tibble: 6 × 6 [39m
+#&gt;   csv_path                   senso…¹ datum_uhrzeit       senso…² param…³ messw…⁴
+#&gt;    [3m [38;5;246m<chr> [39m [23m                         [3m [38;5;246m<int> [39m [23m  [3m [38;5;246m<dttm> [39m [23m                 [3m [38;5;246m<int> [39m [23m  [3m [38;5;246m<chr> [39m [23m      [3m [38;5;246m<dbl> [39m [23m
+#&gt;  [38;5;250m1 [39m C:/Users/RUNNER~1/AppData… 4 [4m1 [24m [4m8 [24m [4m2 [24m001 2022-07-07  [38;5;246m05:00:00 [39m       1 Leitfa…   971  
+#&gt;  [38;5;250m2 [39m C:/Users/RUNNER~1/AppData… 4 [4m1 [24m [4m8 [24m [4m2 [24m001 2022-07-07  [38;5;246m05:00:00 [39m       1 Temper…    23.9
+#&gt;  [38;5;250m3 [39m C:/Users/RUNNER~1/AppData… 4 [4m1 [24m [4m8 [24m [4m2 [24m001 2022-07-07  [38;5;246m11:00:00 [39m       1 Leitfa…   974  
+#&gt;  [38;5;250m4 [39m C:/Users/RUNNER~1/AppData… 4 [4m1 [24m [4m8 [24m [4m2 [24m001 2022-07-07  [38;5;246m11:00:00 [39m       1 Temper…    23.7
+#&gt;  [38;5;250m5 [39m C:/Users/RUNNER~1/AppData… 4 [4m1 [24m [4m8 [24m [4m2 [24m001 2022-07-07  [38;5;246m17:00:00 [39m       1 Leitfa…   982  
+#&gt;  [38;5;250m6 [39m C:/Users/RUNNER~1/AppData… 4 [4m1 [24m [4m8 [24m [4m2 [24m001 2022-07-07  [38;5;246m17:00:00 [39m       1 Temper…    24.1
+#&gt;  [38;5;246m# … with abbreviated variable names ¹​sensor_id, ²​sensor_endnummer, ³​parameter, [39m
+#&gt;  [38;5;246m#   ⁴​messwert [39m
+  </dbl></chr></int></dttm></int></chr></int></int></chr></chr></dttm></int></chr></chr></chr></chr></chr></chr></chr></chr></chr></main>
 </div>
 
 
