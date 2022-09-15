@@ -78,7 +78,7 @@
       <img src="" class="logo" alt=""><h1>Emshoff 91</h1>
                         <h4 data-toc-skip class="author">Michael Rustler</h4>
             
-            <h4 data-toc-skip class="date">2022-09-14</h4>
+            <h4 data-toc-skip class="date">2022-09-15</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/KWB-R/kwb.geosalz/blob/HEAD/vignettes/emshoff91.Rmd" class="external-link"><code>vignettes/emshoff91.Rmd</code></a></small>
       <div class="d-none name"><code>emshoff91.Rmd</code></div>
@@ -94,8 +94,7 @@
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span>, repos <span class="op">=</span> <span class="st">"https://cloud.r-project.org"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"kwb-r/kwb.geosalz"</span>, </span>
-<span>                        dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"kwb-r/kwb.geosalz"</span>, dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="setup-the-project">2 Setup the project<a class="anchor" aria-label="anchor" href="#setup-the-project"></a>
@@ -105,7 +104,7 @@
 </h3>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Define paths and resolve placeholders</span></span>
-<span><span class="va">paths_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span><span class="va">paths</span> <span class="op">&lt;-</span> <span class="fu">kwb.utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/kwb.utils/man/resolve.html" class="external-link">resolve</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  servername <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"servername"</span><span class="op">)</span>,</span>
 <span>  project <span class="op">=</span> <span class="st">"geosalz"</span>, </span>
 <span>  processing_dir <span class="op">=</span> <span class="st">"//&lt;servername&gt;/processing/&lt;project&gt;"</span>,</span>
@@ -114,8 +113,7 @@
 <span>  export_xlsx_name <span class="op">=</span> <span class="st">"emshoff91_v&lt;version&gt;.xlsx"</span>,</span>
 <span>  export_xlsx_dir <span class="op">=</span> <span class="st">"&lt;processing_dir&gt;/archiv/cleaned-data"</span>,</span>
 <span>  export_xlsx_path <span class="op">=</span> <span class="st">"&lt;export_xlsx_dir&gt;/&lt;export_xlsx_name&gt;"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">paths</span> <span class="op">&lt;-</span> <span class="fu">kwb.utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/kwb.utils/man/resolve.html" class="external-link">resolve</a></span><span class="op">(</span><span class="va">paths_list</span><span class="op">)</span></span>
+<span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">#paths &lt;- kwb.utils::resolve(paths, root = "C:/projects")</span></span></code></pre></div>
 </div>
@@ -133,78 +131,89 @@
 <span><span class="va">emshoff91_df_remapped</span> <span class="op">&lt;-</span> <span class="fu">kwb.geosalz</span><span class="fu">::</span><span class="fu"><a href="../reference/emshoff91_remap_values.html">emshoff91_remap_values</a></span><span class="op">(</span><span class="va">emshoff91_df</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">emshoff91_df_remapped</span> <span class="op">&lt;-</span> <span class="va">emshoff91_import</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>  </span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">right_join</a></span><span class="op">(</span><span class="va">emshoff91_df_remapped</span>,</span>
-<span>                    by <span class="op">=</span> <span class="st">"ods_names_clean"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>datum <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"19%s"</span>,<span class="va">.data</span><span class="op">$</span><span class="va">datum</span><span class="op">)</span>,</span>
-<span>                                format <span class="op">=</span> <span class="st">"%Y/%m/%d"</span><span class="op">)</span>, </span>
-<span>                rohr <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html" class="external-link">str_replace</a></span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">rohr</span>, </span>
-<span>                                     <span class="st">"^0"</span>, </span>
-<span>                                     <span class="st">"O"</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">right_join</a></span><span class="op">(</span></span>
+<span>    <span class="va">emshoff91_df_remapped</span>,</span>
+<span>    by <span class="op">=</span> <span class="st">"ods_names_clean"</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    datum <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"19%s"</span>,<span class="va">.data</span><span class="op">$</span><span class="va">datum</span><span class="op">)</span>, format <span class="op">=</span> <span class="st">"%Y/%m/%d"</span><span class="op">)</span>,</span>
+<span>    rohr <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html" class="external-link">str_replace</a></span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">rohr</span>, <span class="st">"^0"</span>, <span class="st">"O"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span></span>
-<span><span class="va">messstelle_split</span> <span class="op">&lt;-</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_split.html" class="external-link">str_split_fixed</a></span><span class="op">(</span><span class="va">emshoff91_df_remapped</span><span class="op">$</span><span class="va">messstelle</span>, </span>
-<span>                         pattern <span class="op">=</span> <span class="st">"\\s{1,9}"</span>,</span>
-<span>                         n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span><span class="va">messstelle_split</span> <span class="op">&lt;-</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_split.html" class="external-link">str_split_fixed</a></span><span class="op">(</span></span>
+<span>  <span class="va">emshoff91_df_remapped</span><span class="op">$</span><span class="va">messstelle</span>, </span>
+<span>  pattern <span class="op">=</span> <span class="st">"\\s{1,9}"</span>,</span>
+<span>  n <span class="op">=</span> <span class="fl">3</span></span>
+<span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
-<span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">messstelle_split</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"objekt"</span>, <span class="st">"bhrgs_nr-jahr"</span>, <span class="st">"rohr"</span><span class="op">)</span>  </span>
 <span></span>
 <span><span class="va">messstelle_split</span> <span class="op">&lt;-</span> <span class="va">messstelle_split</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/separate.html" class="external-link">separate</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"bhrgs_nr-jahr"</span>, </span>
-<span>                  into <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bhrgs_nr"</span>, <span class="st">"jahr"</span><span class="op">)</span>,</span>
-<span>                  sep <span class="op">=</span> <span class="st">"/"</span>,</span>
-<span>                  remove <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>rohr <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html" class="external-link">str_replace</a></span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">rohr</span>, </span>
-<span>                                     <span class="st">"^0"</span>, </span>
-<span>                                     <span class="st">"O"</span><span class="op">)</span>, </span>
-<span>                ms <span class="op">=</span> <span class="fu">kwb.utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/kwb.utils/man/multiSubstitute.html" class="external-link">multiSubstitute</a></span><span class="op">(</span><span class="va">messstelle_split</span><span class="op">$</span><span class="va">objekt</span>,</span>
-<span>                           replacements <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"GF|F-Gal."</span> <span class="op">=</span> <span class="st">"Gal_F"</span>,</span>
-<span>                                               <span class="st">"GE|E-Gal"</span> <span class="op">=</span> <span class="st">"Gal_E"</span>,</span>
-<span>                                               <span class="st">"GI|I-Gal."</span> <span class="op">=</span> <span class="st">"Gal_I"</span>,</span>
-<span>                                               <span class="st">"GG|G-Gal.|G-Gal"</span> <span class="op">=</span> <span class="st">"Gal_G"</span>,</span>
-<span>                                               <span class="st">"GK|K-Gal."</span> <span class="op">=</span> <span class="st">"Gal_K"</span>,</span>
-<span>                                               <span class="st">"^Go$"</span> <span class="op">=</span> <span class="st">"Gal_O"</span>,</span>
-<span>                                               <span class="st">"GH|H-Gal."</span> <span class="op">=</span> <span class="st">"Gal_H"</span>, </span>
-<span>                                               <span class="st">"GO"</span> <span class="op">=</span> <span class="st">"Gal_O"</span>,</span>
-<span>                                               <span class="st">"GL|L-Gal."</span> <span class="op">=</span> <span class="st">"Gal_L"</span>, </span>
-<span>                                               <span class="st">"GM|M-Gal."</span> <span class="op">=</span> <span class="st">"Gal_M"</span>,</span>
-<span>                                               <span class="st">",,"</span> <span class="op">=</span> <span class="st">","</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> </span>
+<span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/separate.html" class="external-link">separate</a></span><span class="op">(</span></span>
+<span>    col <span class="op">=</span> <span class="st">"bhrgs_nr-jahr"</span>, </span>
+<span>    into <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bhrgs_nr"</span>, <span class="st">"jahr"</span><span class="op">)</span>,</span>
+<span>    sep <span class="op">=</span> <span class="st">"/"</span>,</span>
+<span>    remove <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    rohr <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html" class="external-link">str_replace</a></span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">rohr</span>, <span class="st">"^0"</span>, <span class="st">"O"</span><span class="op">)</span>, </span>
+<span>    ms <span class="op">=</span> <span class="fu">kwb.utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/kwb.utils/man/multiSubstitute.html" class="external-link">multiSubstitute</a></span><span class="op">(</span></span>
+<span>      <span class="va">messstelle_split</span><span class="op">$</span><span class="va">objekt</span>,</span>
+<span>      replacements <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>        <span class="st">"GF|F-Gal."</span> <span class="op">=</span> <span class="st">"Gal_F"</span>,</span>
+<span>        <span class="st">"GE|E-Gal"</span> <span class="op">=</span> <span class="st">"Gal_E"</span>,</span>
+<span>        <span class="st">"GI|I-Gal."</span> <span class="op">=</span> <span class="st">"Gal_I"</span>,</span>
+<span>        <span class="st">"GG|G-Gal.|G-Gal"</span> <span class="op">=</span> <span class="st">"Gal_G"</span>,</span>
+<span>        <span class="st">"GK|K-Gal."</span> <span class="op">=</span> <span class="st">"Gal_K"</span>,</span>
+<span>        <span class="st">"^Go$"</span> <span class="op">=</span> <span class="st">"Gal_O"</span>,</span>
+<span>        <span class="st">"GH|H-Gal."</span> <span class="op">=</span> <span class="st">"Gal_H"</span>, </span>
+<span>        <span class="st">"GO"</span> <span class="op">=</span> <span class="st">"Gal_O"</span>,</span>
+<span>        <span class="st">"GL|L-Gal."</span> <span class="op">=</span> <span class="st">"Gal_L"</span>, </span>
+<span>        <span class="st">"GM|M-Gal."</span> <span class="op">=</span> <span class="st">"Gal_M"</span>,</span>
+<span>        <span class="st">",,"</span> <span class="op">=</span> <span class="st">","</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span> </span>
 <span></span>
-<span>  <span class="va">messstelle_split2</span> <span class="op">&lt;-</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_split.html" class="external-link">str_split_fixed</a></span><span class="op">(</span><span class="va">messstelle_split</span><span class="op">$</span><span class="va">ms</span>, pattern <span class="op">=</span> <span class="st">","</span>, n <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>  </span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span></span>
-<span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">messstelle_split2</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"brunnen_galerie"</span>, <span class="st">"brunnen_id"</span><span class="op">)</span></span>
+<span><span class="va">messstelle_split2</span> <span class="op">&lt;-</span> <span class="va">messstelle_split</span><span class="op">$</span><span class="va">ms</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_split.html" class="external-link">str_split_fixed</a></span><span class="op">(</span>pattern <span class="op">=</span> <span class="st">","</span>, n <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span> <span class="va">messstelle_split2</span> <span class="op">&lt;-</span> <span class="va">messstelle_split2</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
-<span>   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>brunnen_id <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html" class="external-link">str_remove</a></span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">brunnen_id</span>, pattern <span class="op">=</span> <span class="st">"^Br"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">messstelle_split2</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"brunnen_galerie"</span>, <span class="st">"brunnen_id"</span><span class="op">)</span></span>
 <span></span>
-<span> <span class="va">ms_split</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">messstelle_split</span>, <span class="va">messstelle_split2</span><span class="op">)</span></span>
+<span><span class="va">messstelle_split2</span> <span class="op">&lt;-</span> <span class="va">messstelle_split2</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    brunnen_id <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html" class="external-link">str_remove</a></span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">brunnen_id</span>, pattern <span class="op">=</span> <span class="st">"^Br"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
 <span></span>
-<span> <span class="va">ms_split</span></span>
-<span> </span>
+<span><span class="va">ms_split</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">messstelle_split</span>, <span class="va">messstelle_split2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ms_split</span></span>
+<span></span>
 <span><span class="va">samples_per_moni_id</span> <span class="op">&lt;-</span> <span class="va">emshoff91_df_remapped</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>  </span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">messstelle</span>, </span>
-<span>               <span class="op">)</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">messstelle</span><span class="op">)</span> </span>
 <span></span>
 <span><span class="va">samples_per_moni_id_master</span> <span class="op">&lt;-</span> <span class="va">emshoff91_df_remapped</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>  </span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">messstelle</span>, </span>
-<span>               <span class="va">.data</span><span class="op">$</span><span class="va">rohr</span>,</span>
-<span>               <span class="va">.data</span><span class="op">$</span><span class="va">fi_mi</span>, </span>
-<span>               <span class="va">.data</span><span class="op">$</span><span class="va">strat</span>,</span>
-<span>               <span class="va">.data</span><span class="op">$</span><span class="va">progr</span></span>
-<span>               <span class="op">)</span> </span>
-<span>                                            </span></code></pre></div>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span></span>
+<span>    <span class="va">.data</span><span class="op">$</span><span class="va">messstelle</span>, </span>
+<span>    <span class="va">.data</span><span class="op">$</span><span class="va">rohr</span>,</span>
+<span>    <span class="va">.data</span><span class="op">$</span><span class="va">fi_mi</span>, </span>
+<span>    <span class="va">.data</span><span class="op">$</span><span class="va">strat</span>,</span>
+<span>    <span class="va">.data</span><span class="op">$</span><span class="va">progr</span></span>
+<span>  <span class="op">)</span> </span></code></pre></div>
 <div class="section level3">
 <h3 id="export-to-excel">4 Export to Excel<a class="anchor" aria-label="anchor" href="#export-to-excel"></a>
 </h3>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">openxlsx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/openxlsx/man/write.xlsx.html" class="external-link">write.xlsx</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>samples_per_moni_id <span class="op">=</span> <span class="va">samples_per_moni_id</span>, </span>
-<span>                          samples_per_moni_id_master <span class="op">=</span> <span class="va">samples_per_moni_id_master</span>,</span>
-<span>                          data <span class="op">=</span> <span class="va">emshoff91_df_remapped</span><span class="op">)</span>,</span>
-<span>                     file <span class="op">=</span> <span class="va">paths</span><span class="op">$</span><span class="va">export_xlsx_path</span>,</span>
-<span>                     overwrite <span class="op">=</span> <span class="cn">TRUE</span></span>
+<code class="sourceCode R"><span><span class="fu">openxlsx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/openxlsx/man/write.xlsx.html" class="external-link">write.xlsx</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    samples_per_moni_id <span class="op">=</span> <span class="va">samples_per_moni_id</span>, </span>
+<span>    samples_per_moni_id_master <span class="op">=</span> <span class="va">samples_per_moni_id_master</span>,</span>
+<span>    data <span class="op">=</span> <span class="va">emshoff91_df_remapped</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  file <span class="op">=</span> <span class="va">paths</span><span class="op">$</span><span class="va">export_xlsx_path</span>,</span>
+<span>  overwrite <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
@@ -258,7 +267,7 @@
 </tr>
 <tr class="odd">
 <td align="left">date</td>
-<td align="left">2022-09-14</td>
+<td align="left">2022-09-15</td>
 </tr>
 <tr class="even">
 <td align="left">pandoc</td>
