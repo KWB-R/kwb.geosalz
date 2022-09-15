@@ -21,7 +21,6 @@ get_phreeqc_data <- function(lab_bwb)
     )
 }
 
-
 #' Prepare PhreeqC input
 #'
 #' @param lab_bwb_phreeqc selected BWB lab data as retrieved by \code{\link{get_phreeqc_data}}

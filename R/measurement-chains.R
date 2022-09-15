@@ -257,7 +257,8 @@ read_measurementchains_data <- function(csv_paths, debug = FALSE)
       locale = readr::locale(
         #data is always CET without switching
         #https://stackoverflow.com/a/38333522                                           
-        tz = "Etc/GMT-1"),
+        tz = "Etc/GMT-1"
+      ),
       col_types = readr::cols(
         "Geraet" = readr::col_integer(), 
         "DatumUhrzeit" = readr::col_datetime(), 
