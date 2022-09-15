@@ -9,7 +9,7 @@ get_measurementchains_metadata(
 )
 }
 \arguments{
-\item{file}{path to measurement chains metadata file (default: 
+\item{file}{path to measurement chains metadata file (default:
 system.file("extdata/metadata_messketten.csv", package = "kwb.geosalz"))}
 }
 \value{

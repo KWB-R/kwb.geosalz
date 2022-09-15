@@ -13,12 +13,12 @@ download_measurementchains_data(
 )
 }
 \arguments{
-\item{sftp_paths}{character vector with paths to files to be downloaded. As 
+\item{sftp_paths}{character vector with paths to files to be downloaded. As
 retrieved by \code{\link{get_measurementchains_files}} column "sftp_path"}
 
 \item{target_directory}{target directory}
 
-\item{sftp_connection}{an SFTP connnection as retrieved by 
+\item{sftp_connection}{an SFTP connnection as retrieved by
 \code{\link{create_sftp_connection}}}
 
 \item{run_parallel}{default: TRUE}
@@ -26,7 +26,7 @@ retrieved by \code{\link{get_measurementchains_files}} column "sftp_path"}
 \item{debug}{show debug messages (default: FALSE)}
 }
 \value{
-paths to downloaded files
+tibble with columns file_id, sftp_path and local_path of csv files
 }
 \description{
 Measurement Chains: download data

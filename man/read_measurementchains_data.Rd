@@ -2,13 +2,12 @@
 % Please edit documentation in R/measurement-chains.R
 \name{read_measurementchains_data}
 \alias{read_measurementchains_data}
-\title{Measurement Chains: read csv data}
+\title{Measurement Chains: read csv data from multiple files}
 \usage{
-read_measurementchains_data(csv_paths, debug = FALSE)
+read_measurementchains_data(csv_files, run_parallel = TRUE, debug = FALSE)
 }
 \arguments{
-\item{csv_paths}{character vector with paths to downloaded csv files. As 
-retrieved by \code{\link{download_measurementchains_data}}}
+\item{csv_files}{tibble as retrieved by \code{\link{download_measurementchains_data}}}
 
 \item{debug}{show debug messages (default: FALSE)}
 }
@@ -16,16 +15,16 @@ retrieved by \code{\link{download_measurementchains_data}}}
 data frame with imported data from csv files
 }
 \description{
-Measurement Chains: read csv data
+Measurement Chains: read csv data from multiple files
 }
 \examples{
 \dontrun{
 mc_files <- kwb.geosalz::get_measurementchains_files()
 target_directory <- tempdir()
-csv_paths <- kwb.geosalz::download_measurementchains_data(
+csv_files <- kwb.geosalz::download_measurementchains_data(
 sftp_paths = mc_files$sftp_path,
 target_directory)
-mc_data <- kwb.geosalz::read_measurementchains_data(csv_paths)
+mc_data <- kwb.geosalz::read_measurementchains_data(csv_files)
 
 }
 }

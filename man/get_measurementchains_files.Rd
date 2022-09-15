@@ -10,13 +10,13 @@ get_measurementchains_files(
 )
 }
 \arguments{
-\item{sftp_connection}{an SFTP connnection as retrieved by 
+\item{sftp_connection}{an SFTP connnection as retrieved by
 \code{\link{create_sftp_connection}}}
 
 \item{debug}{show debug messages (default: FALSE)}
 }
 \value{
-tibble with information on available files and tidied meta-information 
+tibble with information on available files and tidied meta-information
 based on file naming
 }
 \description{

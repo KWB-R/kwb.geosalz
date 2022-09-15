@@ -14,21 +14,20 @@ knitr::opts_chunk$set(
 )
 
 con_vars <- sprintf("MESSKETTEN_%s", c("SERVER", "USER", "PASSWORD"))
-
-con <- list(
-  server = Sys.getenv(con_vars[1]),
-  user = Sys.getenv(con_vars[2]),
-  pw = Sys.getenv(con_vars[3]
-  )
+con <- list(server = Sys.getenv(con_vars[1]),
+            user = Sys.getenv(con_vars[2]),
+            pw = Sys.getenv(con_vars[3])
 )
 
 is_defined <- sapply(con, stringr::str_length) > 0
 
 con_defined <- all(is_defined)
+
 ```
 
 ```{r setup,  eval = con_defined}
 library(kwb.geosalz)
+
 
 mc_metadata <- kwb.geosalz::get_measurementchains_metadata()
 
@@ -42,15 +41,27 @@ head(mc_files)
 
 target_directory <- tempdir()
 
-system.time(
-  csv_paths <- kwb.geosalz::download_measurementchains_data(
-    sftp_paths = mc_files$sftp_path[1:10],
-    target_directory
-  )
-)
+csv_files <- kwb.geosalz::download_measurementchains_data(
+  sftp_paths = mc_files$sftp_path,
+  target_directory,
+  debug = TRUE)
 
-system.time(mc_data <- kwb.geosalz::read_measurementchains_data(csv_paths))
+csv_files
 
-str(mc_data)
-head(mc_data)
+mc_data_single <- kwb.geosalz::read_measurementchains_data(
+  csv_files,
+  run_parallel = FALSE,
+  debug = TRUE)
+mc_data_parallel <- kwb.geosalz::read_measurementchains_data(
+  csv_files,
+  run_parallel = TRUE,
+  debug = TRUE)
+
+identical(mc_data_single, mc_data_parallel)
+
+
+mc_data_parallel
+
+
+
 ```
