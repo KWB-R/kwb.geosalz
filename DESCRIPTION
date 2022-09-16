@@ -13,6 +13,8 @@ Description: R Package for Documenting Workflow Used in Project "geosalz".
 License: MIT + file LICENSE
 URL: https://github.com/KWB-R/kwb.geosalz
 BugReports: https://github.com/KWB-R/kwb.geosalz/issues
+Depends: 
+    R (>= 2.10)
 Imports: 
     cellranger (>= 1.1.0),
     crayon (>= 1.3.4),
@@ -27,11 +29,11 @@ Imports:
     magrittr (>= 1.5),
     parallel,
     readODS,
-    readr(>= 1.4.0), 
+    readr(>= 1.4.0),
     readxl (>= 1.2.0),
     rlang (>= 0.3.1),
-    sf, 
-    sftp, 
+    sf,
+    sftp,
     stringr (>= 1.4.0),
     tibble (>= 2.0.1),
     tidyr (>= 0.8.2),
@@ -39,12 +41,12 @@ Imports:
 Suggests: 
     covr (>= 3.2.1),
     DT,
-    ggplot2 (>= 3.1.0),
     ggforce,
+    ggplot2 (>= 3.1.0),
     htmlwidgets,
-    leaflet,
     knitr (>= 1.21),
     kwb.pkgbuild,
+    leaflet,
     openxlsx,
     phreeqc,
     rmarkdown (>= 1.11),
@@ -63,5 +65,3 @@ ByteCompile: true
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.1
-Depends: 
-    R (>= 2.10)
