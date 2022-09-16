@@ -88,12 +88,52 @@
 
     
     
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="section level2">
+<h2 id="background">Background<a class="anchor" aria-label="anchor" href="#background"></a>
+</h2>
+<p>One measurement chain consist of six sensors (column <code>sensor_endnummer</code> in <code>Table 1</code>), which will be placed into one production well, but at different filter depths. In total three measurement chains will be installed into three different production wells (column: <code>brunnen_nummer</code> in <code>Table 1</code>) as shown in detail in <code>Table 1</code> below:</p>
+<div id="htmlwidget-c7417b3f0d9de9c7d1fc" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-c7417b3f0d9de9c7d1fc">{"x":{"filter":"none","vertical":false,"caption":"<caption>Table 1: Metadata of Measurement Chains<\/caption>","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18"],["K","K","K","K","K","K","K","K","K","K","K","K","K","K","K","K","K","K"],[9,9,9,9,9,9,10,10,10,10,10,10,11,11,11,11,11,11],[400,400,400,400,400,400,600,600,600,600,600,600,600,600,600,600,600,600],["über Filter","über Filter","über Filter","über Filter","über Filter","über Filter","unter Filter","unter Filter","unter Filter","unter Filter","unter Filter","unter Filter","unter Filter","unter Filter","unter Filter","unter Filter","unter Filter","unter Filter"],["unter Pumpe","unter Pumpe","unter Pumpe","unter Pumpe","unter Pumpe","unter Pumpe","über Pumpe (am Steigrohr)","über Pumpe (am Steigrohr)","über Pumpe (am Steigrohr)","über Pumpe (am Steigrohr)","über Pumpe (am Steigrohr)","über Pumpe (am Steigrohr)","über Pumpe (am Steigrohr)","über Pumpe (am Steigrohr)","über Pumpe (am Steigrohr)","über Pumpe (am Steigrohr)","über Pumpe (am Steigrohr)","über Pumpe (am Steigrohr)"],[21,21,21,21,21,21,11,11,11,11,11,11,12,12,12,12,12,12],[27,27,27,27,27,27,18,18,18,18,18,18,20,20,20,20,20,20],[null,null,null,null,null,null,4182006,4182005,4182004,4182003,4182002,4182001,null,null,null,null,null,null],[6,5,4,3,2,1,6,5,4,3,2,1,6,5,4,3,2,1],[21.5,22.5,23.5,24.5,25.5,26.5,11.5,12.7,13.9,15.1,16.3,17.5,12.5,13.9,15.3,16.7,18.1,19.5]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>galerie<\/th>\n      <th>brunnen_nummer<\/th>\n      <th>dn<\/th>\n      <th>einbau_pumpe<\/th>\n      <th>einbau_messkette<\/th>\n      <th>filteroberkante_muGOK<\/th>\n      <th>filterunterkante_muGOK<\/th>\n      <th>sensor_id<\/th>\n      <th>sensor_endnummer<\/th>\n      <th>einbau_sensor_muGOK<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[2,3,6,7,8,9,10]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script><p>Each sensor (type: <code>WLF05</code>, <code>link_to_manufacturer_factsheet</code>: <code>to_do: add-link-to-factsheet-on-kwb-cloud</code>) measures the the following two parameters with the characteristics summarized below:</p>
+<ul>
+<li>
+<p><code>electrical conductivity</code>:</p>
+<ul>
+<li><p>measurement range: <code>0 - 20 mS</code></p></li>
+<li><p>measurement range detection: <code>automatic</code></p></li>
+<li><p>typical accuracy: +/- 1.5 % of measurement value</p></li>
+</ul>
+</li>
+<li>
+<p><code>temperature</code>:</p>
+<ul>
+<li><p>measurement range: <code>0 - 50 Celsius</code></p></li>
+<li><p>measurement resolution: <code>0.1 Celsius</code></p></li>
+<li><p>typical accuracy: <code>&lt;= 0.1 Celsius</code></p></li>
+</ul>
+</li>
+</ul>
+<p>The maximum <code>temporal resolution</code> of each sensor is <code>every second</code>. Within the project <code>GeoSalz</code> a measurement <code>every 5 minutes</code> is proposed by KWB in order to be able to detect potential salinity shifts due to a switched pumping regime.</p>
+</div>
+<div class="section level2">
+<h2 id="data-management">Data Management<a class="anchor" aria-label="anchor" href="#data-management"></a>
+</h2>
+<div class="section level3">
+<h3 id="define-sftp-login">Define SFTP Login<a class="anchor" aria-label="anchor" href="#define-sftp-login"></a>
+</h3>
+<p>Run <code><a href="https://usethis.r-lib.org/reference/edit.html" class="external-link">usethis::edit_r_environ()</a></code> to edit the R <code>.Renviron</code> file and add the following three environment variables.</p>
+<pre><code>MESSKETTEN_SERVER = &lt;sftp_url&gt;
+MESSKETTEN_USER = &lt;sftp_username&gt;
+MESSKETTEN_PASSWORD = &lt;sftp_userpassord&gt;</code></pre>
+<p>Finally save the <code>.Renviron</code> file and restart <code>R(Studio)</code>. Subsequently the code below will work (in case the SFTP login credentials were defined correctly!) and assure that the <code>measurement chains</code> data (i.e. parameters <code>electrical conductivity</code> and <code>temperature</code>) will be downloaded from the <code>SFTP server</code> to a user-defined directory on your local device. For auto</p>
+</div>
+<div class="section level3">
+<h3 id="data-download">Data Download<a class="anchor" aria-label="anchor" href="#data-download"></a>
+</h3>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/KWB-R/kwb.geosalz" class="external-link">kwb.geosalz</a></span><span class="op">)</span></span>
 <span></span>
-<span></span>
+<span><span class="co">### Metadata of measurement chains (see also Table 1 above)</span></span>
 <span><span class="va">mc_metadata</span> <span class="op">&lt;-</span> <span class="fu">kwb.geosalz</span><span class="fu">::</span><span class="fu"><a href="../reference/get_measurementchains_metadata.html">get_measurementchains_metadata</a></span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">mc_metadata</span><span class="op">)</span></span>
 <span><span class="co">#&gt; spec_tbl_df [18 × 10] (S3: spec_tbl_df/tbl_df/tbl/data.frame)</span></span>
 <span><span class="co">#&gt;  $ galerie               : chr [1:18] "K" "K" "K" "K" ...</span></span>
@@ -120,81 +160,168 @@
 <span><span class="co">#&gt;   ..   einbau_sensor_muGOK = <span style="color: #00BB00;">col_double()</span></span></span>
 <span><span class="co">#&gt;   .. )</span></span>
 <span><span class="co">#&gt;  - attr(*, "problems")=&lt;externalptr&gt;</span></span>
-<span><span class="fu">DT</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/DT/man/datatable.html" class="external-link">datatable</a></span><span class="op">(</span><span class="va">mc_metadata</span><span class="op">)</span></span></code></pre></div>
-<div id="htmlwidget-7e60ddd1cf0db5181b85" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-7e60ddd1cf0db5181b85">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18"],["K","K","K","K","K","K","K","K","K","K","K","K","K","K","K","K","K","K"],[9,9,9,9,9,9,10,10,10,10,10,10,11,11,11,11,11,11],[400,400,400,400,400,400,600,600,600,600,600,600,600,600,600,600,600,600],["über Filter","über Filter","über Filter","über Filter","über Filter","über Filter","unter Filter","unter Filter","unter Filter","unter Filter","unter Filter","unter Filter","unter Filter","unter Filter","unter Filter","unter Filter","unter Filter","unter Filter"],["unter Pumpe","unter Pumpe","unter Pumpe","unter Pumpe","unter Pumpe","unter Pumpe","über Pumpe (am Steigrohr)","über Pumpe (am Steigrohr)","über Pumpe (am Steigrohr)","über Pumpe (am Steigrohr)","über Pumpe (am Steigrohr)","über Pumpe (am Steigrohr)","über Pumpe (am Steigrohr)","über Pumpe (am Steigrohr)","über Pumpe (am Steigrohr)","über Pumpe (am Steigrohr)","über Pumpe (am Steigrohr)","über Pumpe (am Steigrohr)"],[21,21,21,21,21,21,11,11,11,11,11,11,12,12,12,12,12,12],[27,27,27,27,27,27,18,18,18,18,18,18,20,20,20,20,20,20],[null,null,null,null,null,null,4182006,4182005,4182004,4182003,4182002,4182001,null,null,null,null,null,null],[6,5,4,3,2,1,6,5,4,3,2,1,6,5,4,3,2,1],[21.5,22.5,23.5,24.5,25.5,26.5,11.5,12.7,13.9,15.1,16.3,17.5,12.5,13.9,15.3,16.7,18.1,19.5]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>galerie<\/th>\n      <th>brunnen_nummer<\/th>\n      <th>dn<\/th>\n      <th>einbau_pumpe<\/th>\n      <th>einbau_messkette<\/th>\n      <th>filteroberkante_muGOK<\/th>\n      <th>filterunterkante_muGOK<\/th>\n      <th>sensor_id<\/th>\n      <th>sensor_endnummer<\/th>\n      <th>einbau_sensor_muGOK<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[2,3,6,7,8,9,10]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
-
-mc_files  tibble [366 × 15] (S3: tbl_df/tbl/data.frame)
-#&gt;  $ rights          : chr [1:366] "-rw-r--r--" "-rw-r--r--" "-rw-r--r--" "-rw-r--r--" ...
-#&gt;  $ links           : chr [1:366] "1" "1" "1" "1" ...
-#&gt;  $ ownername       : chr [1:366] "1011" "1011" "1011" "1011" ...
-#&gt;  $ ownergroup      : chr [1:366] "1002" "1002" "1002" "1002" ...
-#&gt;  $ filesize        : chr [1:366] "235" "235" "238" "239" ...
-#&gt;  $ t1              : chr [1:366] "Jul" "Jul" "Jul" "Jul" ...
-#&gt;  $ t2              : chr [1:366] "8" "9" "10" "11" ...
-#&gt;  $ t3              : chr [1:366] "09:20" "06:00" "06:00" "06:00" ...
-#&gt;  $ sftp_path       : chr [1:366] "K10/4182001-2022-07-08-0506.csv" "K10/4182001-2022-07-09-0506.csv" "K10/4182001-2022-07-10-0507.csv" "K10/4182001-2022-07-11-0507.csv" ...
-#&gt;  $ sensor_id       : int [1:366] 4182001 4182001 4182001 4182001 4182001 4182001 4182001 4182001 4182001 4182001 ...
-#&gt;  $ datum_uhrzeit   : POSIXct[1:366], format: "2022-07-08 05:06:00" "2022-07-09 05:06:00" ...
-#&gt;  $ type            : chr [1:366] "file" "file" "file" "file" ...
-#&gt;  $ galerie         : chr [1:366] "K" "K" "K" "K" ...
-#&gt;  $ brunnen_nummer  : int [1:366] 10 10 10 10 10 10 10 10 10 10 ...
-#&gt;  $ sensor_endnummer: int [1:366] 1 1 1 1 1 1 1 1 1 1 ...
-head(mc_files)
-#&gt;  [38;5;246m# A tibble: 6 × 15 [39m
-#&gt;   rights     links ownername ownergr…¹ files…² t1    t2    t3    sftp_…³ senso…⁴
-#&gt;    [3m [38;5;246m<chr> [39m [23m       [3m [38;5;246m<chr> [39m [23m  [3m [38;5;246m<chr> [39m [23m      [3m [38;5;246m<chr> [39m [23m      [3m [38;5;246m<chr> [39m [23m    [3m [38;5;246m<chr> [39m [23m  [3m [38;5;246m<chr> [39m [23m  [3m [38;5;246m<chr> [39m [23m  [3m [38;5;246m<chr> [39m [23m      [3m [38;5;246m<int> [39m [23m
-#&gt;  [38;5;250m1 [39m -rw-r--r-- 1     1011      1002      235     Jul   8     09:20 K10/41… 4 [4m1 [24m [4m8 [24m [4m2 [24m001
-#&gt;  [38;5;250m2 [39m -rw-r--r-- 1     1011      1002      235     Jul   9     06:00 K10/41… 4 [4m1 [24m [4m8 [24m [4m2 [24m001
-#&gt;  [38;5;250m3 [39m -rw-r--r-- 1     1011      1002      238     Jul   10    06:00 K10/41… 4 [4m1 [24m [4m8 [24m [4m2 [24m001
-#&gt;  [38;5;250m4 [39m -rw-r--r-- 1     1011      1002      239     Jul   11    06:00 K10/41… 4 [4m1 [24m [4m8 [24m [4m2 [24m001
-#&gt;  [38;5;250m5 [39m -rw-r--r-- 1     1011      1002      239     Jul   12    06:00 K10/41… 4 [4m1 [24m [4m8 [24m [4m2 [24m001
-#&gt;  [38;5;250m6 [39m -rw-r--r-- 1     1011      1002      239     Jul   13    06:00 K10/41… 4 [4m1 [24m [4m8 [24m [4m2 [24m001
-#&gt;  [38;5;246m# … with 5 more variables: datum_uhrzeit <dttm>, type <chr>, galerie <chr>, [39m
-#&gt;  [38;5;246m#   brunnen_nummer <int>, sensor_endnummer <int>, and abbreviated variable [39m
-#&gt;  [38;5;246m#   names ¹​ownergroup, ²​filesize, ³​sftp_path, ⁴​sensor_id [39m
-
-target_directory  Download 366 measurement chains files (using 2 CPU cores) ... ok. (8.71s)
-
-csv_files
-#&gt;  [38;5;246m# A tibble: 366 × 3 [39m
-#&gt;    file_id sftp_path                       local_path                           
-#&gt;       [3m [38;5;246m<int> [39m [23m  [3m [38;5;246m<chr> [39m [23m                            [3m [38;5;246m<chr> [39m [23m                                
-#&gt;  [38;5;250m 1 [39m       1 K10/4182001-2022-07-08-0506.csv C:/Users/RUNNER~1/AppData/Local/Temp…
-#&gt;  [38;5;250m 2 [39m       2 K10/4182001-2022-07-09-0506.csv C:/Users/RUNNER~1/AppData/Local/Temp…
-#&gt;  [38;5;250m 3 [39m       3 K10/4182001-2022-07-10-0507.csv C:/Users/RUNNER~1/AppData/Local/Temp…
-#&gt;  [38;5;250m 4 [39m       4 K10/4182001-2022-07-11-0507.csv C:/Users/RUNNER~1/AppData/Local/Temp…
-#&gt;  [38;5;250m 5 [39m       5 K10/4182001-2022-07-12-0506.csv C:/Users/RUNNER~1/AppData/Local/Temp…
-#&gt;  [38;5;250m 6 [39m       6 K10/4182001-2022-07-13-0506.csv C:/Users/RUNNER~1/AppData/Local/Temp…
-#&gt;  [38;5;250m 7 [39m       7 K10/4182001-2022-07-14-0506.csv C:/Users/RUNNER~1/AppData/Local/Temp…
-#&gt;  [38;5;250m 8 [39m       8 K10/4182001-2022-07-15-0507.csv C:/Users/RUNNER~1/AppData/Local/Temp…
-#&gt;  [38;5;250m 9 [39m       9 K10/4182001-2022-07-16-0507.csv C:/Users/RUNNER~1/AppData/Local/Temp…
-#&gt;  [38;5;250m10 [39m      10 K10/4182001-2022-07-17-0507.csv C:/Users/RUNNER~1/AppData/Local/Temp…
-#&gt;  [38;5;246m# … with 356 more rows [39m
-
-mc_data_single  Importing 366 measurement chains files (using 1 CPU core) ... ok. (6.29s)
-mc_data_parallel  Importing 366 measurement chains files (using 2 CPU cores) ... ok. (4.99s)
-
-identical(mc_data_single, mc_data_parallel)
-#&gt; [1] TRUE
-
-
-mc_data_parallel
-#&gt;  [38;5;246m# A tibble: 2,928 × 5 [39m
-#&gt;    file_id sensor_id datum_uhrzeit       parameter      messwert
-#&gt;       [3m [38;5;246m<int> [39m [23m      [3m [38;5;246m<int> [39m [23m  [3m [38;5;246m<dttm> [39m [23m               [3m [38;5;246m<chr> [39m [23m              [3m [38;5;246m<dbl> [39m [23m
-#&gt;  [38;5;250m 1 [39m       1   4 [4m1 [24m [4m8 [24m [4m2 [24m001 2022-07-07  [38;5;246m05:00:00 [39m Leitfaehigkeit      971
-#&gt;  [38;5;250m 2 [39m       1   4 [4m1 [24m [4m8 [24m [4m2 [24m001 2022-07-07  [38;5;246m11:00:00 [39m Leitfaehigkeit      974
-#&gt;  [38;5;250m 3 [39m       1   4 [4m1 [24m [4m8 [24m [4m2 [24m001 2022-07-07  [38;5;246m17:00:00 [39m Leitfaehigkeit      982
-#&gt;  [38;5;250m 4 [39m       1   4 [4m1 [24m [4m8 [24m [4m2 [24m001 2022-07-07  [38;5;246m23:00:00 [39m Leitfaehigkeit      983
-#&gt;  [38;5;250m 5 [39m       2   4 [4m1 [24m [4m8 [24m [4m2 [24m001 2022-07-08  [38;5;246m05:00:00 [39m Leitfaehigkeit      982
-#&gt;  [38;5;250m 6 [39m       2   4 [4m1 [24m [4m8 [24m [4m2 [24m001 2022-07-08  [38;5;246m11:00:00 [39m Leitfaehigkeit      985
-#&gt;  [38;5;250m 7 [39m       2   4 [4m1 [24m [4m8 [24m [4m2 [24m001 2022-07-08  [38;5;246m17:00:00 [39m Leitfaehigkeit      994
-#&gt;  [38;5;250m 8 [39m       2   4 [4m1 [24m [4m8 [24m [4m2 [24m001 2022-07-08  [38;5;246m23:00:00 [39m Leitfaehigkeit      995
-#&gt;  [38;5;250m 9 [39m       3   4 [4m1 [24m [4m8 [24m [4m2 [24m001 2022-07-09  [38;5;246m05:00:00 [39m Leitfaehigkeit      996
-#&gt;  [38;5;250m10 [39m       3   4 [4m1 [24m [4m8 [24m [4m2 [24m001 2022-07-09  [38;5;246m11:00:00 [39m Leitfaehigkeit      [4m1 [24m000
-#&gt;  [38;5;246m# … with 2,918 more rows [39m
-  </dbl></chr></dttm></int></int></chr></chr></int></int></int></chr></chr></dttm></int></chr></chr></chr></chr></chr></chr></chr></chr></chr></main>
+<span></span>
+<span><span class="co">### Tibble with Information on available measurement chain files on SFTP server</span></span>
+<span><span class="va">mc_files</span> <span class="op">&lt;-</span> <span class="fu">kwb.geosalz</span><span class="fu">::</span><span class="fu"><a href="../reference/get_measurementchains_files.html">get_measurementchains_files</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">mc_files</span><span class="op">)</span></span>
+<span><span class="co">#&gt; tibble [366 × 15] (S3: tbl_df/tbl/data.frame)</span></span>
+<span><span class="co">#&gt;  $ rights          : chr [1:366] "-rw-r--r--" "-rw-r--r--" "-rw-r--r--" "-rw-r--r--" ...</span></span>
+<span><span class="co">#&gt;  $ links           : chr [1:366] "1" "1" "1" "1" ...</span></span>
+<span><span class="co">#&gt;  $ ownername       : chr [1:366] "1011" "1011" "1011" "1011" ...</span></span>
+<span><span class="co">#&gt;  $ ownergroup      : chr [1:366] "1002" "1002" "1002" "1002" ...</span></span>
+<span><span class="co">#&gt;  $ filesize        : chr [1:366] "235" "235" "238" "239" ...</span></span>
+<span><span class="co">#&gt;  $ t1              : chr [1:366] "Jul" "Jul" "Jul" "Jul" ...</span></span>
+<span><span class="co">#&gt;  $ t2              : chr [1:366] "8" "9" "10" "11" ...</span></span>
+<span><span class="co">#&gt;  $ t3              : chr [1:366] "09:20" "06:00" "06:00" "06:00" ...</span></span>
+<span><span class="co">#&gt;  $ sftp_path       : chr [1:366] "K10/4182001-2022-07-08-0506.csv" "K10/4182001-2022-07-09-0506.csv" "K10/4182001-2022-07-10-0507.csv" "K10/4182001-2022-07-11-0507.csv" ...</span></span>
+<span><span class="co">#&gt;  $ sensor_id       : int [1:366] 4182001 4182001 4182001 4182001 4182001 4182001 4182001 4182001 4182001 4182001 ...</span></span>
+<span><span class="co">#&gt;  $ datum_uhrzeit   : POSIXct[1:366], format: "2022-07-08 05:06:00" "2022-07-09 05:06:00" ...</span></span>
+<span><span class="co">#&gt;  $ type            : chr [1:366] "file" "file" "file" "file" ...</span></span>
+<span><span class="co">#&gt;  $ galerie         : chr [1:366] "K" "K" "K" "K" ...</span></span>
+<span><span class="co">#&gt;  $ brunnen_nummer  : int [1:366] 10 10 10 10 10 10 10 10 10 10 ...</span></span>
+<span><span class="co">#&gt;  $ sensor_endnummer: int [1:366] 1 1 1 1 1 1 1 1 1 1 ...</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mc_files</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 15</span></span></span>
+<span><span class="co">#&gt;   rights     links ownername ownergr…¹ files…² t1    t2    t3    sftp_…³ senso…⁴</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> -rw-r--r-- 1     1011      1002      235     Jul   8     09:20 K10/41… 4<span style="text-decoration: underline;">182</span>001</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> -rw-r--r-- 1     1011      1002      235     Jul   9     06:00 K10/41… 4<span style="text-decoration: underline;">182</span>001</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> -rw-r--r-- 1     1011      1002      238     Jul   10    06:00 K10/41… 4<span style="text-decoration: underline;">182</span>001</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> -rw-r--r-- 1     1011      1002      239     Jul   11    06:00 K10/41… 4<span style="text-decoration: underline;">182</span>001</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> -rw-r--r-- 1     1011      1002      239     Jul   12    06:00 K10/41… 4<span style="text-decoration: underline;">182</span>001</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> -rw-r--r-- 1     1011      1002      239     Jul   13    06:00 K10/41… 4<span style="text-decoration: underline;">182</span>001</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># … with 5 more variables: datum_uhrzeit &lt;dttm&gt;, type &lt;chr&gt;, galerie &lt;chr&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   brunnen_nummer &lt;int&gt;, sensor_endnummer &lt;int&gt;, and abbreviated variable</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   names ¹​ownergroup, ²​filesize, ³​sftp_path, ⁴​sensor_id</span></span></span>
+<span></span>
+<span></span>
+<span><span class="co"># Define target directory for download of measurement chain `.csv` files</span></span>
+<span><span class="va">target_directory</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="co"># Download of measurement mhain `.csv` files from SFTP server</span></span>
+<span><span class="va">csv_files</span> <span class="op">&lt;-</span> <span class="fu">kwb.geosalz</span><span class="fu">::</span><span class="fu"><a href="../reference/download_measurementchains_data.html">download_measurementchains_data</a></span><span class="op">(</span></span>
+<span>  sftp_paths <span class="op">=</span> <span class="va">mc_files</span><span class="op">$</span><span class="va">sftp_path</span>,</span>
+<span>  <span class="va">target_directory</span>,</span>
+<span>  debug <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Download 366 measurement chains files (using 2 CPU cores) ... ok. (8.69s)</span></span>
+<span></span>
+<span><span class="va">csv_files</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 366 × 3</span></span></span>
+<span><span class="co">#&gt;    file_id sftp_path                       local_path                           </span></span>
+<span><span class="co">#&gt;      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>       1 K10/4182001-2022-07-08-0506.csv C:/Users/RUNNER~1/AppData/Local/Temp…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>       2 K10/4182001-2022-07-09-0506.csv C:/Users/RUNNER~1/AppData/Local/Temp…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>       3 K10/4182001-2022-07-10-0507.csv C:/Users/RUNNER~1/AppData/Local/Temp…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>       4 K10/4182001-2022-07-11-0507.csv C:/Users/RUNNER~1/AppData/Local/Temp…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>       5 K10/4182001-2022-07-12-0506.csv C:/Users/RUNNER~1/AppData/Local/Temp…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>       6 K10/4182001-2022-07-13-0506.csv C:/Users/RUNNER~1/AppData/Local/Temp…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>       7 K10/4182001-2022-07-14-0506.csv C:/Users/RUNNER~1/AppData/Local/Temp…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>       8 K10/4182001-2022-07-15-0507.csv C:/Users/RUNNER~1/AppData/Local/Temp…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>       9 K10/4182001-2022-07-16-0507.csv C:/Users/RUNNER~1/AppData/Local/Temp…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>      10 K10/4182001-2022-07-17-0507.csv C:/Users/RUNNER~1/AppData/Local/Temp…</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># … with 356 more rows</span></span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="data-import">Data Import<a class="anchor" aria-label="anchor" href="#data-import"></a>
+</h3>
+<p>The downloaded <code>.csv</code> measurement chains files will be imported into R by running the code below:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">csv_files</span><span class="op">)</span><span class="op">&gt;</span><span class="fl">0</span><span class="op">)</span> <span class="co">### print error in case no csv file is available</span></span>
+<span></span>
+<span></span>
+<span><span class="co">### CSV import using single CPU core</span></span>
+<span><span class="va">mc_data_single</span> <span class="op">&lt;-</span> <span class="fu">kwb.geosalz</span><span class="fu">::</span><span class="fu"><a href="../reference/read_measurementchains_data.html">read_measurementchains_data</a></span><span class="op">(</span></span>
+<span>  <span class="va">csv_files</span>,</span>
+<span>  run_parallel <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  debug <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Importing 366 measurement chains files (using 1 CPU core) ... ok. (6.56s)</span></span>
+<span></span>
+<span><span class="co">## CSV import using multiple CPU cores</span></span>
+<span><span class="va">mc_data_parallel</span> <span class="op">&lt;-</span> <span class="fu">kwb.geosalz</span><span class="fu">::</span><span class="fu"><a href="../reference/read_measurementchains_data.html">read_measurementchains_data</a></span><span class="op">(</span></span>
+<span>  <span class="va">csv_files</span>,</span>
+<span>  run_parallel <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  debug <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Importing 366 measurement chains files (using 2 CPU cores) ... ok. (5.09s)</span></span>
+<span></span>
+<span></span>
+<span><span class="co">### Just test if both imports give identical results</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">mc_data_single</span>, <span class="va">mc_data_parallel</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
+<span></span>
+<span></span>
+<span><span class="va">mc_data_parallel</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2,928 × 5</span></span></span>
+<span><span class="co">#&gt;    file_id sensor_id datum_uhrzeit       parameter      messwert</span></span>
+<span><span class="co">#&gt;      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>       1   4<span style="text-decoration: underline;">182</span>001 2022-07-07 <span style="color: #949494;">05:00:00</span> Leitfaehigkeit      971</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>       1   4<span style="text-decoration: underline;">182</span>001 2022-07-07 <span style="color: #949494;">11:00:00</span> Leitfaehigkeit      974</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>       1   4<span style="text-decoration: underline;">182</span>001 2022-07-07 <span style="color: #949494;">17:00:00</span> Leitfaehigkeit      982</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>       1   4<span style="text-decoration: underline;">182</span>001 2022-07-07 <span style="color: #949494;">23:00:00</span> Leitfaehigkeit      983</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>       2   4<span style="text-decoration: underline;">182</span>001 2022-07-08 <span style="color: #949494;">05:00:00</span> Leitfaehigkeit      982</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>       2   4<span style="text-decoration: underline;">182</span>001 2022-07-08 <span style="color: #949494;">11:00:00</span> Leitfaehigkeit      985</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>       2   4<span style="text-decoration: underline;">182</span>001 2022-07-08 <span style="color: #949494;">17:00:00</span> Leitfaehigkeit      994</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>       2   4<span style="text-decoration: underline;">182</span>001 2022-07-08 <span style="color: #949494;">23:00:00</span> Leitfaehigkeit      995</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>       3   4<span style="text-decoration: underline;">182</span>001 2022-07-09 <span style="color: #949494;">05:00:00</span> Leitfaehigkeit      996</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>       3   4<span style="text-decoration: underline;">182</span>001 2022-07-09 <span style="color: #949494;">11:00:00</span> Leitfaehigkeit     <span style="text-decoration: underline;">1</span>000</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># … with 2,918 more rows</span></span></span></code></pre></div>
+<p>In a nutshell the following datasets were imported into R:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mc_data_parallel_stats</span> <span class="op">&lt;-</span> <span class="va">mc_data_parallel</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>  </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">sensor_id</span>,</span>
+<span>                  <span class="va">.data</span><span class="op">$</span><span class="va">parameter</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>datetime_min <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">datum_uhrzeit</span><span class="op">)</span>, </span>
+<span>                   datetime_max <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">datum_uhrzeit</span><span class="op">)</span>,</span>
+<span>                   number_of_samples <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">sensor_id</span>, </span>
+<span>                 <span class="va">.data</span><span class="op">$</span><span class="va">parameter</span><span class="op">)</span></span>
+<span><span class="co">#&gt; `summarise()` has grouped output by 'sensor_id'. You can override using the</span></span>
+<span><span class="co">#&gt; `.groups` argument.</span></span>
+<span></span>
+<span><span class="fu">DT</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/DT/man/datatable.html" class="external-link">datatable</a></span><span class="op">(</span><span class="va">mc_data_parallel_stats</span><span class="op">)</span></span></code></pre></div>
+<div id="htmlwidget-fd3cd5464649f881c03d" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-fd3cd5464649f881c03d">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12"],[4182001,4182001,4182002,4182002,4182003,4182003,4182004,4182004,4182005,4182005,4182006,4182006],["Leitfaehigkeit","Temperatur","Leitfaehigkeit","Temperatur","Leitfaehigkeit","Temperatur","Leitfaehigkeit","Temperatur","Leitfaehigkeit","Temperatur","Leitfaehigkeit","Temperatur"],["2022-07-07T04:00:00Z","2022-07-07T04:00:00Z","2022-07-07T04:00:00Z","2022-07-07T04:00:00Z","2022-07-07T04:00:00Z","2022-07-07T04:00:00Z","2022-07-07T04:00:00Z","2022-07-07T04:00:00Z","2022-07-07T04:00:00Z","2022-07-07T04:00:00Z","2022-07-07T04:00:00Z","2022-07-07T04:00:00Z"],["2022-09-05T22:00:00Z","2022-09-05T22:00:00Z","2022-09-05T22:00:00Z","2022-09-05T22:00:00Z","2022-09-05T22:00:00Z","2022-09-05T22:00:00Z","2022-09-05T22:00:00Z","2022-09-05T22:00:00Z","2022-09-05T22:00:00Z","2022-09-05T22:00:00Z","2022-09-05T22:00:00Z","2022-09-05T22:00:00Z"],[244,244,244,244,244,244,244,244,244,244,244,244]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>sensor_id<\/th>\n      <th>parameter<\/th>\n      <th>datetime_min<\/th>\n      <th>datetime_max<\/th>\n      <th>number_of_samples<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,5]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script><p>These cover the time period from 2022-07-07 05:00:00 to 2022-07-07 05:00:00 with a total of 2928 samples.</p>
+</div>
+<div class="section level3">
+<h3 id="data-export">Data Export<a class="anchor" aria-label="anchor" href="#data-export"></a>
+</h3>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">debug</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span></span>
+<span></span>
+<span></span>
+<span><span class="co">### Export to csv file</span></span>
+<span><span class="va">csv_path</span> <span class="op">&lt;-</span> <span class="fu">kwb.geosalz</span><span class="fu">::</span><span class="fu"><a href="../reference/write_measurementchains_data.html">write_measurementchains_data</a></span><span class="op">(</span><span class="va">mc_data_parallel</span>,</span>
+<span>                                                      <span class="va">target_directory</span>,</span>
+<span>                                                      to_zip <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>                                                      debug <span class="op">=</span> <span class="va">debug</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Exporting provided dataset 'mc_data_parallel' to 'C:/Users/RUNNER~1/AppData/Local/Temp/RtmpGChI04/mc-data_20220707-050000TZ+01_20220707-050000TZ+01.csv' ... ok. (0.08s)</span></span>
+<span></span>
+<span><span class="va">size_csv</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/file_info.html" class="external-link">file_size</a></span><span class="op">(</span><span class="va">csv_path</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">### Export to zip file (~10x less disk space for test dataset)</span></span>
+<span><span class="va">zip_path</span> <span class="op">&lt;-</span> <span class="fu">kwb.geosalz</span><span class="fu">::</span><span class="fu"><a href="../reference/write_measurementchains_data.html">write_measurementchains_data</a></span><span class="op">(</span><span class="va">mc_data_parallel</span>,</span>
+<span>                                                      <span class="va">target_directory</span>,</span>
+<span>                                                      to_zip <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                                                      debug <span class="op">=</span> <span class="va">debug</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Exporting provided dataset 'mc_data_parallel' to 'C:/Users/RUNNER~1/AppData/Local/Temp/RtmpGChI04/mc-data_20220707-050000TZ+01_20220707-050000TZ+01.csv' ... ok. (0.08s) </span></span>
+<span><span class="co">#&gt; Exporting provided dataset 'mc_data_parallel' to 'C:/Users/RUNNER~1/AppData/Local/Temp/RtmpGChI04/mc-data_20220707-050000TZ+01_20220707-050000TZ+01.zip' and delete intermediate 'C:/Users/RUNNER~1/AppData/Local/Temp/RtmpGChI04/mc-data_20220707-050000TZ+01_20220707-050000TZ+01.csv' ... ok. (0.01s)</span></span>
+<span></span>
+<span><span class="va">size_zip</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/file_info.html" class="external-link">file_size</a></span><span class="op">(</span><span class="va">zip_path</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">size_csv</span> <span class="op">/</span> <span class="va">size_zip</span></span>
+<span><span class="co">#&gt; 10.4</span></span></code></pre></div>
+<p>The file size of the mc-data_20220707-050000TZ+01_20220707-050000TZ+01.csv file is 10.4 times larger compared to compressing it into <code>r</code>basename(zip_path)`.</p>
+</div>
+<div class="section level3">
+<h3 id="data-upload">Data Upload<a class="anchor" aria-label="anchor" href="#data-upload"></a>
+</h3>
+<p>In order to automate the data management process the <a href="#data-export">exported data</a> it is planned to upload these data to a restricted shared folder on the KWB cloud.</p>
+<pre><code>to do: implement functions in R package</code></pre>
+</div>
+</div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
