@@ -16,6 +16,7 @@ BugReports: https://github.com/KWB-R/kwb.geosalz/issues
 Depends: 
     R (>= 2.10)
 Imports: 
+    archive,
     cellranger (>= 1.1.0),
     crayon (>= 1.3.4),
     data.table (>= 1.12.0),

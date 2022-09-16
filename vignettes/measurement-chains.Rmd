@@ -22,25 +22,88 @@ con <- list(server = Sys.getenv(con_vars[1]),
 is_defined <- sapply(con, stringr::str_length) > 0
 
 con_defined <- all(is_defined)
-
 ```
 
-```{r setup,  eval = con_defined}
+## Background 
+
+One measurement chain consist of six sensors (column `sensor_endnummer` in `Table 1`), 
+which will be placed into one production well, but at different filter depths. 
+In total three measurement chains will be installed into three different 
+production wells (column: `brunnen_nummer` in `Table 1`) as shown in detail in 
+`Table 1` below: 
+
+```{r, echo = FALSE}
+library(kwb.geosalz)
+mc_metadata <- kwb.geosalz::get_measurementchains_metadata()
+DT::datatable(mc_metadata, caption = "Table 1: Metadata of Measurement Chains")
+```
+
+Each sensor (type: `WLF05`, `link_to_manufacturer_factsheet`: `to_do: add-link-to-factsheet-on-kwb-cloud`) measures the the following two parameters with the characteristics summarized 
+below:
+
+- `electrical conductivity`: 
+  
+    + measurement range: `0 - 20 mS`
+    
+    + measurement range detection: `automatic`
+    
+    + typical accuracy: +/- 1.5 % of measurement value
+
+- `temperature`:
+
+    + measurement range: `0 - 50 Celsius`
+    
+    + measurement resolution: `0.1 Celsius`
+    
+    + typical accuracy: `<= 0.1 Celsius`
+
+The maximum `temporal resolution` of each sensor is `every second`. Within the 
+project `GeoSalz` a measurement `every 5 minutes` is proposed by KWB in order to 
+be able to detect potential salinity shifts due to a switched pumping regime.
+
+
+## Data Management 
+
+### Define SFTP Login
+
+Run `usethis::edit_r_environ()` to edit the R `.Renviron` file and add the 
+following three environment variables.
+
+```
+MESSKETTEN_SERVER = <sftp_url>
+MESSKETTEN_USER = <sftp_username>
+MESSKETTEN_PASSWORD = <sftp_userpassord>
+```
+
+Finally save the `.Renviron` file and restart `R(Studio)`. Subsequently the code 
+below will work (in case the SFTP login credentials were defined correctly!) and 
+assure that the `measurement chains` data (i.e. parameters `electrical conductivity` 
+and `temperature`) will be downloaded from the `SFTP server` to a user-defined 
+directory on your local device. For auto
+
+
+### Data Download
+
+
+```{r measurementchains_data-download,  eval = con_defined}
 library(kwb.geosalz)
 
-
+### Metadata of measurement chains (see also Table 1 above)
 mc_metadata <- kwb.geosalz::get_measurementchains_metadata()
-
 str(mc_metadata)
-DT::datatable(mc_metadata)
 
+### Tibble with Information on available measurement chain files on SFTP server
 mc_files <- kwb.geosalz::get_measurementchains_files()
 
 str(mc_files)
 head(mc_files)
 
+
+# Define target directory for download of measurement chain `.csv` files
 target_directory <- tempdir()
 
+
+# Download of measurement mhain `.csv` files from SFTP server
 csv_files <- kwb.geosalz::download_measurementchains_data(
   sftp_paths = mc_files$sftp_path,
   target_directory,
@@ -48,20 +111,94 @@ csv_files <- kwb.geosalz::download_measurementchains_data(
 
 csv_files
 
+```
+
+### Data Import
+
+The downloaded `.csv` measurement chains files will be imported into R by running 
+the code below:
+
+
+```{r measurementchains_data-import,  eval = con_defined}
+stopifnot(nrow(csv_files)>0) ### print error in case no csv file is available
+
+
+### CSV import using single CPU core
 mc_data_single <- kwb.geosalz::read_measurementchains_data(
   csv_files,
   run_parallel = FALSE,
   debug = TRUE)
+
+## CSV import using multiple CPU cores
 mc_data_parallel <- kwb.geosalz::read_measurementchains_data(
   csv_files,
   run_parallel = TRUE,
   debug = TRUE)
 
+
+### Just test if both imports give identical results
 identical(mc_data_single, mc_data_parallel)
 
 
 mc_data_parallel
+```
+
+In a nutshell the following datasets were imported into R: 
+
+```{r measurementchains_data-import_stats,  eval = con_defined}
+mc_data_parallel_stats <- mc_data_parallel %>%  
+  dplyr::group_by(.data$sensor_id,
+                  .data$parameter) %>% 
+  dplyr::summarise(datetime_min = min(.data$datum_uhrzeit), 
+                   datetime_max = max(.data$datum_uhrzeit),
+                   number_of_samples = dplyr::n()) %>% 
+  dplyr::arrange(.data$sensor_id, 
+                 .data$parameter)
+
+DT::datatable(mc_data_parallel_stats)
+```
+
+These cover the time period from `r min(mc_data_parallel_stats$datetime_min)` to
+`r max(mc_data_parallel_stats$datetime_min)` with a total of `r sum(mc_data_parallel_stats$number_of_samples)` samples.
+
+### Data Export
 
 
+```{r measurementchains_data-export,  eval = con_defined}
+debug <- TRUE
 
+
+### Export to csv file
+csv_path <- kwb.geosalz::write_measurementchains_data(mc_data_parallel,
+                                                      target_directory,
+                                                      to_zip = FALSE,
+                                                      debug = debug)
+
+size_csv <- fs::file_size(csv_path)
+
+### Export to zip file (~10x less disk space for test dataset)
+zip_path <- kwb.geosalz::write_measurementchains_data(mc_data_parallel,
+                                                      target_directory,
+                                                      to_zip = TRUE,
+                                                      debug = debug)
+
+size_zip <- fs::file_size(zip_path)
+
+size_csv / size_zip
+
+```
+
+The file size of the `r basename(csv_path)` file is `r round(size_csv / size_zip, 1)` 
+times larger compared to compressing it into `r `basename(zip_path)`.
+
+
+### Data Upload 
+
+
+In order to automate the data management process the [exported data](#data-export)
+it is planned to upload these data to a restricted shared folder on the KWB 
+cloud. 
+
+```
+to do: implement functions in R package
 ```
