@@ -32,9 +32,10 @@ write_measurementchains_data <- function(
     ) 
   
   datetime_to_character <- function(datetime) {
+    stopifnot(length(datetime) == 1L)
     paste0(
-      as.character(min(mc_data$datum_uhrzeit)) %>%  
-        stringr::str_remove_all("-|:") %>% 
+      as.character(datetime) %>%  
+        stringr::str_remove_all("[-:]") %>% 
         stringr::str_replace(" ", "-") %>% 
         stringr::str_c("TZ"),
       ifelse(attr(datetime, "tzone") == "Etc/GMT-1", "+01", "not-implemented")
