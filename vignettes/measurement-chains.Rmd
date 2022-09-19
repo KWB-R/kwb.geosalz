@@ -13,25 +13,20 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
-con_vars <- sprintf("MESSKETTEN_%s", c("SERVER", "USER", "PASSWORD"))
-
-con <- list(
-  server = Sys.getenv(con_vars[1]),
-  user = Sys.getenv(con_vars[2]),
-  pw = Sys.getenv(con_vars[3])
+con <- kwb.geosalz:::get_environment_variables(
+  server = "MESSKETTEN_SERVER", 
+  user   = "MESSKETTEN_USER", 
+  pw     = "MESSKETTEN_PASSWORD"
 )
 
 con_is_defined <- sapply(con, stringr::str_length) > 0L
 
 con_defined <- all(con_is_defined)
 
-
-nc_vars <- sprintf("NEXTCLOUD_%s", c("URL", "USER", "PASSWORD"))
-
-nc <- list(
-  server = Sys.getenv(nc_vars[1]),
-  user = Sys.getenv(nc_vars[2]),
-  pw = Sys.getenv(nc_vars[3])
+nc <- kwb.geosalz:::get_environment_variables(
+  server = "NEXTCLOUD_URL", 
+  user   = "NEXTCLOUD_USER", 
+  pw     = "NEXTCLOUD_PASSWORD"
 )
 
 nc_is_defined <- sapply(nc, stringr::str_length) > 0L
