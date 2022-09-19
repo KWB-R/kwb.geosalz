@@ -21,9 +21,23 @@ con <- list(
   pw = Sys.getenv(con_vars[3])
 )
 
-is_defined <- sapply(con, stringr::str_length) > 0L
+con_is_defined <- sapply(con, stringr::str_length) > 0L
 
-con_defined <- all(is_defined)
+con_defined <- all(con_is_defined)
+
+
+nc_vars <- sprintf("NEXTCLOUD_%s", c("URL", "USER", "PASSWORD"))
+
+nc <- list(
+  server = Sys.getenv(nc_vars[1]),
+  user = Sys.getenv(nc_vars[2]),
+  pw = Sys.getenv(nc_vars[3])
+)
+
+nc_is_defined <- sapply(nc, stringr::str_length) > 0L
+
+nc_defined <- all(nc_is_defined)
+
 ```
 
 ## Background 
@@ -62,6 +76,25 @@ be able to detect potential salinity shifts due to a switched pumping regime.
 
 ## Data Management 
 
+### Define Paths 
+
+```{r define_paths,  eval = con_defined}
+paths_list <- list(
+ local_dir = fs::path_abs(tempdir()),
+ # Define target directory for download of measurement chain `.csv` files
+ download_dir = "<local_dir>/download", 
+ # Local directory for exporting imported data to ".csv" and ".zip" 
+ export_dir = "<local_dir>/export", 
+ # Upload KWB cloud directory for imported data in "export_dir"
+ upload_dir = "projects/GeoSalz/Monitoring/messketten"
+)
+
+paths <- kwb.utils::resolve(paths_list)
+
+paths
+```
+
+
 ### Define SFTP Login
 
 Run `usethis::edit_r_environ()` to edit the R `.Renviron` file and add the 
@@ -70,7 +103,7 @@ following three environment variables.
 ```
 MESSKETTEN_SERVER = <sftp_url>
 MESSKETTEN_USER = <sftp_username>
-MESSKETTEN_PASSWORD = <sftp_userpassord>
+MESSKETTEN_PASSWORD = <sftp_userpassword>
 ```
 
 Finally save the `.Renviron` file and restart `R(Studio)`. Subsequently the code
@@ -78,6 +111,8 @@ below will work (in case the SFTP login credentials were defined correctly!) and
 assure that the `measurement chains` data (i.e. parameters `electrical
 conductivity` and `temperature`) will be downloaded from the `SFTP server` to a
 user-defined directory on your local device.
+
+
 
 ### Data Download
 
@@ -94,13 +129,10 @@ mc_files <- kwb.geosalz::get_measurementchains_files()
 str(mc_files)
 head(mc_files)
 
-# Define target directory for download of measurement chain `.csv` files
-target_directory <- tempdir()
-
 # Download of measurement mhain `.csv` files from SFTP server
 csv_files <- kwb.geosalz::download_measurementchains_data(
   sftp_paths = mc_files$sftp_path,
-  target_directory,
+  target_directory = paths$download_dir,
   debug = TRUE
 )
 
@@ -166,40 +198,98 @@ These cover the time period from `r min(mc_data_parallel_stats$datetime_min)` to
 ```{r measurementchains_data-export,  eval = con_defined}
 debug <- TRUE
 
-### Export to csv file
-csv_path <- kwb.geosalz::write_measurementchains_data(
+### Export "mc_data" to csv file
+data_csv_path <- kwb.geosalz::write_measurementchains_data(
   mc_data_parallel,
-  target_directory,
+  target_directory = paths$export_dir,
   to_zip = FALSE,
   debug = debug
 )
 
-size_csv <- fs::file_size(csv_path)
+size_data_csv <- fs::file_size(data_csv_path)
 
-### Export to zip file (~10x less disk space for test dataset)
-zip_path <- kwb.geosalz::write_measurementchains_data(
+### Export "mc_data" to zip file (~10x less disk space for test dataset)
+data_zip_path <- kwb.geosalz::write_measurementchains_data(
   mc_data_parallel,
-  target_directory,
+  target_directory = paths$export_dir,
   to_zip = TRUE,
   debug = debug
 )
 
-size_zip <- fs::file_size(zip_path)
 
-size_csv / size_zip
+size_data_zip <- fs::file_size(data_zip_path)
+size_data_csv / size_data_zip
+
+### Export "mc_files" and "mc_metadata" to csv
+extract_data_timeperiod <- function(data_path) {
+  basename(data_path) %>% 
+    kwb.utils::replaceFileExtension("") %>%  
+    stringr::str_remove("^mc[-|_]data")
+}
+
+write_csv <- function(df, postfix = "", target_directory) {
+  
+fs::dir_create(target_directory)  
+  
+df_name <- deparse(substitute(df))
+
+target_path <- file.path(target_directory, 
+                         paste0(df_name, postfix,  ".csv"))
+
+readr::write_csv(df, target_path)
+target_path
+}
+
+metadata_path <- write_csv(mc_metadata, 
+                           postfix = extract_data_timeperiod(data_zip_path),
+                           target_directory = paths$export_dir)
+
+files_path <- write_csv(mc_files, 
+                        postfix = extract_data_timeperiod(data_zip_path),
+                        target_directory = paths$export_dir)
 ```
 
 The file size of the 
-`r basename(csv_path)` file is 
-`r round(size_csv / size_zip, 1)` 
+`r basename(data_csv_path)` file is 
+`r round(size_data_csv / size_data_zip, 1)` 
 times larger compared to compressing it into 
-`r `basename(zip_path)`.
+`r `basename(data_zip_path)`.
 
 ### Data Upload 
 
 In order to automate the data management process the 
-[exported data](#data-export) it is planned to upload these data to a restricted shared folder on the KWB cloud.
+[exported data](#data-export) these data will be uploaded to a restricted 
+shared folder `r paths$upload_directory` on the KWB cloud. For doing so the 
+following environment variables need to be defined in case the code below should 
+be run from a client computer. However, as these variables are defined in a 
+GitHub actions workflow there is no need to do this locally.
+
 
 ```
-to do: implement functions in R package
+NEXTCLOUD_URL = "https://<replace-with-kwb-cloud-url>"
+NEXTCLOUD_USER = "<your-kwb-cloud-username>" # your username
+NEXTCLOUD_PASSWORD = "your-nextcloud-app-password" ### see details below
+```
+
+Subsequently the following code is run for uploading the data:
+
+```{r measurementchains_data-upload,  eval = con_defined & nc_defined}
+
+# Upload all files in "paths$export_dir"
+#upload_files <- list.files(paths$export_dir, full.names = TRUE)
+
+
+# List paths of files to upload explicitly
+upload_files <- c(metadata_path, 
+                  files_path,
+                  data_zip_path)
+
+res <- sapply(upload_files, function(upload_file) {
+  kwb.utils::catAndRun(messageText = sprintf("Uploading file %s", upload_file),
+                       expr = {
+                       kwb.nextcloud::upload_file(file = upload_file,
+                                                  target_path = paths$upload_dir)
+                       },
+                       dbg = TRUE)
+  })
 ```

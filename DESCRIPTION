@@ -46,6 +46,7 @@ Suggests:
     ggplot2 (>= 3.1.0),
     htmlwidgets,
     knitr (>= 1.21),
+    kwb.nextcloud,
     kwb.pkgbuild,
     leaflet,
     openxlsx,
@@ -58,6 +59,7 @@ VignetteBuilder:
 Remotes:
     github::KWB-R/geosalz.phreeqc,
     github::KWB-R/kwb.base,
+    github::KWB-R/kwb.nextcloud,    
     github::KWB-R/kwb.pkgbuild,
     github::KWB-R/kwb.utils,
     github::KWB-R/wasserportal,

@@ -13,7 +13,7 @@
 #' @importFrom archive archive_write_files
 #' @importFrom dplyr n summarise 
 #' @importFrom kwb.utils catAndRun replaceFileExtension
-#' @importFrom fs file_delete path_abs
+#' @importFrom fs dir_create file_delete path_abs
 #' @importFrom readr write_csv
 #' @importFrom stringr str_c str_remove_all str_replace
 
@@ -24,6 +24,9 @@ write_measurementchains_data <- function(
     debug = FALSE
 ) 
 {
+  
+  fs::dir_create(target_directory)
+  
   mc_data_stats <- mc_data %>%  
     dplyr::summarise(
       datetime_min = min(.data$datum_uhrzeit), 
@@ -45,7 +48,7 @@ write_measurementchains_data <- function(
   dataset_name <- deparse(substitute(expr = mc_data))
   
   csv_path <- sprintf(
-    "%s/mc-data_%s_%s.csv",
+    "%s/mc_data_%s_%s.csv",
     fs::path_abs(target_directory),
     datetime_to_character(mc_data_stats$datetime_min),
     datetime_to_character(mc_data_stats$datetime_max)
