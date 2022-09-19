@@ -38,6 +38,8 @@ nc_is_defined <- sapply(nc, stringr::str_length) > 0L
 
 nc_defined <- all(nc_is_defined)
 
+is_ghactions <- identical(Sys.getenv("CI"), "true")
+
 ```
 
 ## Background 
@@ -293,3 +295,12 @@ res <- sapply(upload_files, function(upload_file) {
                        dbg = TRUE)
   })
 ```
+
+```{r measurementchains_data-upload,  echo = FALSE, eval = con_defined & is_ghactions}
+
+delete_files <- list.files(path = paths$export_dir, 
+                           full.names = TRUE)
+
+fs::file_delete(path = delete_files)
+```
+
