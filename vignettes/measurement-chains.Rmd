@@ -296,7 +296,7 @@ res <- sapply(upload_files, function(upload_file) {
   })
 ```
 
-```{r measurementchains_data-upload,  echo = FALSE, eval = con_defined & is_ghactions}
+```{r measurementchains_data-delete,  echo = FALSE, eval = con_defined & is_ghactions}
 
 delete_files <- list.files(path = paths$export_dir, 
                            full.names = TRUE)
