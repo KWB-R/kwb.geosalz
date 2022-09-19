@@ -52,9 +52,9 @@ with the characteristics summarized below:
 
 - `temperature`:
 
-+ measurement range: `0 - 50 Celsius`
-+ measurement resolution: `0.1 Celsius`
-+ typical accuracy: `<= 0.1 Celsius`
++ measurement range: `0 - 50 \u00B0 Celsius`
++ measurement resolution: `0.1 \u00B0 Celsius`
++ typical accuracy: `<= 0.1 \u00B0 Celsius`
 
 The maximum `temporal resolution` of each sensor is `every second`. Within the 
 project `GeoSalz` a measurement `every 5 minutes` is proposed by KWB in order to 
@@ -77,7 +77,7 @@ Finally save the `.Renviron` file and restart `R(Studio)`. Subsequently the code
 below will work (in case the SFTP login credentials were defined correctly!) and
 assure that the `measurement chains` data (i.e. parameters `electrical
 conductivity` and `temperature`) will be downloaded from the `SFTP server` to a
-user-defined directory on your local device. For auto
+user-defined directory on your local device.
 
 ### Data Download
 
@@ -158,7 +158,7 @@ DT::datatable(mc_data_parallel_stats)
 ```
 
 These cover the time period from `r min(mc_data_parallel_stats$datetime_min)` to
-`r max(mc_data_parallel_stats$datetime_min)` with a total of 
+`r max(mc_data_parallel_stats$datetime_max)` with a total of 
 `r sum(mc_data_parallel_stats$number_of_samples)` samples.
 
 ### Data Export
