@@ -9,8 +9,12 @@
 #' mc_metadata <- kwb.geosalz::get_measurementchains_metadata()
 #' str(mc_metadata)
 #' mc_metadata
-get_measurementchains_metadata <- function(file = system.file("extdata/metadata_messketten.csv",
-                                                              package = "kwb.geosalz"))
+get_measurementchains_metadata <- function(
+    file = system.file(
+      "extdata/metadata_messketten.csv", 
+      package = "kwb.geosalz"
+    )
+)
 {
   readr::read_csv(
     file = file,
@@ -148,11 +152,13 @@ get_measurementchains_files <- function(sftp_connection = create_sftp_connection
 #' sftp_paths = mc_files$sftp_path,
 #' target_directory)
 #' }
-download_measurementchains_data <- function(sftp_paths,
-                                            target_directory = tempdir(),
-                                            sftp_connection = create_sftp_connection(),
-                                            run_parallel = TRUE,
-                                            debug = FALSE)
+download_measurementchains_data <- function(
+    sftp_paths,
+    target_directory = tempdir(),
+    sftp_connection = create_sftp_connection(),
+    run_parallel = TRUE,
+    debug = FALSE
+)
 {
   fs::dir_create(target_directory)
   
