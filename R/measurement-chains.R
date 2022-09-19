@@ -42,15 +42,14 @@ get_measurementchains_metadata <- function(
 #' @importFrom stringr str_length
 create_sftp_connection <- function()
 {
-  con_vars <-
-    sprintf("MESSKETTEN_%s", c("SERVER", "USER", "PASSWORD"))
-  
-  con <- list(
-    server = Sys.getenv(con_vars[1L]),
-    username = Sys.getenv(con_vars[2L]),
-    password = Sys.getenv(con_vars[3L])
+  con_vars <- c(
+    server = "MESSKETTEN_SERVER", 
+    username = "MESSKETTEN_USER", 
+    password = "MESSKETTEN_PASSWORD"
   )
-  
+
+  con <- lapply(con_vars, Sys.getenv)
+
   not_defined <- sapply(con, stringr::str_length) == 0L
   
   if (any(not_defined)) {
