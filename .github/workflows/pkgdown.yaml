@@ -15,6 +15,9 @@ jobs:
       MESSKETTEN_SERVER: ${{ secrets.MESSKETTEN_SERVER }} 
       MESSKETTEN_USER:  ${{ secrets.MESSKETTEN_USER }} 
       MESSKETTEN_PASSWORD: ${{ secrets.MESSKETTEN_PASSWORD }} 
+      NEXTCLOUD_URL: ${{ secrets.NEXTCLOUD_URL }}
+      NEXTCLOUD_USER: ${{ secrets.NEXTCLOUD_USER }}
+      NEXTCLOUD_PASSWORD: ${{ secrets.NEXTCLOUD_PASSWORD }}
     steps:
       - uses: actions/checkout@v2
 
