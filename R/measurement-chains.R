@@ -42,7 +42,7 @@ get_measurementchains_metadata <- function(
 #' @importFrom stringr str_length
 create_sftp_connection <- function()
 {
-  con <- kwb.geosalz:::get_environment_variables(
+  con <- get_environment_variables(
     server = "MESSKETTEN_SERVER", 
     username = "MESSKETTEN_USER", 
     password = "MESSKETTEN_PASSWORD"
