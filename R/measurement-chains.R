@@ -9,8 +9,12 @@
 #' mc_metadata <- kwb.geosalz::get_measurementchains_metadata()
 #' str(mc_metadata)
 #' mc_metadata
-get_measurementchains_metadata <- function(file = system.file("extdata/metadata_messketten.csv",
-                                                              package = "kwb.geosalz"))
+get_measurementchains_metadata <- function(
+    file = system.file(
+      "extdata/metadata_messketten.csv", 
+      package = "kwb.geosalz"
+    )
+)
 {
   readr::read_csv(
     file = file,
@@ -38,15 +42,12 @@ get_measurementchains_metadata <- function(file = system.file("extdata/metadata_
 #' @importFrom stringr str_length
 create_sftp_connection <- function()
 {
-  con_vars <-
-    sprintf("MESSKETTEN_%s", c("SERVER", "USER", "PASSWORD"))
-  
-  con <- list(
-    server = Sys.getenv(con_vars[1L]),
-    username = Sys.getenv(con_vars[2L]),
-    password = Sys.getenv(con_vars[3L])
+  con <- get_environment_variables(
+    server = "MESSKETTEN_SERVER", 
+    username = "MESSKETTEN_USER", 
+    password = "MESSKETTEN_PASSWORD"
   )
-  
+
   not_defined <- sapply(con, stringr::str_length) == 0L
   
   if (any(not_defined)) {
@@ -148,11 +149,13 @@ get_measurementchains_files <- function(sftp_connection = create_sftp_connection
 #' sftp_paths = mc_files$sftp_path,
 #' target_directory)
 #' }
-download_measurementchains_data <- function(sftp_paths,
-                                            target_directory = tempdir(),
-                                            sftp_connection = create_sftp_connection(),
-                                            run_parallel = TRUE,
-                                            debug = FALSE)
+download_measurementchains_data <- function(
+    sftp_paths,
+    target_directory = tempdir(),
+    sftp_connection = create_sftp_connection(),
+    run_parallel = TRUE,
+    debug = FALSE
+)
 {
   fs::dir_create(target_directory)
   
