@@ -19,9 +19,11 @@ knitr::opts_chunk$set(
 ```{r define_helpers}
 library(kwb.geosalz)
 
-add_label <- function(df,
-                      columns = c("Nummer", "start",
-                                  "end", "n", "interval")) {
+add_label <- function(
+    df, 
+    columns = c("Nummer", "start", "end", "n", "interval")
+)
+{
   df %>%
     dplyr::mutate(label = wasserportal::columns_to_labels(
       data = df,
@@ -41,56 +43,58 @@ get_data_stats <- function(df, group_col = "Messstellennummer") {
       n = dplyr::n(),
       interval = round(.data$period / .data$n, 0)
     )
-  
 }
 
 difftime_to_numeric <- function(df) {
   df %>%  
-    dplyr::rename(period_days = .data$period, 
-                  interval_days = .data$interval) %>% 
-    dplyr::mutate(period_days = as.numeric(.data$period_days),
-                  interval_days = as.numeric(.data$interval_days)
-                  )
+    dplyr::rename(
+      period_days = .data$period, 
+      interval_days = .data$interval
+    ) %>% 
+    dplyr::mutate(
+      period_days = as.numeric(.data$period_days),
+      interval_days = as.numeric(.data$interval_days)
+    )
 }
 
 remove_na_and_geometry <- function(df) {
-  if(any(names(df) == "label")) {
+  
+  if (any(names(df) == "label")) {
     df <- dplyr::select(df, - .data$label)
   }
+  
   sf::st_geometry(df) <- NULL
   
   df %>% 
-  dplyr::select_if(function(x){!all(is.na(x))})
+    dplyr::select_if(function(x){!all(is.na(x))})
 }
 ```
 
 ```{r setup}
 library(kwb.geosalz)
 
-
 ### Set target CRS
 crs_target <- 4326
 
 ### Load SVM Boundaries
-shp_svm_path <-
-  system.file("extdata/gis/shapefiles/svm_south.shp", package = "kwb.geosalz")
-
+shp_svm_path <- system.file(
+  "extdata/gis/shapefiles/svm_south.shp", 
+  package = "kwb.geosalz"
+)
 
 svm <- sf::st_read(shp_svm_path) %>%
   sf::st_transform(crs = crs_target)
-sf::st_crs(svm)
 
+sf::st_crs(svm)
 
 polygon_svm_fri <- svm$geometry[svm$name == "Friedrichshagen"]
 
-
 stations <- wasserportal::get_stations()
 
-
 swl_master <- wasserportal::get_wasserportal_masters_data(
-  station_ids = stations$overview_list$surface_water.water_level %>%
+  master_urls = stations$overview_list$surface_water.water_level %>%
     dplyr::filter(.data$Betreiber == "Land Berlin") %>%
-    dplyr::pull(.data$Messstellennummer)
+    dplyr::pull(.data$stammdaten_link)
 ) 
 
 swl_master_sf <- swl_master %>%
@@ -101,54 +105,56 @@ swl_master_sf <- swl_master %>%
 swl_master <- swl_master %>% 
   dplyr::filter(.data$Nummer %in% swl_master_sf$Nummer) 
 
-readr::write_csv2(swl_master,
-                 file = "swl_master.csv")
+readr::write_csv2(swl_master, file = "swl_master.csv")
 
-swl_data_list <- stats::setNames(lapply(swl_master$Nummer, function(station) {
-wasserportal::read_wasserportal(station = station, 
-                                from_date = "1900-01-01",
-                                variables = "ws", 
-                                type = "daily",
-                                stations_crosstable = stations$crosstable)
-}), nm = swl_master$Nummer)
+swl_data_list <- stats::setNames(
+  lapply(swl_master$Nummer, function(station) {
+    wasserportal::read_wasserportal(
+      station = station, 
+      from_date = "1900-01-01",
+      variables = "ws", 
+      type = "daily",
+      stations_crosstable = stations$crosstable)
+  }), 
+  nm = swl_master$Nummer
+)
 
-swl_data <- stats::setNames(lapply(names(swl_data_list), function(name) {
-  swl_data_list[[name]][[1]]}),
-  names(swl_data_list)) %>% 
+swl_data <- stats::setNames(
+  lapply(names(swl_data_list), function(name) {
+    swl_data_list[[name]][[1]]
+  }),
+  names(swl_data_list)
+) %>% 
   dplyr::bind_rows(.id = "Messstellennummer") %>% 
   dplyr::mutate(Datum = as.Date(.data$Datum, format = "%d.%m.%Y")) %>% 
   dplyr::filter(.data$Tagesmittelwert != -777) %>% 
   dplyr::rename(Tagesmittelwert_cm_ueber_Pegelnullpunkt = .data$Tagesmittelwert) %>% 
-  dplyr::left_join(swl_master[, c("Nummer", "Pegelnullpunkt_m")],
-                   by = c("Messstellennummer" = "Nummer")) %>%  
-  dplyr::mutate(Tagesmittelwert_Pegelstand_mNN = as.numeric(.data$Pegelnullpunkt_m) + .data$Tagesmittelwert_cm_ueber_Pegelnullpunkt/100) %>% 
+  dplyr::left_join(
+    swl_master[, c("Nummer", "Pegelnullpunkt_m")],
+    by = c("Messstellennummer" = "Nummer")
+  ) %>%  
+  dplyr::mutate(
+    Tagesmittelwert_Pegelstand_mNN = as.numeric(.data$Pegelnullpunkt_m) +
+      .data$Tagesmittelwert_cm_ueber_Pegelnullpunkt/100
+  ) %>% 
   dplyr::select(- .data$Pegelnullpunkt_m)
 
-readr::write_csv2(swl_data,
-                  file = "swl_data.csv")
+readr::write_csv2(swl_data, file = "swl_data.csv")
 
 swl_data_stats <- get_data_stats(swl_data)
 
-
-swl_data_stats_export <- 
-  swl_master_sf %>% 
+swl_data_stats_export <- swl_master_sf %>% 
   remove_na_and_geometry() %>%
-  dplyr::left_join(difftime_to_numeric(swl_data_stats),
-                   by = c("Nummer" = "Messstellennummer"))
-  
-readr::write_csv2(swl_data_stats_export,
-                  file = "swl_data_stats.csv")
+  dplyr::left_join(
+    difftime_to_numeric(swl_data_stats),
+    by = c("Nummer" = "Messstellennummer")
+  )
 
+readr::write_csv2(swl_data_stats_export, file = "swl_data_stats.csv")
 
-gwl_master <-
-  jsonlite::fromJSON("https://kwb-r.github.io/wasserportal/stations_gwl_master.json") %>%  
-  ### fix to remove 3 surface water stations from dataset 
-  ### ()
-  dplyr::filter(is.na(.data$Flusskilometer)) %>% 
-  dplyr::select(- .data$Name,
-                - .data$Flusskilometer, 
-                - .data$Gewaesser
-                )
+gwl_master <- jsonlite::fromJSON(
+  "https://kwb-r.github.io/wasserportal/stations_gwl_master.json"
+)
 
 gwl_master_sf <- gwl_master %>%
   kwb.geosalz::convert_to_sf(crs_target = crs_target) %>%
@@ -157,35 +163,34 @@ gwl_master_sf <- gwl_master %>%
 gwl_master <- gwl_master %>% 
   dplyr::filter(.data$Nummer %in% gwl_master_sf$Nummer)
 
-readr::write_csv2(gwl_master,
-                  file = "gwl_master.csv")
+readr::write_csv2(gwl_master, file = "gwl_master.csv")
 
-gwl_data <- data.table::rbindlist(lapply(gwl_master$Nummer,
-                                         function(id) {
-                                           wasserportal::read_wasserportal_raw_gw(station = id, stype = "gwl")
-                                         }))
+gwl_data <- data.table::rbindlist(
+  lapply(gwl_master$Nummer, function(id) {
+    wasserportal::read_wasserportal_raw_gw(station = id, stype = "gwl")
+  })
+)
 
-readr::write_csv2(gwl_data,
-                  file = "gwl_data.csv")
+readr::write_csv2(gwl_data, file = "gwl_data.csv")
 
 gwl_data_stats <- get_data_stats(gwl_data) 
 
 gwl_data_stats_export <- gwl_master_sf %>% 
   remove_na_and_geometry() %>%
-  dplyr::left_join(difftime_to_numeric(gwl_data_stats),
-                   by = c("Nummer" = "Messstellennummer"))
-  
-readr::write_csv2(gwl_data_stats_export,
-                  file = "gwl_data_stats.csv")
+  dplyr::left_join(
+    difftime_to_numeric(gwl_data_stats),
+    by = c("Nummer" = "Messstellennummer")
+  )
 
+readr::write_csv2(gwl_data_stats_export, file = "gwl_data_stats.csv")
 
 gwl_master_stats <- gwl_master %>%
   dplyr::left_join(gwl_data_stats, by = c("Nummer" = "Messstellennummer")) %>%
   add_label()
 
-
-gwq_master <-
-  jsonlite::fromJSON("https://kwb-r.github.io/wasserportal/stations_gwq_master.json")
+gwq_master <- jsonlite::fromJSON(
+  "https://kwb-r.github.io/wasserportal/stations_gwq_master.json"
+)
 
 gwq_master_sf <- gwq_master %>%
   kwb.geosalz::convert_to_sf(crs_target = crs_target) %>%
@@ -194,38 +199,40 @@ gwq_master_sf <- gwq_master %>%
 gwq_master <- gwq_master %>% 
   dplyr::filter(.data$Nummer %in% gwq_master_sf$Nummer)
 
-readr::write_csv2(gwq_master,
-                  file = "gwq_master.csv")
-
+readr::write_csv2(gwq_master, file = "gwq_master.csv")
 
 gw_master <- gwl_master %>%  
   dplyr::full_join(gwq_master) %>% 
   dplyr::mutate(Nummer = as.integer(.data$Nummer)) %>% 
   dplyr::arrange(.data$Nummer)
 
-readr::write_csv2(gw_master,
-                  file = "gw_master.csv")
+readr::write_csv2(gw_master, file = "gw_master.csv")
 
-
-gwq_data <- jsonlite::fromJSON("https://kwb-r.github.io/wasserportal/stations_gwq_data.json") %>%
+gwq_data <- jsonlite::fromJSON(
+  "https://kwb-r.github.io/wasserportal/stations_gwq_data.json"
+) %>%
   dplyr::filter(.data$Messstellennummer %in% gwq_master$Nummer)
 
-readr::write_csv2(gwq_data,
-                  file = "gwq_data.csv")
-
+readr::write_csv2(
+  gwq_data,
+  file = "gwq_data.csv"
+)
 
 gwq_chloride_data <- gwq_data %>%
   dplyr::filter(.data$Parameter == "Chlorid")
 
-readr::write_csv2(gwq_chloride_data,
-                  file = "gwq_chloride_data.csv")
-
+readr::write_csv2(
+  gwq_chloride_data,
+  file = "gwq_chloride_data.csv"
+)
 
 gwq_chloride_master <- gwq_master %>% 
   dplyr::filter(.data$Nummer %in% gwq_chloride_data$Messstellennummer)
 
-readr::write_csv2(gwq_chloride_master,
-                  file = "gwq_chloride_master.csv")
+readr::write_csv2(
+  gwq_chloride_master,
+  file = "gwq_chloride_master.csv"
+)
 
 gwq_chloride_data_stats <- gwq_chloride_data %>%
   get_data_stats()
@@ -234,20 +241,28 @@ gwq_chloride_data_stats_export <- gwq_chloride_master %>%
   kwb.geosalz::convert_to_sf() %>% 
   remove_na_and_geometry() %>%
   dplyr::mutate(Nummer = as.integer(.data$Nummer)) %>% 
-  dplyr::left_join(difftime_to_numeric(gwq_chloride_data_stats),
-                   by = c("Nummer" = "Messstellennummer"))
-  
-readr::write_csv2(gwq_chloride_data_stats_export,
-                  file = "gwq_chloride_data_stats.csv")
+  dplyr::left_join(
+    difftime_to_numeric(gwq_chloride_data_stats),
+    by = c("Nummer" = "Messstellennummer")
+  )
+
+readr::write_csv2(
+  gwq_chloride_data_stats_export,
+  file = "gwq_chloride_data_stats.csv"
+)
 
 gwq_chloride_master_stats <- gwq_chloride_master %>%
   dplyr::mutate(Nummer = as.integer(.data$Nummer)) %>%
-  dplyr::left_join(gwq_chloride_data_stats, by = c("Nummer" = "Messstellennummer")) %>%
+  dplyr::left_join(
+    gwq_chloride_data_stats, 
+    by = c("Nummer" = "Messstellennummer")
+  ) %>%
   add_label()
 
-readr::write_csv2(gwq_chloride_master_stats,
-                  file = "gwq_chloride_master_stats.csv")
-
+readr::write_csv2(
+  gwq_chloride_master_stats, 
+  file = "gwq_chloride_master_stats.csv"
+)
 
 # Print Map
 basemap <- svm %>%
@@ -255,7 +270,6 @@ basemap <- svm %>%
   leaflet::addTiles() %>%
   leaflet::addProviderTiles(leaflet::providers$CartoDB.Positron) %>%
   leaflet::addPolygons(color = "red", fill = FALSE)
-
 
 swl_map <-  basemap %>%
   leaflet::addCircles(
@@ -271,7 +285,6 @@ swl_map <-  basemap %>%
     title = "Legende"
   )
 
-
 gwl_map <-  basemap %>%
   leaflet::addCircles(
     data = kwb.geosalz::convert_to_sf(gwl_master_stats),
@@ -286,7 +299,6 @@ gwl_map <-  basemap %>%
     title = "Legende"
   )
 
-
 gwq_map <-  basemap %>%
   leaflet::addCircles(
     data = kwb.geosalz::convert_to_sf(gwq_chloride_master_stats),
@@ -297,7 +309,6 @@ gwq_map <-  basemap %>%
   leaflet::addLegend(
     position = "topright",
     colors = c("red", "orange"),
-    
     labels = c("SVM Modellgrenze", "GW-G\u00FCte (Wasserportal)"),
     title = "Legende"
   )
@@ -312,7 +323,6 @@ gwq_map
 Save maps for full page view:
 
 ```{r save_maps}
-
 htmlwidgets::saveWidget(
   swl_map, 
   "./map_swl.html", 

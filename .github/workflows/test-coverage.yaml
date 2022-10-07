@@ -15,12 +15,30 @@ jobs:
     runs-on: windows-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      MESSKETTEN_SERVER: ${{ secrets.MESSKETTEN_SERVER }} 
+      MESSKETTEN_USER:  ${{ secrets.MESSKETTEN_USER }} 
+      MESSKETTEN_PASSWORD: ${{ secrets.MESSKETTEN_PASSWORD }} 
     steps:
       - uses: actions/checkout@v2
 
       - uses: r-lib/actions/setup-r@master
 
       - uses: r-lib/actions/setup-pandoc@master
+      
+      - name: Install sf libraries on macOS
+        if: runner.os == 'macOS'
+        run: | 
+          brew install proj
+          brew install geos
+          brew install gdal
+
+      - name: Export latest curl path for sftp support on macOS # https://apple.stackexchange.com/questions/406604/curl-not-bring-installed-to-usr-local-bin-with-homebrew
+        if: runner.os == 'macOS'
+        run: |
+          echo 'export PATH="/usr/local/opt/curl/bin:$PATH"' >> $HOME/.bash_profile
+          echo 'export LDFLAGS="-L/usr/local/opt/curl/lib"' #For compilers to find curl
+          echo 'export CPPFLAGS="-I/usr/local/opt/curl/include"' #For compilers to find curl
+          echo 'export PKG_CONFIG_PATH="/usr/local/opt/curl/lib/pkgconfig"' # For pkg-config to find curl 
 
       - name: Query dependencies
         run: |
@@ -40,6 +58,8 @@ jobs:
         run: |
           install.packages(c("remotes"))
           remotes::install_deps(dependencies = TRUE)
+          install.packages("RCurl", type = "source")
+          RCurl::curlVersion()
           remotes::install_cran("covr")
         shell: Rscript {0}
 

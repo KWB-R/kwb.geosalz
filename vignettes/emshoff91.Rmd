@@ -8,12 +8,13 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-  
+
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
 library(dplyr)
 library(tidyr)
 ```
@@ -25,8 +26,7 @@ if (! require("remotes")) {
   install.packages("remotes", repos = "https://cloud.r-project.org")
 }
 
-remotes::install_github("kwb-r/kwb.geosalz", 
-                        dependencies = TRUE)
+remotes::install_github("kwb-r/kwb.geosalz", dependencies = TRUE)
 ```
 
 # 2 Setup the project 
@@ -35,7 +35,7 @@ remotes::install_github("kwb-r/kwb.geosalz",
 
 ```{r eval=TRUE, echo = TRUE}
 # Define paths and resolve placeholders
-paths_list <- list(
+paths <- kwb.utils::resolve(list(
   servername = Sys.getenv("servername"),
   project = "geosalz", 
   processing_dir = "//<servername>/processing/<project>",
@@ -44,23 +44,18 @@ paths_list <- list(
   export_xlsx_name = "emshoff91_v<version>.xlsx",
   export_xlsx_dir = "<processing_dir>/archiv/cleaned-data",
   export_xlsx_path = "<export_xlsx_dir>/<export_xlsx_name>"
-)
-paths <- kwb.utils::resolve(paths_list)
+))
 
 #paths <- kwb.utils::resolve(paths, root = "C:/projects")
 ```
 
 ```{r echo = FALSE}
-if(dir.exists(paths$ods_dir)) {
-  knitr::opts_chunk$set(eval=TRUE, message=FALSE, echo=TRUE)
-} else {
-  knitr::opts_chunk$set(eval=FALSE, message=FALSE, echo=TRUE)
-}
+dir_exists <- dir.exists(paths$ods_dir)
+
+knitr::opts_chunk$set(eval = dir_exists, message = FALSE, echo = TRUE)
 ```
 
-
 # 3 Data import
-
 
 ```{r data_import}
 emshoff91_import <- kwb.geosalz::create_emshoff91_import(ods_dir = paths$ods_dir)
@@ -72,83 +67,92 @@ emshoff91_df <- kwb.geosalz::emshoff91_list_to_df(emshoff91_list)
 emshoff91_df_remapped <- kwb.geosalz::emshoff91_remap_values(emshoff91_df)
 
 emshoff91_df_remapped <- emshoff91_import %>%  
-  dplyr::right_join(emshoff91_df_remapped,
-                    by = "ods_names_clean") %>% 
-  dplyr::mutate(datum = as.Date(sprintf("19%s",.data$datum),
-                                format = "%Y/%m/%d"), 
-                rohr = stringr::str_replace(.data$rohr, 
-                                     "^0", 
-                                     "O"))
+  dplyr::right_join(
+    emshoff91_df_remapped,
+    by = "ods_names_clean"
+  ) %>% 
+  dplyr::mutate(
+    datum = as.Date(sprintf("19%s",.data$datum), format = "%Y/%m/%d"),
+    rohr = stringr::str_replace(.data$rohr, "^0", "O"))
 
-
-messstelle_split <- stringr::str_split_fixed(emshoff91_df_remapped$messstelle, 
-                         pattern = "\\s{1,9}",
-                         n = 3) %>% 
+messstelle_split <- stringr::str_split_fixed(
+  emshoff91_df_remapped$messstelle, 
+  pattern = "\\s{1,9}",
+  n = 3
+) %>% 
   as.data.frame()
-
-
 
 names(messstelle_split) <- c("objekt", "bhrgs_nr-jahr", "rohr")  
 
 messstelle_split <- messstelle_split %>% 
   tibble::as_tibble() %>% 
-  tidyr::separate(col = "bhrgs_nr-jahr", 
-                  into = c("bhrgs_nr", "jahr"),
-                  sep = "/",
-                  remove = FALSE) %>% 
-  dplyr::mutate(rohr = stringr::str_replace(.data$rohr, 
-                                     "^0", 
-                                     "O"), 
-                ms = kwb.utils::multiSubstitute(messstelle_split$objekt,
-                           replacements = list("GF|F-Gal." = "Gal_F",
-                                               "GE|E-Gal" = "Gal_E",
-                                               "GI|I-Gal." = "Gal_I",
-                                               "GG|G-Gal.|G-Gal" = "Gal_G",
-                                               "GK|K-Gal." = "Gal_K",
-                                               "^Go$" = "Gal_O",
-                                               "GH|H-Gal." = "Gal_H", 
-                                               "GO" = "Gal_O",
-                                               "GL|L-Gal." = "Gal_L", 
-                                               "GM|M-Gal." = "Gal_M",
-                                               ",," = ","))) 
+  tidyr::separate(
+    col = "bhrgs_nr-jahr", 
+    into = c("bhrgs_nr", "jahr"),
+    sep = "/",
+    remove = FALSE
+  ) %>% 
+  dplyr::mutate(
+    rohr = stringr::str_replace(.data$rohr, "^0", "O"), 
+    ms = kwb.utils::multiSubstitute(
+      messstelle_split$objekt,
+      replacements = list(
+        "GF|F-Gal." = "Gal_F",
+        "GE|E-Gal" = "Gal_E",
+        "GI|I-Gal." = "Gal_I",
+        "GG|G-Gal.|G-Gal" = "Gal_G",
+        "GK|K-Gal." = "Gal_K",
+        "^Go$" = "Gal_O",
+        "GH|H-Gal." = "Gal_H", 
+        "GO" = "Gal_O",
+        "GL|L-Gal." = "Gal_L", 
+        "GM|M-Gal." = "Gal_M",
+        ",," = ","
+      )
+    )
+  ) 
 
-  messstelle_split2 <- stringr::str_split_fixed(messstelle_split$ms, pattern = ",", n = 2) %>%  
-    as.data.frame()
- names(messstelle_split2) <- c("brunnen_galerie", "brunnen_id")
+messstelle_split2 <- messstelle_split$ms %>%
+  stringr::str_split_fixed(pattern = ",", n = 2) %>%  
+  as.data.frame()
 
- messstelle_split2 <- messstelle_split2 %>% 
-   dplyr::mutate(brunnen_id = stringr::str_remove(.data$brunnen_id, pattern = "^Br"))
+names(messstelle_split2) <- c("brunnen_galerie", "brunnen_id")
 
- ms_split <- dplyr::bind_cols(messstelle_split, messstelle_split2)
+messstelle_split2 <- messstelle_split2 %>% 
+  dplyr::mutate(
+    brunnen_id = stringr::str_remove(.data$brunnen_id, pattern = "^Br")
+  )
 
- ms_split
- 
+ms_split <- dplyr::bind_cols(messstelle_split, messstelle_split2)
+
+ms_split
+
 samples_per_moni_id <- emshoff91_df_remapped %>%  
-  dplyr::count(.data$messstelle, 
-               ) 
+  dplyr::count(.data$messstelle) 
 
 samples_per_moni_id_master <- emshoff91_df_remapped %>%  
-  dplyr::count(.data$messstelle, 
-               .data$rohr,
-               .data$fi_mi, 
-               .data$strat,
-               .data$progr
-               ) 
-                                            
+  dplyr::count(
+    .data$messstelle, 
+    .data$rohr,
+    .data$fi_mi, 
+    .data$strat,
+    .data$progr
+  ) 
 ```
-
 
 ## 4 Export to Excel
 
 ```{r excel_export}
-openxlsx::write.xlsx(list(samples_per_moni_id = samples_per_moni_id, 
-                          samples_per_moni_id_master = samples_per_moni_id_master,
-                          data = emshoff91_df_remapped),
-                     file = paths$export_xlsx_path,
-                     overwrite = TRUE
+openxlsx::write.xlsx(
+  list(
+    samples_per_moni_id = samples_per_moni_id, 
+    samples_per_moni_id_master = samples_per_moni_id_master,
+    data = emshoff91_df_remapped
+  ),
+  file = paths$export_xlsx_path,
+  overwrite = TRUE
 )
 ```
-
 
 # 5 Session Info 
 
@@ -158,30 +162,25 @@ openxlsx::write.xlsx(list(samples_per_moni_id = samples_per_moni_id,
 environment <- sessioninfo::session_info()  
 
 knitr::kable(tibble::enframe(unlist(environment$platform)))
-
 ```
 
 ## Packages
 
 ```{r packages, eval = TRUE, echo= FALSE}
-
 environment$packages
-
 ```
 
 ### Pandoc
 
 ```{r pandoc, eval = TRUE, echo= FALSE}
-
-if(rmarkdown::pandoc_available()) {
-  data.frame(pandoc_directory = rmarkdown::pandoc_exec(),
-             pandoc_version = as.character(rmarkdown::pandoc_version()), 
-             stringsAsFactors = FALSE)
+if (rmarkdown::pandoc_available()) {
+  data.frame(
+    pandoc_directory = rmarkdown::pandoc_exec(),
+    pandoc_version = as.character(rmarkdown::pandoc_version()), 
+    stringsAsFactors = FALSE
+  )
 } else {
   print("No PANDOC installed!")
 }
 
 ```
-
-
-

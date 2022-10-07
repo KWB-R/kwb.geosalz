@@ -19,11 +19,16 @@
 #' ods_dir <- "<replace-with-path-to-files>/emshoff91/converted_ods"
 #' emshoff91_import <- create_emshoff91_import(ods_dir)
 #' }
-create_emshoff91_import <- function(ods_dir,
-                                    files_to_ignore = c("cl25",
-                                                        "clliste",
-                                                        "rupelauf",
-                                                        "salzlast")) {
+create_emshoff91_import <- function(
+    ods_dir,
+    files_to_ignore = c(
+      "cl25",
+      "clliste",
+      "rupelauf",
+      "salzlast"
+    )
+)
+{
   emshoff91 <- tibble::tibble(
     ods_paths = list.files(
       path = ods_dir,
@@ -56,13 +61,9 @@ create_emshoff91_import <- function(ods_dir,
       )
     )
   
-  
   emshoff91 %>%
     dplyr::filter(!.data$ods_names_clean %in% files_to_ignore)
 }
-
-
-
 
 #' Reads a Single EMSHOFF 91 ODS File into Tibble
 #'
@@ -75,35 +76,37 @@ create_emshoff91_import <- function(ods_dir,
 #' @importFrom janitor clean_names
 #' @importFrom dplyr everything filter if_any bind_cols
 #' @importFrom kwb.utils catAndRun
-read_emshoff91_ods <- function(emshoff91_import_selected) {
-  
-  
+read_emshoff91_ods <- function(emshoff91_import_selected)
+{
   if (emshoff91_import_selected$ods_names_clean == "gwnguete") {
+    
     tmp <- readODS::read_ods(
       path = emshoff91_import_selected$ods_paths,
       col_names = FALSE,
-      range = "A6:Z168")
+      range = "A6:Z168"
+    )
     
-    tmp_header <- names(readODS::read_ods(emshoff91_import_selected$ods_paths,
-                                    col_names = TRUE,
-                                    range = "A2:Z2")) %>% 
+    tmp_header <- names(readODS::read_ods(
+      emshoff91_import_selected$ods_paths,
+      col_names = TRUE,
+      range = "A2:Z2"
+    )) %>% 
       stringr::str_replace(pattern = "^Kuppb\\.$", "Kupp. St.") %>% 
       janitor::make_clean_names()
     
     names(tmp) <- tmp_header
+    
   } else {
-  
-  tmp <-
-    readODS::read_ods(path = emshoff91_import_selected$ods_paths,
-                      skip = emshoff91_import_selected$skip_rows) %>%
-    janitor::clean_names()
-  
+    
+    tmp <-readODS::read_ods(
+      path = emshoff91_import_selected$ods_paths,
+      skip = emshoff91_import_selected$skip_rows
+    ) %>%
+      janitor::clean_names()
   } 
   
-  tmp <- tmp %>%
-    ### remove completely empty rows
-    dplyr::filter(dplyr::if_any(dplyr::everything(), ~ !is.na(.x))) 
-    
+  ### remove completely empty rows
+  tmp <- dplyr::filter(tmp, dplyr::if_any(dplyr::everything(), ~ !is.na(.x))) 
   
   has_messstellen <- stringr::str_detect(names(tmp), "^messstellen$")
   
@@ -115,36 +118,37 @@ read_emshoff91_ods <- function(emshoff91_import_selected) {
   has_datum <- stringr::str_detect(names(tmp), "^datum$")
   
   if (any(has_datum)) {
-    tmp <- tmp %>% 
-      dplyr::filter(.data$datum != "Datum")
+    tmp <- dplyr::filter(tmp, .data$datum != "Datum")
   }
   
-    tmp <- tmp %>%
-    dplyr::filter(!is.na(.data$messstelle))
+  tmp <- dplyr::filter(tmp, !is.na(.data$messstelle))
   
   if (emshoff91_import_selected$ods_names_clean == "gf_gm") {
-    message(sprintf("Only imported first 201 rows of '%s' due to messy data afterwards!!!", 
-            emshoff91_import_selected$ods_paths))
-  }
     
-  if (emshoff91_import_selected$skip_rows %in% 1:2) {
-    messprogramm <-
-      paste0(
-        readODS::read_ods(
-          path = emshoff91_import_selected$ods_paths[1],
-          range = sprintf("A1:B%s", emshoff91_import_selected$skip_rows),
-          col_names = FALSE
-        )[seq_len(emshoff91_import_selected$skip_rows), 1],
-        collapse = "@"
-      )
+    message(sprintf(
+      "Only imported first 201 rows of '%s' due to messy data afterwards!!!", 
+      emshoff91_import_selected$ods_paths
+    ))
+  }
+  
+  messprogramm <- if (emshoff91_import_selected$skip_rows %in% 1:2) {
+    
+    paste0(
+      readODS::read_ods(
+        path = emshoff91_import_selected$ods_paths[1],
+        range = sprintf("A1:B%s", emshoff91_import_selected$skip_rows),
+        col_names = FALSE
+      )[seq_len(emshoff91_import_selected$skip_rows), 1],
+      collapse = "@"
+    )
+    
   } else {
-    messprogramm <- NA_character_
+    
+    NA_character_
   }
   
   dplyr::bind_cols(tmp, tibble::tibble("messprogramm" = messprogramm))
-  
 }
-
 
 #' Reads Multiple EMSHOFF 91 ODS Files into List
 #'
@@ -161,21 +165,20 @@ read_emshoff91_ods <- function(emshoff91_import_selected) {
 #' emshoff91_import <- create_emshoff91_import(ods_dir)
 #' read_multiple_emshoff91_ods(emshoff91_import)
 #' }
-read_multiple_emshoff91_ods <- function(emshoff91_import) {
-  emshoff91_import_list <-
-    stats::setNames(lapply(seq_len(nrow(emshoff91_import)),
-                           function(i) {
-                             kwb.utils::catAndRun(sprintf("Importing '%s'\n",
-                                                          emshoff91_import$ods_paths[i]),
-                                                  expr = {
-                                                    read_emshoff91_ods(emshoff91_import[i,])
-                                                  })
-                           }),
-                    nm = emshoff91_import$ods_names_clean)
+read_multiple_emshoff91_ods <- function(emshoff91_import) 
+{
+  emshoff91_import_list <- lapply(
+    seq_len(nrow(emshoff91_import)), 
+    function(i) {
+      kwb.utils::catAndRun(
+        sprintf("Importing '%s'\n", emshoff91_import$ods_paths[i]),
+        expr = read_emshoff91_ods(emshoff91_import[i,])
+      )
+    }
+  )
+  
+  stats::setNames(emshoff91_import_list, emshoff91_import$ods_names_clean)
 }
-
-
-
 
 # tmp <- readODS::read_ods(path = emshoff91$ods_paths[13],
 #                          skip = 202)

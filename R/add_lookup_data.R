@@ -9,12 +9,11 @@
 #' @importFrom readxl read_excel
 #' @importFrom janitor clean_names
 #'
-get_parameters_meta <- function(xlsx_path,
-                                sheet_name = "nur Parameterliste") {
+get_parameters_meta <- function(xlsx_path, sheet_name = "nur Parameterliste")
+{
   readxl::read_excel(xlsx_path, sheet = sheet_name) %>%
     janitor::clean_names()
 }
-
 
 #' add_para_metadata
 #'
@@ -29,43 +28,44 @@ get_parameters_meta <- function(xlsx_path,
 #' @return return "df" with added parameter metadata
 #' @export
 
-add_para_metadata <- function(df,
-                              lookup_para_path,
-                              parameters_path) {
+add_para_metadata <- function(df, lookup_para_path, parameters_path)
+{
   if (file.exists(lookup_para_path)) {
+    
     lookup_para <- read.csv(
       file = lookup_para_path,
       stringsAsFactors = FALSE
     ) %>%
       dplyr::filter(!is.na(.data$para_id))
 
-    if (length(lookup_para) > 0) {
-      parameters <- get_parameters_meta(parameters_path)
-
-      lookup_para <- lookup_para %>%
-        dplyr::left_join(y = parameters)
-
-      analysed_paras <- unique(lookup_para$para_kurzname)
-      cat(crayon::green(
-        crayon::bold(
-          sprintf(
-            "Successfully read parameter lookup table:\n'%s'\n and joined it with:\n
-                  '%s'.\n\nIn total the following %d parameters can be analysed:\n%s\n\n",
-            lookup_para_path,
-            parameters_path,
-            length(analysed_paras),
-            paste(analysed_paras, collapse = ", ")
-          )
-        )
-      ))
-
-      labor_sel <- df %>%
-        dplyr::left_join(y = lookup_para, by = "VariableName_org") %>%
-        dplyr::filter(!is.na(.data$para_id))
-    } else {
-      stop(sprintf("No parameters defined in %s", lookup_para_path))
+    if (length(lookup_para) == 0L) {
+      kwb.utils::stopFormatted("No parameters defined in %s", lookup_para_path)
     }
+    
+    parameters <- get_parameters_meta(parameters_path)
+    
+    lookup_para <- lookup_para %>%
+      dplyr::left_join(y = parameters)
+    
+    analysed_paras <- unique(lookup_para$para_kurzname)
+    
+    cat(crayon::green(crayon::bold(
+      sprintf(
+        "Successfully read parameter lookup table:\n'%s'\n and joined it with:\n
+                  '%s'.\n\nIn total the following %d parameters can be analysed:\n%s\n\n",
+        lookup_para_path,
+        parameters_path,
+        length(analysed_paras),
+        paste(analysed_paras, collapse = ", ")
+      )
+    )))
+    
+    labor_sel <- df %>%
+      dplyr::left_join(y = lookup_para, by = "VariableName_org") %>%
+      dplyr::filter(!is.na(.data$para_id))
+
   } else {
+    
     lookup_para_template <- data.frame(
       VariableName_org = sort(as.character(unique(df[, "VariableName_org"]))),
       para_id = NA,
@@ -82,20 +82,20 @@ add_para_metadata <- function(df,
       row.names = FALSE
     )
 
-    stop_msg <- cat(crayon::red(
-      crayon::bold(sprintf(
-        "Template parameter lookup table created at:\n%s\n
+    stop_msg <- cat(crayon::red(crayon::bold(sprintf(
+      "Template parameter lookup table created at:\n%s\n
                              Please fill with column 'para_id' with 'Para Id' from file:\n%s\n
                              Do not use EXCEL, just a text editor like Notepad++.\n
                              Afterwords rename the file to 'lookup_para.csv' and save it in the same directory!",
-        normalizePath(lookup_para_export_path),
-        normalizePath(parameters_path)
-      ))
-    ))
-
+      normalizePath(lookup_para_export_path),
+      normalizePath(parameters_path)
+    )
+    )))
+    
     stop(stop_msg)
   }
-  return(labor_sel)
+  
+  labor_sel
 }
 
 #' add_site_metadata
@@ -108,12 +108,9 @@ add_para_metadata <- function(df,
 #' @import dplyr
 #' @importFrom janitor clean_names
 #' @export
-add_site_metadata <- function(df,
-                              site_path) {
-  sites <- readxl::read_excel(
-    path = site_path,
-    .name_repair = "minimal"
-  ) %>%
+add_site_metadata <- function(df, site_path)
+{
+  sites <- readxl::read_excel(path = site_path, .name_repair = "minimal") %>%
     janitor::clean_names() %>%
     dplyr::rename(site_id = .data$interne_nr)
 

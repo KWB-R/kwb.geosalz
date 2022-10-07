@@ -1,3 +1,20 @@
+# [kwb.geosalz 0.5.0](https://github.com/KWB-R/kwb.geosalz/releases/tag/v0.5.0) <small>2022-09-16</small>
+
+* Bugfix: fix `read_lab_bwb()` leading to crash in case of importing `Hydrochemie_Gesamt_Geosalz_v1.0.6.xlsx`
+(see here for [fix](https://github.com/KWB-R/kwb.geosalz/commit/9ea71f2eecaa1ba31ea34d780447969e47d317a8])
+
+
+* Add `stop_if_duplicated_samples_found()` for `read_lab_bwb()` and `read_isotopes()` to 
+throw error in case imported dataset contains duplicated `sample_id` 
+
+
+**Articles**
+
+- Added [Measurement Chains](../articles/measurement-chains.html) data import 
+workflow for `electrical conductivity` and `temperature`, which will be installed 
+in productions wells in September/October 2022.
+
+
 # [kwb.geosalz 0.4.0](https://github.com/KWB-R/kwb.geosalz/releases/tag/v0.4.0) <small>2022-08-25</small>
 
 

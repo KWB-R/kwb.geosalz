@@ -30,6 +30,9 @@ jobs:
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      MESSKETTEN_SERVER: ${{ secrets.MESSKETTEN_SERVER }} 
+      MESSKETTEN_USER:  ${{ secrets.MESSKETTEN_USER }} 
+      MESSKETTEN_PASSWORD: ${{ secrets.MESSKETTEN_PASSWORD }} 
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
       RSPM: ${{ matrix.config.rspm }}
 
@@ -48,6 +51,14 @@ jobs:
           brew install proj
           brew install geos
           brew install gdal
+          
+      - name: Export latest curl path for sftp support on macOS # https://apple.stackexchange.com/questions/406604/curl-not-bring-installed-to-usr-local-bin-with-homebrew
+        if: runner.os == 'macOS'
+        run: |
+          echo 'export PATH="/usr/local/opt/curl/bin:$PATH"' >> $HOME/.bash_profile
+          echo 'export LDFLAGS="-L/usr/local/opt/curl/lib"' #For compilers to find curl
+          echo 'export CPPFLAGS="-I/usr/local/opt/curl/include"' #For compilers to find curl
+          echo 'export PKG_CONFIG_PATH="/usr/local/opt/curl/lib/pkgconfig"' # For pkg-config to find curl 
 
       - name: Query dependencies
         run: |
@@ -74,11 +85,13 @@ jobs:
       - name: Install dependencies
         run: |
           remotes::install_deps(dependencies = TRUE)
+          install.packages("RCurl", type = "source")
+          RCurl::curlVersion()
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
 
       - name: Check
-        run: rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "warning", check_dir = "check")
+        run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--ignore-vignettes"), build_args = c("--no-manual", "--no-build-vignettes"), error_on = "error", check_dir = "check")
         shell: Rscript {0}
 
       - name: Upload check results

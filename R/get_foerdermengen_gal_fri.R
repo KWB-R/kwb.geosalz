@@ -10,10 +10,13 @@
 #' @importFrom dplyr relocate mutate
 #' @importFrom tidyr pivot_longer
 #' @importFrom readxl read_xlsx
-get_foerdermengen_gal_fri <- function(path) {
-  q_gal <- readxl::read_xlsx(path,
-                             sheet = "Gal. Jahresmengen",
-                             range = "A2:R70")
+get_foerdermengen_gal_fri <- function(path)
+{
+  q_gal <- readxl::read_xlsx(
+    path,
+    sheet = "Gal. Jahresmengen",
+    range = "A2:R70"
+  )
   
   names(q_gal)[1] <- "year"
   
@@ -27,7 +30,8 @@ get_foerdermengen_gal_fri <- function(path) {
       names_to = "galerie",
       values_to = "foerdermenge_m3"
     ) %>%
-    dplyr::mutate(galerie = stringr::str_remove(.data$galerie, pattern = "^FRI "),
-                  werk = werk)
-  
+    dplyr::mutate(
+      galerie = stringr::str_remove(.data$galerie, pattern = "^FRI "),
+      werk = werk
+    )
 }
