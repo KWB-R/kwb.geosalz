@@ -275,9 +275,13 @@ read_measurementchain_data <- function(path) {
 #' Measurement Chains: read csv data from multiple files
 #'
 #' @param csv_files tibble as retrieved by \code{\link{download_measurementchains_data}}
+#' @param datetime_installation datetime of first logger installation in well K10. 
+#' Used to filter out older measurement data! (default: as.POSIXct("2022-09-27 11:00:00", 
+#' tz = "Etc/GMT-1")
 #' @param debug show debug messages (default: FALSE)
 #' @return data frame with imported data from csv files
 #' @export
+#' @importFrom kwb.utils catAndRun isNullOrEmpty
 #' @importFrom readr read_csv col_datetime
 #' @importFrom dplyr arrange mutate bind_rows
 #' @examples
@@ -291,8 +295,11 @@ read_measurementchain_data <- function(path) {
 #'
 #' }
 read_measurementchains_data <- function(csv_files,
+                                        datetime_installation = as.POSIXct("2022-09-27 11:00:00", 
+                                                                           tz = "Etc/GMT-1"),
                                         run_parallel = TRUE,
                                         debug = FALSE) {
+  
   csv_files_exist <- fs::file_exists(csv_files$local_path)
   if (!all(csv_files_exist)) {
     msg <-
@@ -344,11 +351,25 @@ read_measurementchains_data <- function(csv_files,
   }
   
   
-  dplyr::bind_rows(data_list, .id = "file_id")  %>%
+  dat <- dplyr::bind_rows(data_list, .id = "file_id")  %>%
     dplyr::mutate(file_id = as.integer(.data$file_id)) %>%
     dplyr::arrange(.data$parameter,
                    .data$sensor_id,
-                   .data$datum_uhrzeit)
+                   .data$datum_uhrzeit) 
+
+  if(kwb.utils::isNullOrEmpty(datetime_installation)) {
+    return(dat)  
+  }
   
+  
+  msg <- sprintf("Filtering out 'lab' measurements before '%s' (installation in K10)", 
+                 datetime_installation)
+  kwb.utils::catAndRun(msg,
+                       expr = {
+                         dat %>%
+                           dplyr::filter(.data$datum_uhrzeit >= datetime_installation)
+                       },
+                       dbg = debug)
+
   
 }
