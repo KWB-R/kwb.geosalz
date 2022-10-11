@@ -126,7 +126,7 @@ mc_files <- kwb.geosalz::get_measurementchains_files()
 str(mc_files)
 head(mc_files)
 
-# Download of measurement mhain `.csv` files from SFTP server
+# Download of measurement chain `.csv` files from SFTP server
 csv_files <- kwb.geosalz::download_measurementchains_data(
   sftp_paths = mc_files$sftp_path,
   target_directory = paths$download_dir,
@@ -145,50 +145,27 @@ running the code below:
 ### print error in case no csv file is available
 stopifnot(nrow(csv_files) > 0L) 
 
-### CSV import using single CPU core
-mc_data_single <- kwb.geosalz::read_measurementchains_data(
-  csv_files,
-  run_parallel = FALSE,
-  debug = TRUE
-)
-
 ## CSV import using multiple CPU cores
-mc_data_parallel <- kwb.geosalz::read_measurementchains_data(
+mc_data <- kwb.geosalz::read_measurementchains_data(
   csv_files,
   run_parallel = TRUE,
   debug = TRUE
 )
 
-### Just test if both imports give identical results
-identical(mc_data_single, mc_data_parallel)
 
-mc_data_parallel
 ```
 
 In a nutshell the following datasets were imported into R: 
 
 ```{r measurementchains_data-import_stats,  eval = con_defined}
-mc_data_parallel_stats <- mc_data_parallel %>%  
-  dplyr::group_by(
-    .data$sensor_id,
-    .data$parameter
-  ) %>% 
-  dplyr::summarise(
-    datetime_min = min(.data$datum_uhrzeit), 
-    datetime_max = max(.data$datum_uhrzeit),
-    number_of_samples = dplyr::n()
-  ) %>% 
-  dplyr::arrange(
-    .data$sensor_id, 
-    .data$parameter
-  )
+mc_data_stats <- kwb.geosalz::get_measurmentchains_data_stats(mc_data)
 
-DT::datatable(mc_data_parallel_stats)
+DT::datatable(mc_data_stats)
 ```
 
-These cover the time period from `r min(mc_data_parallel_stats$datetime_min)` to
-`r max(mc_data_parallel_stats$datetime_max)` with a total of 
-`r sum(mc_data_parallel_stats$number_of_samples)` samples.
+These cover the time period from `r min(mc_data_stats$datetime_min)` to
+`r max(mc_data_stats$datetime_max)` with a total of 
+`r sum(mc_data_stats$number_of_samples)` samples.
 
 ### Data Export
 
@@ -197,7 +174,7 @@ debug <- TRUE
 
 ### Export "mc_data" to csv file
 data_csv_path <- kwb.geosalz::write_measurementchains_data(
-  mc_data_parallel,
+  mc_data,
   target_directory = paths$export_dir,
   to_zip = FALSE,
   debug = debug
@@ -207,7 +184,7 @@ size_data_csv <- fs::file_size(data_csv_path)
 
 ### Export "mc_data" to zip file (~10x less disk space for test dataset)
 data_zip_path <- kwb.geosalz::write_measurementchains_data(
-  mc_data_parallel,
+  mc_data,
   target_directory = paths$export_dir,
   to_zip = TRUE,
   debug = debug

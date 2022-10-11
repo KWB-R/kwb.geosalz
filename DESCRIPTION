@@ -38,7 +38,8 @@ Imports:
     stringr (>= 1.4.0),
     tibble (>= 2.0.1),
     tidyr (>= 0.8.2),
-    tidyselect (>= 1.1.2)
+    tidyselect (>= 1.1.2),
+    withr
 Suggests: 
     covr (>= 3.2.1),
     DT,
@@ -46,7 +47,6 @@ Suggests:
     ggplot2 (>= 3.1.0),
     htmlwidgets,
     knitr (>= 1.21),
-    kwb.nextcloud,
     kwb.pkgbuild,
     leaflet,
     openxlsx,
@@ -59,7 +59,6 @@ VignetteBuilder:
 Remotes:
     github::KWB-R/geosalz.phreeqc,
     github::KWB-R/kwb.base,
-    github::KWB-R/kwb.nextcloud,    
     github::KWB-R/kwb.pkgbuild,
     github::KWB-R/kwb.utils,
     github::KWB-R/wasserportal,
