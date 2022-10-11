@@ -126,7 +126,7 @@ mc_files <- kwb.geosalz::get_measurementchains_files()
 str(mc_files)
 head(mc_files)
 
-# Download of measurement mhain `.csv` files from SFTP server
+# Download of measurement chain `.csv` files from SFTP server
 csv_files <- kwb.geosalz::download_measurementchains_data(
   sftp_paths = mc_files$sftp_path,
   target_directory = paths$download_dir,
@@ -158,26 +158,7 @@ mc_data <- kwb.geosalz::read_measurementchains_data(
 In a nutshell the following datasets were imported into R: 
 
 ```{r measurementchains_data-import_stats,  eval = con_defined}
-mc_data_stats <- mc_data %>%  
-  dplyr::group_by(
-    .data$sensor_id,
-    .data$parameter
-  ) %>% 
-  dplyr::summarise(
-    datetime_min = min(.data$datum_uhrzeit), 
-    datetime_max = max(.data$datum_uhrzeit),
-    min = min(.data$messwert, na.rm = TRUE), 
-    q10 = quantile(.data$messwert, 0.1, na.rm = TRUE), 
-    mean = mean(.data$messwert, na.rm = TRUE), 
-    median = median(.data$messwert, na.rm = TRUE),
-    q90 = quantile(.data$messwert, 0.9, na.rm = TRUE), 
-    max = max(.data$messwert, na.rm = TRUE), 
-    number_of_samples = dplyr::n()
-  ) %>% 
-  dplyr::arrange(
-    .data$sensor_id, 
-    .data$parameter
-  )
+mc_data_stats <- kwb.geosalz::get_measurmentchains_data_stats(mc_data)
 
 DT::datatable(mc_data_stats)
 ```

@@ -16,6 +16,7 @@
 #' @importFrom fs dir_create file_delete path_abs
 #' @importFrom readr write_csv
 #' @importFrom stringr str_c str_remove_all str_replace
+#' @importFrom withr with_dir
 
 write_measurementchains_data <- function(
     mc_data,
@@ -27,12 +28,7 @@ write_measurementchains_data <- function(
   
   fs::dir_create(target_directory)
   
-  mc_data_stats <- mc_data %>%  
-    dplyr::summarise(
-      datetime_min = min(.data$datum_uhrzeit), 
-      datetime_max = max(.data$datum_uhrzeit),
-      number_of_samples = dplyr::n()
-    ) 
+  mc_data_stats <- get_measurmentchains_data_stats(mc_data)
   
   datetime_to_character <- function(datetime) {
     stopifnot(length(datetime) == 1L)
@@ -50,8 +46,8 @@ write_measurementchains_data <- function(
   csv_path <- sprintf(
     "%s/mc_data_%s_%s.csv",
     fs::path_abs(target_directory),
-    datetime_to_character(mc_data_stats$datetime_min),
-    datetime_to_character(mc_data_stats$datetime_max)
+    datetime_to_character(min(mc_data_stats$datetime_min)),
+    datetime_to_character(min(mc_data_stats$datetime_max))
   )
   
   msg <- sprintf(
@@ -72,7 +68,7 @@ write_measurementchains_data <- function(
   
   if (to_zip) {
     
-    zip_path <- kwb.utils::replaceFileExtension(csv_path, ".zip")
+    zip_path <- file.path(target_directory, "mc_data.zip")
     
     msg <- sprintf(
       "Exporting provided dataset '%s' to '%s' and delete intermediate '%s'",
@@ -84,12 +80,14 @@ write_measurementchains_data <- function(
     kwb.utils::catAndRun(
       messageText = msg, 
       expr =  {
+        withr::with_dir(target_directory, 
+                        code = {
         archive::archive_write_files( 
           archive = zip_path,
-          files = csv_path)
+          files = basename(csv_path))
         fs::file_delete(path = csv_path)
         path <- zip_path
-      },
+      })},
       dbg = debug
     )
   }
