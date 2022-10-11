@@ -1,4 +1,4 @@
-# [kwb.geosalz 0.5.0](https://github.com/KWB-R/kwb.geosalz/releases/tag/v0.5.0) <small>2022-09-16</small>
+# [kwb.geosalz 0.5.0](https://github.com/KWB-R/kwb.geosalz/releases/tag/v0.5.0) <small>2022-10-11</small>
 
 * Bugfix: fix `read_lab_bwb()` leading to crash in case of importing `Hydrochemie_Gesamt_Geosalz_v1.0.6.xlsx`
 (see here for [fix](https://github.com/KWB-R/kwb.geosalz/commit/9ea71f2eecaa1ba31ea34d780447969e47d317a8])
@@ -12,7 +12,9 @@ throw error in case imported dataset contains duplicated `sample_id`
 
 - Added [Measurement Chains](../articles/measurement-chains.html) data import 
 workflow for `electrical conductivity` and `temperature`, which will be installed 
-in productions wells in September/October 2022.
+in productions wells in September (K10: 2022-09-27)  and October 2022 (K9: 2022-10-17,
+K13: 2022-10-16). Data in SFTP server is downloaded, aggregated and exported to 
+the restricted KWB cloud each weekday at 07:00:00 UTC. (see [.github/pkgdown.yml#L11](https://github.com/KWB-R/kwb.geosalz/blob/master/.github/workflows/pkgdown.yaml#L11)).
 
 
 # [kwb.geosalz 0.4.0](https://github.com/KWB-R/kwb.geosalz/releases/tag/v0.4.0) <small>2022-08-25</small>
