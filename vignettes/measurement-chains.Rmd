@@ -158,8 +158,9 @@ mc_data <- kwb.geosalz::read_measurementchains_data(
 In a nutshell the following datasets were imported into R: 
 
 ```{r measurementchains_data-import_stats,  eval = con_defined}
-mc_data_stats <- kwb.geosalz::get_measurmentchains_data_stats(mc_data)
-
+mc_data_stats <- kwb.geosalz::get_measurmentchains_data_stats(mc_data) %>% 
+  dplyr::arrange(.data$parameter, 
+                 dplyr::desc(.data$sensor_id))
 DT::datatable(mc_data_stats)
 ```
 
@@ -190,7 +191,6 @@ data_zip_path <- kwb.geosalz::write_measurementchains_data(
   debug = debug
 )
 
-
 size_data_zip <- fs::file_size(data_zip_path)
 size_data_csv / size_data_zip
 
@@ -214,20 +214,52 @@ readr::write_csv(df, target_path)
 target_path
 }
 
+stats_path <- write_csv(mc_data_stats,
+                        postfix = extract_data_timeperiod(data_zip_path),
+                        target_directory = paths$export_dir)
+
 metadata_path <- write_csv(mc_metadata, 
                            postfix = extract_data_timeperiod(data_zip_path),
                            target_directory = paths$export_dir)
 
+
 files_path <- write_csv(mc_files, 
                         postfix = extract_data_timeperiod(data_zip_path),
                         target_directory = paths$export_dir)
+
+plot_to_pdf <- function(mc_data, para, target_dir = ".", debug = TRUE) {
+plts <- kwb.geosalz::plot_measurementchains(mc_data, para)
+
+sapply(names(plts), function(name) {
+path <-  file.path(target_dir, sprintf("mc_data_%s.pdf", name))
+kwb.utils::catAndRun(messageText = sprintf("Writting '%s' to '%s'", 
+                                           name, 
+                                           path),
+                     expr = {
+                       kwb.utils::preparePdf(path, 
+                                             width.cm = 25, 
+                                             height.cm = 15)
+                       plts[[name]]
+                       dev.off()
+                       path 
+                       }, 
+                     dbg = debug)
+ })
+}
+
+pdf_files <- c(plot_to_pdf(mc_data, 
+                           "Leitfaehigkeit", 
+                           target_dir = paths$export_dir), 
+               plot_to_pdf(mc_data, 
+                           "Temperatur", 
+                           target_dir = paths$export_dir))
+
+data_zip_path
 ```
 
-The file size of the 
-`r basename(data_csv_path)` file is 
-`r round(size_data_csv / size_data_zip, 1)` 
-times larger compared to compressing it into 
-`r `basename(data_zip_path)`.
+The file size of the `r basename(data_csv_path)` file is 
+`r round(size_data_csv / size_data_zip, 1)` times larger compared to compressing 
+it into `r basename(data_zip_path)`.
 
 ### Data Upload 
 
@@ -254,7 +286,9 @@ Subsequently the following code is run for uploading the data:
 
 
 # List paths of files to upload explicitly
-upload_files <- c(metadata_path, 
+upload_files <- c(stats_path, 
+                  pdf_files,
+                  metadata_path, 
                   files_path,
                   data_zip_path)
 
