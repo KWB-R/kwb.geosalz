@@ -35,6 +35,8 @@ nc_defined <- all(nc_is_defined)
 
 is_ghactions <- identical(Sys.getenv("CI"), "true")
 
+local <- con_defined & !is_ghactions
+
 ```
 
 ## Background 
@@ -161,6 +163,9 @@ In a nutshell the following datasets were imported into R:
 mc_data_stats <- kwb.geosalz::get_measurmentchains_data_stats(mc_data) %>% 
   dplyr::arrange(.data$parameter, 
                  dplyr::desc(.data$sensor_id))
+```
+
+```{r measurementchains_data-import_stats_table, echo = local,  eval = local }
 DT::datatable(mc_data_stats)
 ```
 
