@@ -239,7 +239,7 @@ kwb.utils::catAndRun(messageText = sprintf("Writting '%s' to '%s'",
                        kwb.utils::preparePdf(path, 
                                              width.cm = 25, 
                                              height.cm = 15)
-                       plts[[name]]
+                       print(plts[[name]])
                        dev.off()
                        path 
                        }, 
