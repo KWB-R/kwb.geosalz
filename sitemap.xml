@@ -55,6 +55,9 @@
     <loc>https://kwb-r.github.io/kwb.geosalz/map_swl.html</loc>
   </url>
   <url>
+    <loc>https://kwb-r.github.io/kwb.geosalz/master_gwl_before-1970.html</loc>
+  </url>
+  <url>
     <loc>https://kwb-r.github.io/kwb.geosalz/news/index.html</loc>
   </url>
   <url>
@@ -218,5 +221,8 @@
   </url>
   <url>
     <loc>https://kwb-r.github.io/kwb.geosalz/reference/write_measurementchains_data.html</loc>
+  </url>
+  <url>
+    <loc>https://kwb-r.github.io/kwb.geosalz/timeseries_gwl_before-1970.html</loc>
   </url>
 </urlset>
