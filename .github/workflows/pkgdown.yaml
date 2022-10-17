@@ -63,7 +63,6 @@ jobs:
         run: |
           remotes::install_deps(dependencies = TRUE)
           install.packages("pkgdown", type = "binary")
-          install.packages("RCurl", type = "source")
           RCurl::curlVersion()
         shell: Rscript {0}
 
