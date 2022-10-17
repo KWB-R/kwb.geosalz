@@ -16,6 +16,7 @@ jobs:
   pkgdown:
     runs-on: windows-latest
     env:
+      CURL_SSL_BACKEND: "openssl"
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       MESSKETTEN_SERVER: ${{ secrets.MESSKETTEN_SERVER }} 
       MESSKETTEN_USER:  ${{ secrets.MESSKETTEN_USER }} 
