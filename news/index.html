@@ -62,7 +62,8 @@
 <ul><li><p>Bugfix: fix <code><a href="../reference/read_lab_bwb.html">read_lab_bwb()</a></code> leading to crash in case of importing <code>Hydrochemie_Gesamt_Geosalz_v1.0.6.xlsx</code> (see here for <a href="https://github.com/KWB-R/kwb.geosalz/commit/9ea71f2eecaa1ba31ea34d780447969e47d317a8%5D" class="external-link">fix</a></p></li>
 <li><p>Add <code><a href="../reference/stop_if_duplicated_samples_found.html">stop_if_duplicated_samples_found()</a></code> for <code><a href="../reference/read_lab_bwb.html">read_lab_bwb()</a></code> and <code><a href="../reference/read_isotopes.html">read_isotopes()</a></code> to throw error in case imported dataset contains duplicated <code>sample_id</code></p></li>
 </ul><p><strong>Articles</strong></p>
-<ul><li>Added <a href="../articles/measurement-chains.html">Measurement Chains</a> data import workflow for <code>electrical conductivity</code> and <code>temperature</code>, which will be installed in productions wells in September (K10: 2022-09-27) and October 2022 (K9: 2022-10-17, K13: 2022-10-16). Data in SFTP server is downloaded, aggregated and exported to the restricted KWB cloud each weekday at 07:00:00 UTC. (see <a href="https://github.com/KWB-R/kwb.geosalz/blob/master/.github/workflows/pkgdown.yaml#L11" class="external-link">.github/pkgdown.yml#L11</a>).</li></ul></div>
+<ul><li>Added <a href="../articles/measurement-chains.html">Measurement Chains</a> data import workflow for <code>electrical conductivity</code> and <code>temperature</code>, which will be installed in productions wells in September (K10: 2022-09-27) and October 2022 (K9: 2022-10-17, K13: 2022-10-16). Data in SFTP server is downloaded, aggregated and exported to the restricted KWB cloud each weekday at 07:00:00 UTC. (see <a href="https://github.com/KWB-R/kwb.geosalz/blob/master/.github/workflows/pkgdown.yaml#L11" class="external-link">.github/pkgdown.yml#L11</a>).</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.0" id="kwbgeosalz-040-2022-08-25">
 <a href="https://github.com/KWB-R/kwb.geosalz/releases/tag/v0.4.0" class="external-link">kwb.geosalz 0.4.0</a> <small>2022-08-25</small>
@@ -93,7 +94,8 @@
 <a class="anchor" aria-label="anchor" href="#kwbgeosalz-030-2022-06-20"></a></h2>
 <p>Adding functionality for checking data availability for SVM Friedrichshagen based on available BWB data from pre-project phase (digitalised at KWB) and open-data from <a href="https://wasserportal.berlin.de" class="external-link">Wasserportal Berlin</a></p>
 <p><strong>Functions</strong></p>
-<ul><li>Add <code><a href="../reference/convert_to_sf.html">convert_to_sf()</a></code> converting different CRS projections to <code>4326</code> (OSM map used as background map)</li></ul><p><strong>Workflows</strong></p>
+<ul><li>Add <code><a href="../reference/convert_to_sf.html">convert_to_sf()</a></code> converting different CRS projections to <code>4326</code> (OSM map used as background map)</li>
+</ul><p><strong>Workflows</strong></p>
 <ul><li><p>Added new workflow <a href="../articles/wasserportal.html">Wasserportal</a> for checking available data from <a href="https://wasserportal.berlin.de" class="external-link">Wasserportal Berlin</a></p></li>
 <li><p>Updated workflow <a href="../articles/data-availability_fri.html">Data Availability WW Friedrichshagen</a> checking available data from pre-project phase (see: <a href="../articles/workflow.html">workflow</a> article)</p></li>
 </ul></div>
@@ -109,7 +111,8 @@
 <a href="https://github.com/KWB-R/kwb.geosalz/releases/tag/v0.1.0" class="external-link">kwb.geosalz 0.1.0</a> <small>2019-02-13</small>
 <a class="anchor" aria-label="anchor" href="#kwbgeosalz-010-2019-02-13"></a></h2>
 <ul><li>Release on Zenodo <a href="https://doi.org/10.5281/zenodo.2563870" class="external-link"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.2563870.svg" alt="DOI"></a>
-</li></ul></div>
+</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0.9000" id="kwbgeosalz-0109000-unreleased">kwb.geosalz 0.1.0.9000 <small>unreleased</small>
 <a class="anchor" aria-label="anchor" href="#kwbgeosalz-0109000-unreleased"></a></h2>
