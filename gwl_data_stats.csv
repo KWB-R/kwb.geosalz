@@ -9,7 +9,7 @@ Nummer;Bezirk;Betreiber;Auspraegung;Grundwasserleiter;Gelaendeoberkante_GOK_m_ue
 5428;Treptow-Köpenick;Senat;GW-Stand;Hauptgrundwasserleiter (GWL 1.3 + 2);36.03;36.40;9.00;10.00;1970-01-02;2022-10-25;19289;8542;2
 5430;Treptow-Köpenick;Senat;GW-Stand;Hauptgrundwasserleiter (GWL 1.3 + 2);34.61;34.50;9.00;10.00;1970-01-02;2022-10-25;19289;8574;2
 5431;Treptow-Köpenick;Senat;GW-Stand;Hauptgrundwasserleiter (GWL 1.3 + 2);36.21;36.00;9.00;10.00;1970-01-02;2022-10-25;19289;7832;2
-6743;Treptow-Köpenick;Senat;GW-Stand, tagesaktuell;Hauptgrundwasserleiter (GWL 1.3 + 2);32.95;33.55;1.59;2.59;1996-04-16;2022-11-16;9710;8146;1
+6743;Treptow-Köpenick;Senat;GW-Stand, tagesaktuell;Hauptgrundwasserleiter (GWL 1.3 + 2);32.95;33.55;1.59;2.59;1996-04-16;2022-11-17;9711;8147;1
 8693;Treptow-Köpenick;Senat;GW-Stand;Hauptgrundwasserleiter (GWL 1.3 + 2);35.05;35.94;12.90;14.90;1985-11-15;2022-10-25;13493;8105;2
 8964;Treptow-Köpenick;Senat;GW-Stand + GW-Güte;Hauptgrundwasserleiter (GWL 1.3 + 2);48.84;49.51;34.00;36.00;1977-01-15;2022-10-25;16719;6483;3
 10421;Treptow-Köpenick;Senat;GW-Stand, tagesaktuell + GW-Güte;Hauptgrundwasserleiter (GWL 1.3 + 2);34.91;35.58;15.00;16.95;2008-04-30;2022-11-16;5313;5255;1
@@ -22,7 +22,7 @@ Nummer;Bezirk;Betreiber;Auspraegung;Grundwasserleiter;Gelaendeoberkante_GOK_m_ue
 15163;Treptow-Köpenick;Senat;GW-Stand, tagesaktuell + GW-Güte;Hauptgrundwasserleiter (GWL 1.3 + 2);36.14;37.12;10.00;11.95;2006-04-25;2022-11-16;6049;5598;1
 15180;Treptow-Köpenick;Senat;GW-Stand, tagesaktuell;Hauptgrundwasserleiter (GWL 1.3 + 2);33.09;33.84;6.00;7.95;2006-12-18;2022-11-16;5812;5737;1
 15181;Treptow-Köpenick;Senat;GW-Stand, tagesaktuell;Hauptgrundwasserleiter (GWL 1.3 + 2);34.18;34.90;6.00;7.95;2006-12-18;2022-11-16;5812;5715;1
-17905;Treptow-Köpenick;Senat;GW-Stand;Moor-Messstelle;32.25;33.81;-0.06;0.94;2011-12-26;2022-11-17;3979;3697;1
+17905;Treptow-Köpenick;Senat;GW-Stand;Moor-Messstelle;32.25;33.81;-0.06;0.94;2011-12-26;2022-11-20;3982;3700;1
 17907;Treptow-Köpenick;Senat;GW-Stand;Moor-Messstelle;32.51;33.94;0.07;1.07;2011-09-28;2022-11-03;4054;4033;1
 17908;Treptow-Köpenick;Senat;GW-Stand;Moor-Messstelle;32.12;33.23;-0.11;0.89;2011-08-19;2022-11-16;4107;3869;1
 99868;Treptow-Köpenick;Senat;GW-Stand;Hauptgrundwasserleiter (GWL 1.3 + 2);35.08;35.81;12.00;14.00;1970-05-01;2022-10-26;19171;5119;4
