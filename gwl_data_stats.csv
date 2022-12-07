@@ -1,28 +1,28 @@
 Nummer;Bezirk;Betreiber;Auspraegung;Grundwasserleiter;Gelaendeoberkante_GOK_m_ue_NHN;Rohroberkante_m_ue_NHN;Filteroberkante_m_u_GOK;Filterunterkante_m_u_GOK;start;end;period_days;n;interval_days
 3155;Treptow-Köpenick;Senat;GW-Stand;Hauptgrundwasserleiter (GWL 1.3 + 2);34.94;35.76;3.50;10.45;2016-01-20;2022-11-11;2487;2253;1
 3156;Treptow-Köpenick;Senat;GW-Stand;Hauptgrundwasserleiter (GWL 1.3 + 2);34.94;35.68;31.00;40.00;2016-01-20;2022-11-11;2487;2345;1
-5036;Treptow-Köpenick;Senat;GW-Stand, tagesaktuell + GW-Güte;Hauptgrundwasserleiter (GWL 1.3 + 2);32.84;33.59;6.00;8.00;1994-12-21;2022-12-02;10208;8805;1
-5039;Treptow-Köpenick;Senat;GW-Stand, tagesaktuell + GW-Güte;Hauptgrundwasserleiter (GWL 1.3 + 2);33.42;34.21;7.50;9.50;1996-02-03;2022-12-02;9799;7900;1
-5040;Treptow-Köpenick;Senat;GW-Stand, tagesaktuell + GW-Güte;Hauptgrundwasserleiter (GWL 1.3 + 2);33.66;34.42;7.70;9.70;1996-02-03;2022-12-02;9799;8821;1
-5042;Treptow-Köpenick;Senat;GW-Stand, tagesaktuell + GW-Güte;Hauptgrundwasserleiter (GWL 1.3 + 2);33.54;34.30;7.00;9.00;1996-03-22;2022-12-02;9751;8380;1
-5049;Treptow-Köpenick;Senat;GW-Stand, tagesaktuell + GW-Güte;Hauptgrundwasserleiter (GWL 1.3 + 2);35.28;36.03;7.00;9.00;1996-02-03;2022-12-02;9799;8975;1
+5036;Treptow-Köpenick;Senat;GW-Stand, tagesaktuell + GW-Güte;Hauptgrundwasserleiter (GWL 1.3 + 2);32.84;33.59;6.00;8.00;1994-12-21;2022-12-05;10211;8808;1
+5039;Treptow-Köpenick;Senat;GW-Stand, tagesaktuell + GW-Güte;Hauptgrundwasserleiter (GWL 1.3 + 2);33.42;34.21;7.50;9.50;1996-02-03;2022-12-05;9802;7903;1
+5040;Treptow-Köpenick;Senat;GW-Stand, tagesaktuell + GW-Güte;Hauptgrundwasserleiter (GWL 1.3 + 2);33.66;34.42;7.70;9.70;1996-02-03;2022-12-05;9802;8824;1
+5042;Treptow-Köpenick;Senat;GW-Stand, tagesaktuell + GW-Güte;Hauptgrundwasserleiter (GWL 1.3 + 2);33.54;34.30;7.00;9.00;1996-03-22;2022-12-05;9754;8383;1
+5049;Treptow-Köpenick;Senat;GW-Stand, tagesaktuell + GW-Güte;Hauptgrundwasserleiter (GWL 1.3 + 2);35.28;36.03;7.00;9.00;1996-02-03;2022-12-05;9802;8978;1
 5428;Treptow-Köpenick;Senat;GW-Stand;Hauptgrundwasserleiter (GWL 1.3 + 2);36.03;36.40;9.00;10.00;1970-01-02;2022-10-25;19289;8542;2
 5430;Treptow-Köpenick;Senat;GW-Stand;Hauptgrundwasserleiter (GWL 1.3 + 2);34.61;34.50;9.00;10.00;1970-01-02;2022-10-25;19289;8574;2
 5431;Treptow-Köpenick;Senat;GW-Stand;Hauptgrundwasserleiter (GWL 1.3 + 2);36.21;36.00;9.00;10.00;1970-01-02;2022-10-25;19289;7832;2
-6743;Treptow-Köpenick;Senat;GW-Stand, tagesaktuell;Hauptgrundwasserleiter (GWL 1.3 + 2);32.95;33.55;1.59;2.59;1996-04-16;2022-12-02;9726;8162;1
+6743;Treptow-Köpenick;Senat;GW-Stand, tagesaktuell;Hauptgrundwasserleiter (GWL 1.3 + 2);32.95;33.55;1.59;2.59;1996-04-16;2022-12-05;9729;8165;1
 8693;Treptow-Köpenick;Senat;GW-Stand;Hauptgrundwasserleiter (GWL 1.3 + 2);35.05;35.94;12.90;14.90;1985-11-15;2022-10-25;13493;8105;2
 8964;Treptow-Köpenick;Senat;GW-Stand + GW-Güte;Hauptgrundwasserleiter (GWL 1.3 + 2);48.84;49.51;34.00;36.00;1977-01-15;2022-10-25;16719;6483;3
-10421;Treptow-Köpenick;Senat;GW-Stand, tagesaktuell + GW-Güte;Hauptgrundwasserleiter (GWL 1.3 + 2);34.91;35.58;15.00;16.95;2008-04-30;2022-12-02;5329;5271;1
+10421;Treptow-Köpenick;Senat;GW-Stand, tagesaktuell + GW-Güte;Hauptgrundwasserleiter (GWL 1.3 + 2);34.91;35.58;15.00;16.95;2008-04-30;2022-12-05;5332;5274;1
 15065;Treptow-Köpenick;Senat;GW-Stand + GW-Güte;Hauptgrundwasserleiter (GWL 1.3 + 2);45.26;46.08;30.05;32.05;2004-11-01;2022-10-25;6567;6447;1
 15152;Treptow-Köpenick;Senat;GW-Stand + GW-Güte;Hauptgrundwasserleiter (GWL 1.3 + 2);34.19;35.23;32.00;34.00;2005-02-05;2022-09-27;6443;6218;1
 15153;Treptow-Köpenick;Senat;GW-Stand + GW-Güte;Elsterzeitl. GW-Leiter (GWL 3);34.30;35.19;63.85;65.85;2005-02-05;2022-09-27;6443;6305;1
-15160;Treptow-Köpenick;Senat;GW-Stand, tagesaktuell + GW-Güte;Elsterzeitl. GW-Leiter (GWL 3);35.93;36.76;86.00;88.00;2006-04-25;2022-12-02;6065;5947;1
-15161;Treptow-Köpenick;Senat;GW-Stand, tagesaktuell;Hauptgrundwasserleiter (GWL 1.3 + 2);36.00;36.79;36.00;37.95;2006-04-25;2022-12-02;6065;6020;1
-15162;Treptow-Köpenick;Senat;GW-Stand, tagesaktuell + GW-Güte;Elsterzeitl. GW-Leiter (GWL 3);36.11;36.94;78.00;80.00;2006-04-25;2022-12-02;6065;5982;1
-15163;Treptow-Köpenick;Senat;GW-Stand, tagesaktuell + GW-Güte;Hauptgrundwasserleiter (GWL 1.3 + 2);36.14;37.12;10.00;11.95;2006-04-25;2022-12-02;6065;5614;1
-15180;Treptow-Köpenick;Senat;GW-Stand, tagesaktuell;Hauptgrundwasserleiter (GWL 1.3 + 2);33.09;33.84;6.00;7.95;2006-12-18;2022-12-02;5828;5753;1
-15181;Treptow-Köpenick;Senat;GW-Stand, tagesaktuell;Hauptgrundwasserleiter (GWL 1.3 + 2);34.18;34.90;6.00;7.95;2006-12-18;2022-12-02;5828;5731;1
-17905;Treptow-Köpenick;Senat;GW-Stand;Moor-Messstelle;32.25;33.81;-0.06;0.94;2011-12-26;2022-12-05;3997;3715;1
+15160;Treptow-Köpenick;Senat;GW-Stand, tagesaktuell + GW-Güte;Elsterzeitl. GW-Leiter (GWL 3);35.93;36.76;86.00;88.00;2006-04-25;2022-12-05;6068;5950;1
+15161;Treptow-Köpenick;Senat;GW-Stand, tagesaktuell;Hauptgrundwasserleiter (GWL 1.3 + 2);36.00;36.79;36.00;37.95;2006-04-25;2022-12-05;6068;6023;1
+15162;Treptow-Köpenick;Senat;GW-Stand, tagesaktuell + GW-Güte;Elsterzeitl. GW-Leiter (GWL 3);36.11;36.94;78.00;80.00;2006-04-25;2022-12-05;6068;5985;1
+15163;Treptow-Köpenick;Senat;GW-Stand, tagesaktuell + GW-Güte;Hauptgrundwasserleiter (GWL 1.3 + 2);36.14;37.12;10.00;11.95;2006-04-25;2022-12-05;6068;5617;1
+15180;Treptow-Köpenick;Senat;GW-Stand, tagesaktuell;Hauptgrundwasserleiter (GWL 1.3 + 2);33.09;33.84;6.00;7.95;2006-12-18;2022-12-05;5831;5756;1
+15181;Treptow-Köpenick;Senat;GW-Stand, tagesaktuell;Hauptgrundwasserleiter (GWL 1.3 + 2);34.18;34.90;6.00;7.95;2006-12-18;2022-12-05;5831;5734;1
+17905;Treptow-Köpenick;Senat;GW-Stand;Moor-Messstelle;32.25;33.81;-0.06;0.94;2011-12-26;2022-12-06;3998;3716;1
 17907;Treptow-Köpenick;Senat;GW-Stand;Moor-Messstelle;32.51;33.94;0.07;1.07;2011-09-28;2022-11-03;4054;4033;1
 17908;Treptow-Köpenick;Senat;GW-Stand;Moor-Messstelle;32.12;33.23;-0.11;0.89;2011-08-19;2022-11-16;4107;3869;1
 99868;Treptow-Köpenick;Senat;GW-Stand;Hauptgrundwasserleiter (GWL 1.3 + 2);35.08;35.81;12.00;14.00;1970-05-01;2022-10-26;19171;5119;4
