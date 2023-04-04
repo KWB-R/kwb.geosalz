@@ -112,9 +112,10 @@ swl_data_list <- stats::setNames(
     wasserportal::read_wasserportal(
       station = station, 
       from_date = "1900-01-01",
-      variables = "ws", 
+      variables = "ows", 
       type = "daily",
-      stations_crosstable = stations$crosstable)
+      stations_crosstable = stations$crosstable
+    )
   }), 
   nm = swl_master$Nummer
 )
