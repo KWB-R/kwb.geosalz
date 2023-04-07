@@ -297,14 +297,16 @@ upload_files <- c(stats_path,
                   files_path,
                   data_zip_path)
 
-res <- sapply(upload_files, function(upload_file) {
-  kwb.utils::catAndRun(messageText = sprintf("Uploading file %s", upload_file),
-                       expr = {
-                       kwb.nextcloud::upload_file(file = upload_file,
-                                                  target_path = paths$upload_dir)
-                       },
-                       dbg = TRUE)
-  })
+for (upload_file in upload_files) {
+  kwb.utils::catAndRun(
+    messageText = paste("Uploading file", upload_file),
+    expr = try(kwb.nextcloud::upload_file(
+      file = upload_file, 
+      target_path = paths$upload_dir
+    )),
+    dbg = TRUE
+  )
+}
 ```
 
 ```{r measurementchains_data-delete,  echo = FALSE, eval = con_defined & is_ghactions}
