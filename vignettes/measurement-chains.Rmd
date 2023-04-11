@@ -291,13 +291,21 @@ Subsequently the following code is run for uploading the data:
 
 
 # List paths of files to upload explicitly
-upload_files <- c(stats_path, 
-                  pdf_files,
-                  metadata_path, 
-                  files_path,
-                  data_zip_path)
+upload_files <- c(
+  stats_path, 
+  pdf_files,
+  metadata_path, 
+  files_path,
+  data_zip_path
+)
 
 for (upload_file in upload_files) {
+  
+  if (!file.exists(upload_file)) {
+    message("File does not exist: ", upload_file)
+    next
+  }
+  
   kwb.utils::catAndRun(
     messageText = paste("Uploading file", upload_file),
     expr = try(kwb.nextcloud::upload_file(
