@@ -124,15 +124,14 @@ get_meta_sheet_or_stop <- function(sheets, pattern, file)
   # Number of meta sheets
   n <- length(meta_sheets)
   
-  if (n == 0) {
-    
+  if (n == 0L) {
     kwb.utils::stopFormatted(
       "%s does not contain a sheet matching '%s'\n",
       file, pattern
     )
-    
-  } else if (n > 1) {
-    
+  }
+  
+  if (n > 1L) {
     kwb.utils::stopFormatted(
       "%s contains %d sheets matching '%s': %s\n",
       file, n, pattern, kwb.utils::stringList(meta_sheets)
@@ -186,12 +185,12 @@ read_bwb_header2 <- function(
     ))
     
     # Read the header rows
-    stopifnot(skip == 2) # Otherwise we need more column names!
+    stopifnot(skip == 2L) # Otherwise we need more column names!
     
     header <- read_from_excel(
       file, 
       sheet,
-      range = cellranger::cell_rows(c(1, skip)),
+      range = cellranger::cell_rows(c(1L, skip)),
     )
     
     header <- to_full_metadata_2(header, file, sheet)
@@ -201,7 +200,7 @@ read_bwb_header2 <- function(
       file, 
       sheet,
       range = cellranger::cell_limits(
-        ul = c(skip + 1, 1),
+        ul = c(skip + 1L, 1L),
         lr = c(NA, nrow(header))
       )
     )
@@ -268,12 +267,12 @@ read_bwb_header4 <- function(
     ))
     
     # Read the header rows
-    stopifnot(skip == 4) # Otherwise we need more column names!
+    stopifnot(skip == 4L) # Otherwise we need more column names!
     
     header <- read_from_excel(
       file, 
       sheet,
-      range = cellranger::cell_rows(c(1, skip))
+      range = cellranger::cell_rows(c(1L, skip))
     )
     
     header <- to_full_metadata_4(header, file, sheet)
@@ -283,7 +282,7 @@ read_bwb_header4 <- function(
       file, 
       sheet,
       range = cellranger::cell_limits(
-        ul = c(skip + 1, 1),
+        ul = c(skip + 1L, 1L),
         lr = c(NA, nrow(header))
       )
     )
@@ -369,7 +368,7 @@ to_full_metadata_2 <- function(header, file, sheet)
   header
 }
 
-#' Helper function: to_full_metadata4
+#' Helper function: to_full_metadata_4
 #'
 #' @param header header
 #' @param file file
@@ -443,15 +442,21 @@ cat_green_bold_0 <- function(...) {
 #' @importFrom dplyr left_join
 #' @return gathered and joined data frame
 
-gather_and_join_1 <- function(tmp_data, columns_keep, metadata, dbg = FALSE) {
+gather_and_join_1 <- function(tmp_data, columns_keep, metadata, dbg = FALSE)
+{
   kwb.utils::printIf(dbg, names(tmp_data))
   kwb.utils::printIf(dbg, columns_keep)
   
-  tidyr::gather_(
-    data = tmp_data, key_col = "VariableName_org", value_col = "DataValue",
-    gather_cols = setdiff(names(tmp_data), columns_keep)
-  ) %>%
-    dplyr::left_join(y = metadata, by = c(VariableName_org = "Name"))
+  tmp_data %>%
+    tidyr::gather_(
+      key_col = "VariableName_org", 
+      value_col = "DataValue",
+      gather_cols = setdiff(names(tmp_data), columns_keep)
+    ) %>%
+    dplyr::left_join(
+      y = metadata, 
+      by = c(VariableName_org = "Name")
+    )
 }
 
 #' Helper function: gather_and_join_2
@@ -464,11 +469,16 @@ gather_and_join_1 <- function(tmp_data, columns_keep, metadata, dbg = FALSE) {
 #' @return gathered and joined data frame
 gather_and_join_2 <- function(tmp_content, columns_keep, header)
 {
-  tidyr::gather_(
-    data = tmp_content, key_col = "key", value_col = "DataValue",
-    gather_cols = setdiff(names(tmp_content), columns_keep)
-  ) %>%
-    dplyr::left_join(y = header, by = "key")
+  tmp_content %>% 
+    tidyr::gather_(
+      key_col = "key", 
+      value_col = "DataValue",
+      gather_cols = setdiff(names(tmp_content), columns_keep)
+    ) %>%
+    dplyr::left_join(
+      y = header, 
+      by = "key"
+    )
 }
 
 #' Import: read_bwb_data
