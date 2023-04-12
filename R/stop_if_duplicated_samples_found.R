@@ -7,12 +7,14 @@
 #' @return error in case duplicated samples were found
 #' @export
 #'
-#' @importFrom kwb.utils isNullOrEmpty stopFormatted
+#' @importFrom kwb.utils isNullOrEmpty selectColumns stopFormatted
 stop_if_duplicated_samples_found <- function(df, col_sampleid, sheet = "")
 {
-  is_duplicated_sampleid <- duplicated(df[[col_sampleid]])
+  sample_ids <- kwb.utils::selectColumns(df, col_sampleid)
   
-  if (any(is_duplicated_sampleid)) {
+  is_duplicated <- duplicated(sample_ids)
+  
+  if (any(is_duplicated)) {
     
     kwb.utils::stopFormatted(
       paste(
@@ -22,7 +24,7 @@ stop_if_duplicated_samples_found <- function(df, col_sampleid, sheet = "")
       col_sampleid, 
       ifelse(kwb.utils::isNullOrEmpty(sheet), "", sprintf("in '%s'", sheet)),
       path,
-      paste(df[[col_sampleid]][is_duplicated_sampleid], collapse = "\n")
+      paste(sample_ids[is_duplicated], collapse = "\n")
     )
   }
 }
