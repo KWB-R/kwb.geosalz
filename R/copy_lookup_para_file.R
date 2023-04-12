@@ -20,12 +20,13 @@ copy_lookup_para_file <- function(
 )
 {
   from_dir <- normalizePath(from_dir)
-  
   to_dir <- normalizePath(to_dir)
   
   from_path <- normalizePath(dir(
-    from_dir, file_pattern,
-    recursive = TRUE, full.names = TRUE
+    from_dir, 
+    file_pattern,
+    recursive = TRUE, 
+    full.names = TRUE
   ))
   
   if (!file.exists(from_path)) {
