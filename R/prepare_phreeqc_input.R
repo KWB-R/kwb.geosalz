@@ -11,7 +11,9 @@ get_phreeqc_data <- function(lab_bwb)
   dat <- lab_bwb %>%
     dplyr::filter(!kwb.utils::isNaOrEmpty(.data$par_name_phreeqc))
   
-  stopifnot(all(dat$unit[!dat$par_name_phreeqc %in% c("temp", "pH")] == "mg/l"))
+  stopifnot(all(
+    dat$unit[!dat$par_name_phreeqc %in% c("temp", "pH")] == "mg/l"
+  ))
   
   dat %>% 
     dplyr::select(

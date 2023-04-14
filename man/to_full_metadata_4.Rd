@@ -2,7 +2,7 @@
 % Please edit documentation in R/read_bwb_data.R
 \name{to_full_metadata_4}
 \alias{to_full_metadata_4}
-\title{Helper function: to_full_metadata4}
+\title{Helper function: to_full_metadata_4}
 \usage{
 to_full_metadata_4(header, file, sheet)
 }
@@ -17,5 +17,5 @@ to_full_metadata_4(header, file, sheet)
 data frame with metadata for header4 (EXCEL) files
 }
 \description{
-Helper function: to_full_metadata4
+Helper function: to_full_metadata_4
 }

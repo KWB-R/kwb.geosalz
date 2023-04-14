@@ -42,12 +42,14 @@ get_measurementchains_metadata <- function(
 #' @importFrom stringr str_length
 create_sftp_connection <- function()
 {
-  con <- get_environment_variables(
+  con_vars <- c(
     server = "MESSKETTEN_SERVER", 
     username = "MESSKETTEN_USER", 
     password = "MESSKETTEN_PASSWORD"
   )
-
+  
+  con <- do.call(get_environment_variables, as.list(con_vars))
+  
   not_defined <- sapply(con, stringr::str_length) == 0L
   
   if (any(not_defined)) {
@@ -80,11 +82,16 @@ create_sftp_connection <- function()
 #' mc_files <- kwb.geosalz::get_measurementchains_files()
 #' str(mc_files)
 #' }
-get_measurementchains_files <- function(sftp_connection = create_sftp_connection(),
-                                        debug = FALSE)
+get_measurementchains_files <- function(
+    sftp_connection = create_sftp_connection(),
+    debug = FALSE
+)
 {
-  files <-
-    sftp::sftp_list(sftp_connection, recurse = TRUE, verbose = debug)
+  files <- sftp::sftp_list(
+    sftp_connection, 
+    recurse = TRUE, 
+    verbose = debug
+  )
   
   files %>%
     dplyr::filter(.data$type != "dir") %>%
@@ -97,13 +104,18 @@ get_measurementchains_files <- function(sftp_connection = create_sftp_connection
     dplyr::rename(sftp_path = .data$name) %>%
     dplyr::mutate(
       galerie = stringr::str_extract(.data$galerywellid, "^[A-Z]"),
-      brunnen_nummer = stringr::str_extract(.data$galerywellid, "[0-9]{1,3}$") %>%
+      brunnen_nummer = stringr::str_extract(
+        .data$galerywellid, 
+        "[0-9]{1,3}$"
+      ) %>%
         as.integer()
     ) %>%
     dplyr::mutate(
-      sensorid_datetime = stringr::str_replace(.data$sensorid_datetime,
-                                               pattern = "-202",
-                                               "_202")
+      sensorid_datetime = stringr::str_replace(
+        .data$sensorid_datetime,
+        pattern = "-202",
+        "_202"
+      )
     ) %>%
     tidyr::separate(
       .data$sensorid_datetime,
@@ -111,16 +123,21 @@ get_measurementchains_files <- function(sftp_connection = create_sftp_connection
       sep = "_"
     ) %>%
     dplyr::mutate(
-      sensor_endnummer = stringr::str_extract(.data$sensor_id, "[0-9]$") %>%
+      sensor_endnummer = stringr::str_extract(
+        .data$sensor_id, 
+        "[0-9]$"
+      ) %>%
         as.integer(),
       sensor_id = as.integer(.data$sensor_id),
       datum_uhrzeit = stringr::str_remove(.data$datum_uhrzeit, "\\.csv$")
     ) %>%
-    dplyr::mutate(datum_uhrzeit = as.POSIXct(.data$datum_uhrzeit,
-                                             format = "%Y-%m-%d-%H%M",
-                                             #data is always CET without switching
-                                             #https://stackoverflow.com/a/38333522
-                                             tz = "Etc/GMT-1")) %>%
+    dplyr::mutate(datum_uhrzeit = as.POSIXct(
+      .data$datum_uhrzeit,
+      format = "%Y-%m-%d-%H%M",
+      #data is always CET without switching
+      #https://stackoverflow.com/a/38333522
+      tz = "Etc/GMT-1"
+    )) %>%
     dplyr::select(-.data$galerywellid) %>%
     tibble::as_tibble()
 }
@@ -159,21 +176,23 @@ download_measurementchains_data <- function(
 {
   fs::dir_create(target_directory)
   
-  
   dbg_msg <- function(text) {
-    sprintf("Download %d measurement chains files %s",
-            length(sftp_paths),
-            text)
+    sprintf(
+      "Download %d measurement chains files %s",
+      length(sftp_paths),
+      text
+    )
   }
   
   if (run_parallel) {
+    
     ncores <- parallel::detectCores()
     
     cl <- parallel::makeCluster(ncores)
     
     dl_list <- kwb.utils::catAndRun(
-      messageText = dbg_msg(sprintf("(using %d CPU cores)",
-                                    ncores)),
+      messageText = dbg_msg(sprintf("(using %d CPU cores)", ncores)),
+      dbg = debug,
       expr = parallel::parLapply(cl, sftp_paths, function(sftp_path) {
         try(sftp::sftp_download(
           file = sftp_path,
@@ -181,15 +200,16 @@ download_measurementchains_data <- function(
           tofolder = target_directory,
           verbose = FALSE
         ))
-      }),
-      dbg = debug
+      })
     )
     
     parallel::stopCluster(cl)
     
   } else {
+    
     dl_list <- kwb.utils::catAndRun(
       messageText = dbg_msg("(using 1 CPU core)"),
+      dbg = debug,
       expr = lapply(sftp_paths, function(sftp_path) {
         try(sftp::sftp_download(
           file = sftp_path,
@@ -197,8 +217,7 @@ download_measurementchains_data <- function(
           tofolder = target_directory,
           verbose = debug
         ))
-      }),
-      dbg = debug
+      })
     )
   }
   
@@ -210,8 +229,10 @@ download_measurementchains_data <- function(
   }
   
   if (all(failed)) {
-    kwb.utils::stopFormatted("Download for all %d measurement chains files failed!",
-                             length(sftp_paths))
+    kwb.utils::stopFormatted(
+      "Download for all %d measurement chains files failed!",
+      length(sftp_paths)
+    )
   }
   
   csv_paths <- sapply(sftp_paths[!failed], function(sftp_path) {
@@ -219,7 +240,7 @@ download_measurementchains_data <- function(
   })
   
   tibble::tibble(
-    file_id = seq_len(length(csv_paths)),
+    file_id = seq_along(csv_paths),
     sftp_path = names(csv_paths),
     local_path = as.character(csv_paths)
   )
@@ -250,12 +271,15 @@ download_measurementchains_data <- function(
 #' mc_data <- kwb.geosalz::read_measurementchain_data(csv_files[1])
 #'
 #' }
-read_measurementchain_data <- function(path) {
+read_measurementchain_data <- function(path)
+{
   readr::read_csv(
     file = path,
-    locale = readr::locale(#data is always CET without switching
+    locale = readr::locale(
+      #data is always CET without switching
       #https://stackoverflow.com/a/38333522
-      tz = "Etc/GMT-1"),
+      tz = "Etc/GMT-1"
+    ),
     col_types = readr::cols(
       "Geraet" = readr::col_integer(),
       "DatumUhrzeit" = readr::col_datetime(),
@@ -263,8 +287,10 @@ read_measurementchain_data <- function(path) {
       "Temperatur" = readr::col_double()
     )
   ) %>%
-    dplyr::rename(sensor_id = .data$Geraet,
-                  datum_uhrzeit = .data$DatumUhrzeit) %>%
+    dplyr::rename(
+      sensor_id = .data$Geraet,
+      datum_uhrzeit = .data$DatumUhrzeit
+    ) %>%
     tidyr::pivot_longer(
       names_to = "parameter",
       values_to = "messwert",
@@ -294,82 +320,95 @@ read_measurementchain_data <- function(path) {
 #' mc_data <- kwb.geosalz::read_measurementchains_data(csv_files)
 #'
 #' }
-read_measurementchains_data <- function(csv_files,
-                                        datetime_installation = as.POSIXct("2022-09-27 11:00:00", 
-                                                                           tz = "Etc/GMT-1"),
-                                        run_parallel = TRUE,
-                                        debug = FALSE) {
+read_measurementchains_data <- function(
+    csv_files,
+    datetime_installation = as.POSIXct("2022-09-27 11:00:00", tz = "Etc/GMT-1"),
+    run_parallel = TRUE,
+    debug = FALSE
+) 
+{
+  files_exist <- fs::file_exists(csv_files$local_path)
   
-  csv_files_exist <- fs::file_exists(csv_files$local_path)
-  if (!all(csv_files_exist)) {
-    msg <-
-      sprintf(
-        paste0(
-          "The following %d (out of %d) local csv files do not ",
-          "exist:\n\n%s\n\nPlease run kwb.geosalz::download_measurementchains_data() ",
-          "again!"
-        ),
-        sum(!csv_files_exist),
-        nrow(csv_files),
-        paste0(csv_files$local_path[!csv_files_exist], collapse = "\n")
-      )
-    stop(msg)
+  if (!all(files_exist)) {
+    kwb.utils::stopFormatted(
+      paste0(
+        "The following %d (out of %d) local csv files do not ",
+        "exist:\n\n%s\n\nPlease run kwb.geosalz::download_measurementchains_data() ",
+        "again!"
+      ),
+      sum(!files_exist),
+      nrow(csv_files),
+      paste0(csv_files$local_path[!files_exist], collapse = "\n")
+    )
   }
   
   dbg_msg <- function(text) {
-    sprintf("Importing %d measurement chains files %s",
-            nrow(csv_files),
-            text)
+    sprintf(
+      "Importing %d measurement chains files %s",
+      nrow(csv_files),
+      text
+    )
   }
   
   if (run_parallel) {
+    
     ncores <- parallel::detectCores()
     
     cl <- parallel::makeCluster(ncores)
     
-    data_list <- kwb.utils::catAndRun(messageText = dbg_msg(sprintf("(using %d CPU cores)",
-                                                                    ncores)),
-                                      expr = {
-                                        stats::setNames(
-                                          parallel::parLapply(cl, csv_files$local_path, read_measurementchain_data),
-                                          csv_files$file_id
-                                        )
-                                      },
-                                      dbg = debug)
+    data_list <- kwb.utils::catAndRun(
+      messageText = dbg_msg(sprintf("(using %d CPU cores)", ncores)),
+      expr = {
+        stats::setNames(
+          parallel::parLapply(
+            cl, 
+            csv_files$local_path, 
+            read_measurementchain_data
+          ),
+          csv_files$file_id
+        )
+      },
+      dbg = debug
+    )
     
     parallel::stopCluster(cl)
     
   } else {
+    
     data_list <- kwb.utils::catAndRun(
       messageText = dbg_msg("(using 1 CPU core)"),
       expr = {
-        stats::setNames(lapply(csv_files$local_path, read_measurementchain_data),
-                        nm = csv_files$file_id)
+        stats::setNames(
+          lapply(csv_files$local_path, read_measurementchain_data),
+          nm = csv_files$file_id
+        )
       },
       dbg = TRUE
     )
   }
   
-  
-  dat <- dplyr::bind_rows(data_list, .id = "file_id")  %>%
+  dat <- data_list %>%
+    dplyr::bind_rows(.id = "file_id") %>%
     dplyr::mutate(file_id = as.integer(.data$file_id)) %>%
-    dplyr::arrange(.data$parameter,
-                   .data$sensor_id,
-                   .data$datum_uhrzeit) 
-
-  if(kwb.utils::isNullOrEmpty(datetime_installation)) {
+    dplyr::arrange(
+      .data$parameter,
+      .data$sensor_id,
+      .data$datum_uhrzeit
+    ) 
+  
+  if (kwb.utils::isNullOrEmpty(datetime_installation)) {
     return(dat)  
   }
   
-  
-  msg <- sprintf("Filtering out 'lab' measurements before '%s' (installation in K10)", 
-                 datetime_installation)
-  kwb.utils::catAndRun(msg,
-                       expr = {
-                         dat %>%
-                           dplyr::filter(.data$datum_uhrzeit >= datetime_installation)
-                       },
-                       dbg = debug)
-
-  
+  kwb.utils::catAndRun(
+    messageText = sprintf(
+      "Filtering out 'lab' measurements before '%s' (installation in K10)", 
+      datetime_installation
+    ),
+    expr = {
+      dat %>%
+        dplyr::filter(.data$datum_uhrzeit >= datetime_installation)
+    },
+    dbg = debug
+  )
 }

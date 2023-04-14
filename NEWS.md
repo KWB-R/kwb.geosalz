@@ -1,3 +1,13 @@
+# [kwb.geosalz 0.6.0](https://github.com/KWB-R/kwb.geosalz/releases/tag/v0.6.0) <small>2023-04-14</small>
+
+* Fix GitHub Actions failure: 
+    - Add dependency on kwb.nextcloud (required by vignette
+    measurement-chains.Rmd)
+    - Consider change of variable name in new Wasserportal API in vignette
+    wasserportal.Rmd
+* Fix bug in `create_sftp_connection()`: provide variable `con_vars` (again)
+* Add some error handling to vignette measurement-chains.Rmd
+
 # [kwb.geosalz 0.5.0](https://github.com/KWB-R/kwb.geosalz/releases/tag/v0.5.0) <small>2022-10-11</small>
 
 * Bugfix: fix `read_lab_bwb()` leading to crash in case of importing `Hydrochemie_Gesamt_Geosalz_v1.0.6.xlsx`

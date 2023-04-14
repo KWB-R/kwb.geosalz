@@ -25,7 +25,7 @@ convert_to_sf <- function(
   df %>% 
     sf::st_as_sf(
       coords = c(col_coord_x, col_cood_y), 
-      crs =  crs_source
+      crs = crs_source
     ) %>%
     sf::st_transform(
       crs = crs_target
