@@ -13,6 +13,9 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
+# Load pipe operator
+`%>%` <- magrittr::`%>%`
+
 # Helper function to check if all strings are not empty
 all_defined <- function(x) {
   all(sapply(x, stringr::str_length) > 0L)
