@@ -54,8 +54,8 @@ well is given in column `sensor_endnummer`. The identifier of the production
 well that the sensor is located in is given in column `brunnen_nummer`.
 
 ```{r, echo = FALSE}
-mc_metadata <- kwb.geosalz::get_measurementchains_metadata()
-DT::datatable(mc_metadata, caption = "Table 1: Metadata of Measurement Chains")
+metadata <- kwb.geosalz::get_measurementchains_metadata()
+DT::datatable(metadata, caption = "Table 1: Metadata of Measurement Chains")
 ```
 
 Each sensor (type: `WLF05`, `link_to_manufacturer_factsheet`: `to_do:
@@ -124,8 +124,8 @@ user-defined directory on your local device.
 library(kwb.geosalz)
 
 ### Metadata of measurement chains (see also Table 1 above)
-mc_metadata <- kwb.geosalz::get_measurementchains_metadata()
-str(mc_metadata)
+metadata <- kwb.geosalz::get_measurementchains_metadata()
+str(metadata)
 
 ### Tibble with Information on available measurement chain files on SFTP server
 mc_files <- kwb.geosalz::get_measurementchains_files()
@@ -204,7 +204,7 @@ data_zip_path <- kwb.geosalz::write_measurementchains_data(
 size_data_zip <- fs::file_size(data_zip_path)
 size_data_csv / size_data_zip
 
-### Export "mc_files" and "mc_metadata" to csv
+### Export "mc_files" and "metadata" to csv
 extract_data_timeperiod <- function(data_path) {
   basename(data_path) %>% 
     kwb.utils::replaceFileExtension("") %>%  
@@ -228,7 +228,7 @@ stats_path <- write_csv(mc_data_stats,
                         postfix = extract_data_timeperiod(data_zip_path),
                         target_directory = paths$export_dir)
 
-metadata_path <- write_csv(mc_metadata, 
+metadata_path <- write_csv(metadata, 
                            postfix = extract_data_timeperiod(data_zip_path),
                            target_directory = paths$export_dir)
 
