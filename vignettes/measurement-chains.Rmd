@@ -13,15 +13,15 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
+all_defined <- function(x) all(sapply(x, stringr::str_length) > 0L)
+
 con <- kwb.geosalz:::get_environment_variables(
   server = "MESSKETTEN_SERVER", 
   user   = "MESSKETTEN_USER", 
   pw     = "MESSKETTEN_PASSWORD"
 )
 
-con_is_defined <- sapply(con, stringr::str_length) > 0L
-
-con_defined <- all(con_is_defined)
+con_defined <- all_defined(con)
 
 nc <- kwb.geosalz:::get_environment_variables(
   server = "NEXTCLOUD_URL", 
@@ -29,9 +29,7 @@ nc <- kwb.geosalz:::get_environment_variables(
   pw     = "NEXTCLOUD_PASSWORD"
 )
 
-nc_is_defined <- sapply(nc, stringr::str_length) > 0L
-
-nc_defined <- all(nc_is_defined)
+nc_defined <- all_defined(nc)
 
 is_ghactions <- identical(Sys.getenv("CI"), "true")
 
