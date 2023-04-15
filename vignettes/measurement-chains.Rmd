@@ -83,21 +83,25 @@ the pumping regime.
 ### Define Paths 
 
 ```{r define_paths,  eval = con_defined}
-paths_list <- list(
- local_dir = fs::path_abs(tempdir()),
- # Define target directory for download of measurement chain `.csv` files
- download_dir = "<local_dir>/download", 
- # Local directory for exporting imported data to ".csv" and ".zip" 
- export_dir = "<local_dir>/export", 
- # Upload KWB cloud directory for imported data in "export_dir"
- upload_dir = "projects/GeoSalz/Monitoring/messketten"
-)
+# Define paths to directories, using <placeholder> replacements
+paths <- kwb.utils::resolve(list(
+  
+  # Local temporary directory
+  local_dir = fs::path_abs(tempdir()),
+  
+  # Target directory for downloaded measurement chain files (.csv)
+  download_dir = "<local_dir>/download", 
+ 
+  # Local directory for aggregated data (.csv and .zip)
+  export_dir = "<local_dir>/export", 
+ 
+  # KWB cloud directory to which data in "export_dir" is uploaded
+  upload_dir = "projects/GeoSalz/Monitoring/messketten"
+))
 
-paths <- kwb.utils::resolve(paths_list)
-
+# Print all paths
 paths
 ```
-
 
 ### Define SFTP Login
 
