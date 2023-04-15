@@ -45,14 +45,15 @@ local <- con_defined & !is_ghactions
 
 ## Background 
 
-One measurement chain consist of six sensors (column `sensor_endnummer` in
-`Table 1`), which will be placed into one production well, but at different
-filter depths. In total three measurement chains will be installed into three
-different production wells (column: `brunnen_nummer` in `Table 1`) as shown in
-detail in `Table 1` below:
+One *measurement chain* consists of six sensors that are placed in one
+production well, but at different filter depths. In total, three measurement
+chains will be installed in three different production wells.
+
+Table 1 below lists all individual sensors. The number of the sensor within the
+well is given in column `sensor_endnummer`. The identifier of the production
+well that the sensor is located in is given in column `brunnen_nummer`.
 
 ```{r, echo = FALSE}
-library(kwb.geosalz)
 mc_metadata <- kwb.geosalz::get_measurementchains_metadata()
 DT::datatable(mc_metadata, caption = "Table 1: Metadata of Measurement Chains")
 ```
