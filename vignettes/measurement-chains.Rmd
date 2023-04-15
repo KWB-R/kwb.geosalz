@@ -13,159 +13,178 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
+# Load pipe operator
+`%>%` <- magrittr::`%>%`
+
+# Helper function to check if all strings are not empty
+all_defined <- function(x) {
+  all(sapply(x, stringr::str_length) > 0L)
+}
+
+# Get environment variables for access to SFTP server with input data
 con <- kwb.geosalz:::get_environment_variables(
   server = "MESSKETTEN_SERVER", 
   user   = "MESSKETTEN_USER", 
   pw     = "MESSKETTEN_PASSWORD"
 )
 
-con_is_defined <- sapply(con, stringr::str_length) > 0L
-
-con_defined <- all(con_is_defined)
-
+# Get environment variables for access to Nextcloud server
 nc <- kwb.geosalz:::get_environment_variables(
   server = "NEXTCLOUD_URL", 
   user   = "NEXTCLOUD_USER", 
   pw     = "NEXTCLOUD_PASSWORD"
 )
 
-nc_is_defined <- sapply(nc, stringr::str_length) > 0L
+# Are all environment variables defined?
+con_defined <- all_defined(con)
+nc_defined <- all_defined(nc)
 
-nc_defined <- all(nc_is_defined)
-
+# Is this script running on a GitHub server?
 is_ghactions <- identical(Sys.getenv("CI"), "true")
 
+# Is this script running locally (with access to SFTP server)?
 local <- con_defined & !is_ghactions
-
 ```
 
 ## Background 
 
-One measurement chain consist of six sensors (column `sensor_endnummer` in
-`Table 1`), which will be placed into one production well, but at different
-filter depths. In total three measurement chains will be installed into three
-different production wells (column: `brunnen_nummer` in `Table 1`) as shown in
-detail in `Table 1` below:
+One *measurement chain* consists of six sensors that are placed in one
+production well, but at different filter depths. In total, three measurement
+chains will be installed in three different production wells.
+
+Table 1 below lists all individual sensors. The number of the sensor within the
+well is given in column `sensor_endnummer`. The identifier of the production
+well that the sensor is located in is given in column `brunnen_nummer`.
 
 ```{r, echo = FALSE}
-library(kwb.geosalz)
-mc_metadata <- kwb.geosalz::get_measurementchains_metadata()
-DT::datatable(mc_metadata, caption = "Table 1: Metadata of Measurement Chains")
+metadata <- kwb.geosalz::get_measurementchains_metadata()
+DT::datatable(metadata, caption = paste(
+  "Table 1: Metadata on Measurement Chains. Each row represents a sensor."
+))
 ```
 
-Each sensor (type: `WLF05`, `link_to_manufacturer_factsheet`: `to_do:
-add-link-to-factsheet-on-kwb-cloud`) measures the the following two parameters
-with the characteristics summarized below:
+Each sensor (type: *WLF05*, **TODO**: add-link-to-factsheet-on-kwb-cloud)
+measures two parameters with the following characteristics:
 
-- `electrical conductivity`: 
+- electrical conductivity:
+    + measurement range: 0 - 20 mS
+    + measurement range detection: automatic
+    + typical accuracy: +/- 1.5 % of measurement value
 
-+ measurement range: `0 - 20 mS`
-+ measurement range detection: `automatic`
-+ typical accuracy: +/- 1.5 % of measurement value
+- temperature:
+    + measurement range: 0 - 50 `r cat("\u00B0")` Celsius
+    + measurement resolution: 0.1 `r cat("\u00B0")` Celsius
+    + typical accuracy: <= 0.1 `r cat("\u00B0")` Celsius
 
-- `temperature`:
-
-+ measurement range: `0 - 50 \u00B0 Celsius`
-+ measurement resolution: `0.1 \u00B0 Celsius`
-+ typical accuracy: `<= 0.1 \u00B0 Celsius`
-
-The maximum `temporal resolution` of each sensor is `every second`. Within the 
-project `GeoSalz` a measurement `every 5 minutes` is proposed by KWB in order to 
-be able to detect potential salinity shifts due to a switched pumping regime.
+The maximum temporal resolution that a sensor can provide is "every second".
+Within the GeoSalz project, measurements are taken every 5 minutes. This should
+be sufficient to detect potential salinity shifts that are caused by changes in
+the pumping regime.
 
 ## Data Management 
 
 ### Define Paths 
 
 ```{r define_paths,  eval = con_defined}
-paths_list <- list(
- local_dir = fs::path_abs(tempdir()),
- # Define target directory for download of measurement chain `.csv` files
- download_dir = "<local_dir>/download", 
- # Local directory for exporting imported data to ".csv" and ".zip" 
- export_dir = "<local_dir>/export", 
- # Upload KWB cloud directory for imported data in "export_dir"
- upload_dir = "projects/GeoSalz/Monitoring/messketten"
-)
+# Define paths to directories, using <placeholder> replacements
+paths <- kwb.utils::resolve(list(
+  
+  # Local temporary directory
+  local_dir = fs::path_abs(tempdir()),
+  
+  # Target directory for downloaded measurement chain files (.csv)
+  download_dir = "<local_dir>/download", 
+ 
+  # Local directory for aggregated data (.csv and .zip)
+  export_dir = "<local_dir>/export", 
+ 
+  # KWB cloud directory to which data in "export_dir" is uploaded
+  upload_dir = "projects/GeoSalz/Monitoring/messketten"
+))
 
-paths <- kwb.utils::resolve(paths_list)
-
+# Print all paths
 paths
 ```
 
-
 ### Define SFTP Login
 
-Run `usethis::edit_r_environ()` to edit the R `.Renviron` file and add the 
-following three environment variables.
+Run `usethis::edit_r_environ()` to edit the `.Renviron` file. The file defines
+environment variables that are to be made accessible during an R session. Add
+the following three rows, defining three more environment variables, to the
+file. The environment variables are required to log in to the SFTP server from
+which input data are downloaded.
 
 ```
-MESSKETTEN_SERVER = <sftp_url>
-MESSKETTEN_USER = <sftp_username>
-MESSKETTEN_PASSWORD = <sftp_userpassword>
+MESSKETTEN_SERVER=<sftp_url>
+MESSKETTEN_USER=<sftp_username>
+MESSKETTEN_PASSWORD=<sftp_userpassword>
 ```
 
-Finally save the `.Renviron` file and restart `R(Studio)`. Subsequently the code
-below will work (in case the SFTP login credentials were defined correctly!) and
-assure that the `measurement chains` data (i.e. parameters `electrical
-conductivity` and `temperature`) will be downloaded from the `SFTP server` to a
-user-defined directory on your local device.
+Replace the placeholders `<sftp_url>`, `<sftp_username>`, `<sftp_userpassword>`
+with the URL, the user name, and the password, respectively, that are required
+to get access to the SFTP server.
 
+Save the `.Renviron` file and restart the R session (e.g. with "Session/Restart
+R" from the menu in RStudio) to make the environment variables available in R.
 
+In case that the SFTP login credentials are correct, the code below should work.
+It downloads the measurement chains data (i.e. parameters electrical
+conductivity and temperature) from the SFTP server to a user-defined directory
+on your local device.
 
 ### Data Download
 
 ```{r measurementchains_data-download,  eval = con_defined}
-library(kwb.geosalz)
+# Metadata of measurement chains (see also Table 1 above)
+metadata <- kwb.geosalz::get_measurementchains_metadata()
+str(metadata)
 
-### Metadata of measurement chains (see also Table 1 above)
-mc_metadata <- kwb.geosalz::get_measurementchains_metadata()
-str(mc_metadata)
-
-### Tibble with Information on available measurement chain files on SFTP server
+# Information on available measurement chain files on SFTP server
 mc_files <- kwb.geosalz::get_measurementchains_files()
 
 str(mc_files)
 head(mc_files)
 
-# Download of measurement chain `.csv` files from SFTP server
+# Download measurement chain files (.csv) from SFTP server
 csv_files <- kwb.geosalz::download_measurementchains_data(
   sftp_paths = mc_files$sftp_path,
   target_directory = paths$download_dir,
   debug = TRUE
 )
 
+# Print the paths to the downloaded files
 csv_files
 ```
 
 ### Data Import
 
-The downloaded `.csv` measurement chains files will be imported into R by
-running the code below:
+The following code imports the downloaded measurement chains files (.csv) into
+R:
 
 ```{r measurementchains_data-import,  eval = con_defined}
-### print error in case no csv file is available
+# Stop in case that no csv file is available
 stopifnot(nrow(csv_files) > 0L) 
 
-## CSV import using multiple CPU cores
+# Import csv files using multiple CPU cores
 mc_data <- kwb.geosalz::read_measurementchains_data(
   csv_files,
   run_parallel = TRUE,
   debug = TRUE
 )
-
-
 ```
 
-In a nutshell the following datasets were imported into R: 
+The following datasets were imported into R: 
 
-```{r measurementchains_data-import_stats,  eval = con_defined}
-mc_data_stats <- kwb.geosalz::get_measurmentchains_data_stats(mc_data) %>% 
-  dplyr::arrange(.data$parameter, 
-                 dplyr::desc(.data$sensor_id))
+```{r measurementchains_data-import_stats, eval = con_defined}
+mc_data_stats <- mc_data %>%
+  kwb.geosalz::get_measurmentchains_data_stats() %>% 
+  dplyr::arrange(
+    .data$parameter, 
+    dplyr::desc(.data$sensor_id)
+  )
 ```
 
-```{r measurementchains_data-import_stats_table, echo = local,  eval = local }
+```{r measurementchains_data-import_stats_table, echo = local, eval = local }
 DT::datatable(mc_data_stats)
 ```
 
@@ -175,10 +194,10 @@ These cover the time period from `r min(mc_data_stats$datetime_min)` to
 
 ### Data Export
 
-```{r measurementchains_data-export,  eval = con_defined}
+```{r measurementchains_data-export, eval = con_defined}
 debug <- TRUE
 
-### Export "mc_data" to csv file
+# Export "mc_data" to csv file
 data_csv_path <- kwb.geosalz::write_measurementchains_data(
   mc_data,
   target_directory = paths$export_dir,
@@ -188,7 +207,7 @@ data_csv_path <- kwb.geosalz::write_measurementchains_data(
 
 size_data_csv <- fs::file_size(data_csv_path)
 
-### Export "mc_data" to zip file (~10x less disk space for test dataset)
+# Export "mc_data" to zip file (~10x less disk space for test dataset)
 data_zip_path <- kwb.geosalz::write_measurementchains_data(
   mc_data,
   target_directory = paths$export_dir,
@@ -199,65 +218,53 @@ data_zip_path <- kwb.geosalz::write_measurementchains_data(
 size_data_zip <- fs::file_size(data_zip_path)
 size_data_csv / size_data_zip
 
-### Export "mc_files" and "mc_metadata" to csv
 extract_data_timeperiod <- function(data_path) {
   basename(data_path) %>% 
     kwb.utils::replaceFileExtension("") %>%  
     stringr::str_remove("^mc[-|_]data")
 }
 
-write_csv <- function(df, postfix = "", target_directory) {
-  
-fs::dir_create(target_directory)  
-  
-df_name <- deparse(substitute(df))
-
-target_path <- file.path(target_directory, 
-                         paste0(df_name, postfix,  ".csv"))
-
-readr::write_csv(df, target_path)
-target_path
+# Define helper function to write a csv file in a target directory
+write_csv <- function(df, postfix = "", target_dir) {
+  fs::dir_create(target_dir)
+  name <- deparse(substitute(df))
+  file <- file.path(target_dir, paste0(name, postfix,  ".csv"))
+  readr::write_csv(df, file)
+  file
 }
 
-stats_path <- write_csv(mc_data_stats,
-                        postfix = extract_data_timeperiod(data_zip_path),
-                        target_directory = paths$export_dir)
+postfix <- extract_data_timeperiod(data_zip_path)
+target_dir <- paths$export_dir
 
-metadata_path <- write_csv(mc_metadata, 
-                           postfix = extract_data_timeperiod(data_zip_path),
-                           target_directory = paths$export_dir)
+# Export data and metadata to csv files
+stats_path <- write_csv(mc_data_stats, postfix, target_dir)
+metadata_path <- write_csv(metadata, postfix, target_dir)
+files_path <- write_csv(mc_files, postfix, target_dir)
 
-
-files_path <- write_csv(mc_files, 
-                        postfix = extract_data_timeperiod(data_zip_path),
-                        target_directory = paths$export_dir)
-
+# Define function that plots data to a pdf file
 plot_to_pdf <- function(mc_data, para, target_dir = ".", debug = TRUE) {
-plts <- kwb.geosalz::plot_measurementchains(mc_data, para)
-
-sapply(names(plts), function(name) {
-path <-  file.path(target_dir, sprintf("mc_data_%s.pdf", name))
-kwb.utils::catAndRun(messageText = sprintf("Writting '%s' to '%s'", 
-                                           name, 
-                                           path),
-                     expr = {
-                       kwb.utils::preparePdf(path, 
-                                             width.cm = 25, 
-                                             height.cm = 15)
-                       print(plts[[name]])
-                       dev.off()
-                       path 
-                       }, 
-                     dbg = debug)
- })
+  
+  plots <- kwb.geosalz::plot_measurementchains(mc_data, para)
+  
+  sapply(names(plots), function(name) {
+    path <-  file.path(target_dir, sprintf("mc_data_%s.pdf", name))
+    kwb.utils::catAndRun(
+      sprintf("Writting '%s' to '%s'", name, path),
+      expr = {
+        kwb.utils::preparePdf(path, width.cm = 25, height.cm = 15)
+        print(plots[[name]])
+        dev.off()
+        path 
+      }, 
+      dbg = debug
+    )
+  })
 }
 
-pdf_files <- c(plot_to_pdf(mc_data, 
-                           "Leitfaehigkeit", 
-                           target_dir = paths$export_dir), 
-               plot_to_pdf(mc_data, 
-                           "Temperatur", 
-                           target_dir = paths$export_dir))
+pdf_files <- c(
+  plot_to_pdf(mc_data, "Leitfaehigkeit", paths$export_dir), 
+  plot_to_pdf(mc_data, "Temperatur", paths$export_dir)
+)
 
 data_zip_path
 ```
@@ -274,7 +281,6 @@ shared folder `r paths$upload_directory` on the KWB cloud. For doing so the
 following environment variables need to be defined in case the code below should 
 be run from a client computer. However, as these variables are defined in a 
 GitHub actions workflow there is no need to do this locally.
-
 
 ```
 NEXTCLOUD_URL = "https://<replace-with-kwb-cloud-url>"
@@ -299,17 +305,17 @@ upload_files <- c(
   data_zip_path
 )
 
-for (upload_file in upload_files) {
+for (file in upload_files) {
   
-  if (!file.exists(upload_file)) {
-    message("File does not exist: ", upload_file)
+  if (!file.exists(file)) {
+    message("File does not exist: ", file)
     next
   }
   
   kwb.utils::catAndRun(
-    messageText = paste("Uploading file", upload_file),
+    messageText = paste("Uploading file", file),
     expr = try(kwb.nextcloud::upload_file(
-      file = upload_file, 
+      file = file, 
       target_path = paths$upload_dir
     )),
     dbg = TRUE
@@ -317,11 +323,6 @@ for (upload_file in upload_files) {
 }
 ```
 
-```{r measurementchains_data-delete,  echo = FALSE, eval = con_defined & is_ghactions}
-
-delete_files <- list.files(path = paths$export_dir, 
-                           full.names = TRUE)
-
-fs::file_delete(path = delete_files)
+```{r measurementchains_data-delete, echo = FALSE, eval = con_defined & is_ghactions}
+fs::file_delete(path = list.files(paths$export_dir, full.names = TRUE))
 ```
-
