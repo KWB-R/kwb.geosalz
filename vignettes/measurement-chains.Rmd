@@ -55,28 +55,28 @@ well that the sensor is located in is given in column `brunnen_nummer`.
 
 ```{r, echo = FALSE}
 metadata <- kwb.geosalz::get_measurementchains_metadata()
-DT::datatable(metadata, caption = "Table 1: Metadata of Measurement Chains")
+DT::datatable(metadata, caption = paste(
+  "Table 1: Metadata on Measurement Chains. Each row represents a sensor."
+))
 ```
 
-Each sensor (type: `WLF05`, `link_to_manufacturer_factsheet`: `to_do:
-add-link-to-factsheet-on-kwb-cloud`) measures the the following two parameters
-with the characteristics summarized below:
+Each sensor (type: *WLF05*, TODO: add-link-to-factsheet-on-kwb-cloud`) measures
+two parameters with the following characteristics:
 
-- `electrical conductivity`: 
+- electrical conductivity:
+    + measurement range: 0 - 20 mS
+    + measurement range detection: automatic
+    + typical accuracy: +/- 1.5 % of measurement value
 
-+ measurement range: `0 - 20 mS`
-+ measurement range detection: `automatic`
-+ typical accuracy: +/- 1.5 % of measurement value
+- temperature:
+    + measurement range: 0 - 50 `r cat("\u00B0")` Celsius
+    + measurement resolution: 0.1 `r cat("\u00B0")` Celsius
+    + typical accuracy: `<= 0.1 `r cat("\u00B0")` Celsius
 
-- `temperature`:
-
-+ measurement range: `0 - 50 \u00B0 Celsius`
-+ measurement resolution: `0.1 \u00B0 Celsius`
-+ typical accuracy: `<= 0.1 \u00B0 Celsius`
-
-The maximum `temporal resolution` of each sensor is `every second`. Within the 
-project `GeoSalz` a measurement `every 5 minutes` is proposed by KWB in order to 
-be able to detect potential salinity shifts due to a switched pumping regime.
+The maximum temporal resolution that a sensor can provide is "every second".
+Within the GeoSalz project, measurements are taken every 5 minutes. This should
+be sufficient to detect potential salinity shifts that are caused by changes in
+the pumping regime.
 
 ## Data Management 
 
