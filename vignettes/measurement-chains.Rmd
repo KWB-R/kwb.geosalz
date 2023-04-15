@@ -60,8 +60,8 @@ DT::datatable(metadata, caption = paste(
 ))
 ```
 
-Each sensor (type: *WLF05*, TODO: add-link-to-factsheet-on-kwb-cloud`) measures
-two parameters with the following characteristics:
+Each sensor (type: *WLF05*, **TODO**: add-link-to-factsheet-on-kwb-cloud)
+measures two parameters with the following characteristics:
 
 - electrical conductivity:
     + measurement range: 0 - 20 mS
