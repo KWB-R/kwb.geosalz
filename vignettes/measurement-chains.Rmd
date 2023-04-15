@@ -13,28 +13,34 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
-all_defined <- function(x) all(sapply(x, stringr::str_length) > 0L)
+# Helper function to check if all strings are not empty
+all_defined <- function(x) {
+  all(sapply(x, stringr::str_length) > 0L)
+}
 
+# Get environment variables for access to ftp server with input data
 con <- kwb.geosalz:::get_environment_variables(
   server = "MESSKETTEN_SERVER", 
   user   = "MESSKETTEN_USER", 
   pw     = "MESSKETTEN_PASSWORD"
 )
 
-con_defined <- all_defined(con)
-
+# Get environment variables for access to Nextcloud server
 nc <- kwb.geosalz:::get_environment_variables(
   server = "NEXTCLOUD_URL", 
   user   = "NEXTCLOUD_USER", 
   pw     = "NEXTCLOUD_PASSWORD"
 )
 
+# Are all environment variables defined?
+con_defined <- all_defined(con)
 nc_defined <- all_defined(nc)
 
+# Is this script running on a GitHub server?
 is_ghactions <- identical(Sys.getenv("CI"), "true")
 
+# Is this script running locally (with access to ftp server)?
 local <- con_defined & !is_ghactions
-
 ```
 
 ## Background 
