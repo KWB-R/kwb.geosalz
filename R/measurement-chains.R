@@ -206,7 +206,7 @@ download_measurementchains_data <- function(
   }
 
   dl_list <- kwb.utils::catAndRun(
-    messageText = debug_message(ncores),
+    debug_message(ncores),
     dbg = debug,
     expr = if (run_parallel) {
       parallel::parLapply(cl, sftp_paths, function(file) {
@@ -340,52 +340,42 @@ read_measurementchains_data <- function(
     )
   }
   
-  dbg_msg <- function(text) {
+  debug_message <- function(ncores) {
     sprintf(
-      "Importing %d measurement chains files %s",
+      "Importing %d measurement chains files (using %d CPU core%s)",
       nrow(csv_files),
-      text
+      ncores,
+      ifelse(ncores > 1L, "s", "")
     )
   }
   
   if (run_parallel) {
     
     ncores <- parallel::detectCores()
-    
     cl <- parallel::makeCluster(ncores)
-    
-    data_list <- kwb.utils::catAndRun(
-      messageText = dbg_msg(sprintf("(using %d CPU cores)", ncores)),
-      expr = {
-        stats::setNames(
-          parallel::parLapply(
-            cl, 
-            csv_files$local_path, 
-            read_measurementchain_data
-          ),
-          csv_files$file_id
-        )
-      },
-      dbg = debug
-    )
-    
-    parallel::stopCluster(cl)
+    on.exit(parallel::stopCluster(cl))
     
   } else {
     
-    data_list <- kwb.utils::catAndRun(
-      messageText = dbg_msg("(using 1 CPU core)"),
-      expr = {
-        stats::setNames(
-          lapply(csv_files$local_path, read_measurementchain_data),
-          nm = csv_files$file_id
-        )
-      },
-      dbg = TRUE
-    )
+    ncores <- 1L
   }
   
-  dat <- data_list %>%
+  files <- stats::setNames(
+    kwb.utils::selectColumns(csv_files, "local_path"),
+    kwb.utils::selectColumns(csv_files, "file_id")
+  )
+  
+  data_list <- kwb.utils::catAndRun(
+    debug_message(ncores),
+    dbg = debug,
+    expr = if (run_parallel) {
+      parallel::parLapply(cl, files, read_measurementchain_data)
+    } else {
+      lapply(files, read_measurementchain_data)
+    }
+  )
+  
+  result <- data_list %>%
     dplyr::bind_rows(.id = "file_id") %>%
     dplyr::mutate(file_id = as.integer(.data$file_id)) %>%
     dplyr::arrange(
@@ -395,18 +385,15 @@ read_measurementchains_data <- function(
     ) 
   
   if (kwb.utils::isNullOrEmpty(datetime_installation)) {
-    return(dat)  
+    return(result)  
   }
   
   kwb.utils::catAndRun(
-    messageText = sprintf(
+    sprintf(
       "Filtering out 'lab' measurements before '%s' (installation in K10)", 
       datetime_installation
     ),
-    expr = {
-      dat %>%
-        dplyr::filter(.data$datum_uhrzeit >= datetime_installation)
-    },
-    dbg = debug
+    dbg = debug,
+    expr = dplyr::filter(result, .data$datum_uhrzeit >= datetime_installation),
   )
 }
