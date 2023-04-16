@@ -176,49 +176,47 @@ download_measurementchains_data <- function(
 {
   fs::dir_create(target_directory)
   
-  dbg_msg <- function(text) {
+  debug_message <- function(ncores) {
     sprintf(
-      "Download %d measurement chains files %s",
+      "Download %d measurement chains files (using %d CPU core%s)",
       length(sftp_paths),
-      text
+      ncores, 
+      ifelse(ncores > 1L, "s", "")
     )
   }
   
   if (run_parallel) {
-    
     ncores <- parallel::detectCores()
-    
     cl <- parallel::makeCluster(ncores)
-    
-    dl_list <- kwb.utils::catAndRun(
-      messageText = dbg_msg(sprintf("(using %d CPU cores)", ncores)),
-      dbg = debug,
-      expr = parallel::parLapply(cl, sftp_paths, function(sftp_path) {
-        try(sftp::sftp_download(
-          file = sftp_path,
-          sftp_connection = sftp_connection,
-          tofolder = target_directory,
-          verbose = FALSE
-        ))
-      })
-    )
-    
-    parallel::stopCluster(cl)
-    
   } else {
-    
-    dl_list <- kwb.utils::catAndRun(
-      messageText = dbg_msg("(using 1 CPU core)"),
-      dbg = debug,
-      expr = lapply(sftp_paths, function(sftp_path) {
-        try(sftp::sftp_download(
-          file = sftp_path,
-          sftp_connection = sftp_connection,
-          tofolder = target_directory,
-          verbose = debug
-        ))
+    ncores <- 1L
+  }
+
+  try_to_download <- function(file, verbose) {
+    try(sftp::sftp_download(
+      file = file,
+      sftp_connection = sftp_connection,
+      tofolder = target_directory,
+      verbose = verbose
+    ))
+  }
+
+  dl_list <- kwb.utils::catAndRun(
+    messageText = debug_message(ncores),
+    dbg = debug,
+    expr = if (run_parallel) {
+      parallel::parLapply(cl, sftp_paths, function(file) {
+        try_to_download(file, verbose = FALSE)
       })
-    )
+    } else {
+      lapply(sftp_paths, function(file) {
+        try_to_download(file, verbose = debug)
+      })
+    }
+  )
+  
+  if (run_parallel) {
+    parallel::stopCluster(cl)
   }
   
   failed <- sapply(dl_list, kwb.utils::isTryError)
