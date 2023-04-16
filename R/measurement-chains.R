@@ -186,9 +186,13 @@ download_measurementchains_data <- function(
   }
   
   if (run_parallel) {
+    
     ncores <- parallel::detectCores()
     cl <- parallel::makeCluster(ncores)
+    on.exit(parallel::stopCluster(cl))
+    
   } else {
+    
     ncores <- 1L
   }
 
@@ -214,11 +218,7 @@ download_measurementchains_data <- function(
       })
     }
   )
-  
-  if (run_parallel) {
-    parallel::stopCluster(cl)
-  }
-  
+
   failed <- sapply(dl_list, kwb.utils::isTryError)
   
   if (any(failed)) {
