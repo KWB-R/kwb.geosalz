@@ -378,11 +378,7 @@ read_measurementchains_data <- function(
   result <- data_list %>%
     dplyr::bind_rows(.id = "file_id") %>%
     dplyr::mutate(file_id = as.integer(.data$file_id)) %>%
-    dplyr::arrange(
-      .data$parameter,
-      .data$sensor_id,
-      .data$datum_uhrzeit
-    ) 
+    order_measurement_chain_data()
   
   if (kwb.utils::isNullOrEmpty(datetime_installation)) {
     return(result)  
@@ -396,4 +392,18 @@ read_measurementchains_data <- function(
     dbg = debug,
     expr = dplyr::filter(result, .data$datum_uhrzeit >= datetime_installation),
   )
+}
+
+# order_measurement_chain_data -------------------------------------------------
+
+#' Order Measurement Chain Data
+#' 
+#' @param data data frame as retrieved by
+#'   \code{\link{read_measurementchains_data}}
+#' @return \code{data}, ordered by "parameter", "sensor_id", "datum_uhrzeit"
+#' @importFrom kwb.utils orderBy
+#' @export
+order_measurement_chain_data <- function(data)
+{
+  kwb.utils::orderBy(data, c("parameter", "sensor_id", "datum_uhrzeit"))
 }
