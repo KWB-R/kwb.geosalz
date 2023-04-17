@@ -176,51 +176,49 @@ download_measurementchains_data <- function(
 {
   fs::dir_create(target_directory)
   
-  dbg_msg <- function(text) {
+  debug_message <- function(ncores) {
     sprintf(
-      "Download %d measurement chains files %s",
+      "Download %d measurement chains files (using %d CPU core%s)",
       length(sftp_paths),
-      text
+      ncores, 
+      ifelse(ncores > 1L, "s", "")
     )
   }
   
   if (run_parallel) {
     
     ncores <- parallel::detectCores()
-    
     cl <- parallel::makeCluster(ncores)
-    
-    dl_list <- kwb.utils::catAndRun(
-      messageText = dbg_msg(sprintf("(using %d CPU cores)", ncores)),
-      dbg = debug,
-      expr = parallel::parLapply(cl, sftp_paths, function(sftp_path) {
-        try(sftp::sftp_download(
-          file = sftp_path,
-          sftp_connection = sftp_connection,
-          tofolder = target_directory,
-          verbose = FALSE
-        ))
-      })
-    )
-    
-    parallel::stopCluster(cl)
+    on.exit(parallel::stopCluster(cl))
     
   } else {
     
-    dl_list <- kwb.utils::catAndRun(
-      messageText = dbg_msg("(using 1 CPU core)"),
-      dbg = debug,
-      expr = lapply(sftp_paths, function(sftp_path) {
-        try(sftp::sftp_download(
-          file = sftp_path,
-          sftp_connection = sftp_connection,
-          tofolder = target_directory,
-          verbose = debug
-        ))
-      })
-    )
+    ncores <- 1L
   }
-  
+
+  try_to_download <- function(file, verbose) {
+    try(sftp::sftp_download(
+      file = file,
+      sftp_connection = sftp_connection,
+      tofolder = target_directory,
+      verbose = verbose
+    ))
+  }
+
+  dl_list <- kwb.utils::catAndRun(
+    debug_message(ncores),
+    dbg = debug,
+    expr = if (run_parallel) {
+      parallel::parLapply(cl, sftp_paths, function(file) {
+        try_to_download(file, verbose = FALSE)
+      })
+    } else {
+      lapply(sftp_paths, function(file) {
+        try_to_download(file, verbose = debug)
+      })
+    }
+  )
+
   failed <- sapply(dl_list, kwb.utils::isTryError)
   
   if (any(failed)) {
@@ -342,73 +340,70 @@ read_measurementchains_data <- function(
     )
   }
   
-  dbg_msg <- function(text) {
+  debug_message <- function(ncores) {
     sprintf(
-      "Importing %d measurement chains files %s",
+      "Importing %d measurement chains files (using %d CPU core%s)",
       nrow(csv_files),
-      text
+      ncores,
+      ifelse(ncores > 1L, "s", "")
     )
   }
   
   if (run_parallel) {
     
     ncores <- parallel::detectCores()
-    
     cl <- parallel::makeCluster(ncores)
-    
-    data_list <- kwb.utils::catAndRun(
-      messageText = dbg_msg(sprintf("(using %d CPU cores)", ncores)),
-      expr = {
-        stats::setNames(
-          parallel::parLapply(
-            cl, 
-            csv_files$local_path, 
-            read_measurementchain_data
-          ),
-          csv_files$file_id
-        )
-      },
-      dbg = debug
-    )
-    
-    parallel::stopCluster(cl)
+    on.exit(parallel::stopCluster(cl))
     
   } else {
     
-    data_list <- kwb.utils::catAndRun(
-      messageText = dbg_msg("(using 1 CPU core)"),
-      expr = {
-        stats::setNames(
-          lapply(csv_files$local_path, read_measurementchain_data),
-          nm = csv_files$file_id
-        )
-      },
-      dbg = TRUE
-    )
+    ncores <- 1L
   }
   
-  dat <- data_list %>%
+  files <- stats::setNames(
+    kwb.utils::selectColumns(csv_files, "local_path"),
+    kwb.utils::selectColumns(csv_files, "file_id")
+  )
+  
+  data_list <- kwb.utils::catAndRun(
+    debug_message(ncores),
+    dbg = debug,
+    expr = if (run_parallel) {
+      parallel::parLapply(cl, files, read_measurementchain_data)
+    } else {
+      lapply(files, read_measurementchain_data)
+    }
+  )
+  
+  result <- data_list %>%
     dplyr::bind_rows(.id = "file_id") %>%
     dplyr::mutate(file_id = as.integer(.data$file_id)) %>%
-    dplyr::arrange(
-      .data$parameter,
-      .data$sensor_id,
-      .data$datum_uhrzeit
-    ) 
+    order_measurement_chain_data()
   
   if (kwb.utils::isNullOrEmpty(datetime_installation)) {
-    return(dat)  
+    return(result)  
   }
   
   kwb.utils::catAndRun(
-    messageText = sprintf(
+    sprintf(
       "Filtering out 'lab' measurements before '%s' (installation in K10)", 
       datetime_installation
     ),
-    expr = {
-      dat %>%
-        dplyr::filter(.data$datum_uhrzeit >= datetime_installation)
-    },
-    dbg = debug
+    dbg = debug,
+    expr = dplyr::filter(result, .data$datum_uhrzeit >= datetime_installation),
   )
+}
+
+# order_measurement_chain_data -------------------------------------------------
+
+#' Order Measurement Chain Data
+#' 
+#' @param data data frame as retrieved by
+#'   \code{\link{read_measurementchains_data}}
+#' @return \code{data}, ordered by "parameter", "sensor_id", "datum_uhrzeit"
+#' @importFrom kwb.utils orderBy
+#' @export
+order_measurement_chain_data <- function(data)
+{
+  kwb.utils::orderBy(data, c("parameter", "sensor_id", "datum_uhrzeit"))
 }

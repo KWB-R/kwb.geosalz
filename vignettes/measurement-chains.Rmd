@@ -145,9 +145,21 @@ mc_files <- kwb.geosalz::get_measurementchains_files()
 str(mc_files)
 head(mc_files)
 
-# Download measurement chain files (.csv) from SFTP server
+# All paths to files on the SFTP server
+all_sftp_paths <- kwb.utils::selectColumns(mc_files, "sftp_path")
+
+# Download existing data from nextcloud
+old_mc_data <- get_measurement_chain_data_on_cloud()
+  
+# Get SFTP paths from which data were originally retrieved
+old_sftp_paths <- kwb.utils::getAttribute(old_mc_data, "sftp_paths")
+  
+# Determine the paths to the new files that need to be downloaded
+new_sftp_paths <- setdiff(all_sftp_paths, old_sftp_paths)
+
+# Download only the new measurement chain files (.csv) from the SFTP server
 csv_files <- kwb.geosalz::download_measurementchains_data(
-  sftp_paths = mc_files$sftp_path,
+  sftp_paths = new_sftp_paths,
   target_directory = paths$download_dir,
   debug = TRUE
 )
@@ -166,11 +178,16 @@ R:
 stopifnot(nrow(csv_files) > 0L) 
 
 # Import csv files using multiple CPU cores
-mc_data <- kwb.geosalz::read_measurementchains_data(
+new_mc_data <- kwb.geosalz::read_measurementchains_data(
   csv_files,
   run_parallel = TRUE,
   debug = TRUE
 )
+
+# Combine the new data with the existing data and reorder
+mc_data <- old_mc_data %>%
+  rbind(new_mc_data) %>%
+  kwb.geosalz::order_measurement_chain_data()
 ```
 
 The following datasets were imported into R: 
