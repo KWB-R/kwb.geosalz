@@ -136,6 +136,9 @@
     <loc>https://kwb-r.github.io/kwb.geosalz/reference/get_measurementchains_metadata.html</loc>
   </url>
   <url>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/get_measurement_chain_data_on_cloud.html</loc>
+  </url>
+  <url>
     <loc>https://kwb-r.github.io/kwb.geosalz/reference/get_measurmentchains_data_stats.html</loc>
   </url>
   <url>
@@ -155,6 +158,9 @@
   </url>
   <url>
     <loc>https://kwb-r.github.io/kwb.geosalz/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/order_measurement_chain_data.html</loc>
   </url>
   <url>
     <loc>https://kwb-r.github.io/kwb.geosalz/reference/pipe.html</loc>
