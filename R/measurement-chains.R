@@ -384,13 +384,10 @@ read_measurementchains_data <- function(
     return(result)  
   }
   
-  kwb.utils::catAndRun(
-    sprintf(
-      "Filtering out 'lab' measurements before '%s' (installation in K10)", 
-      datetime_installation
-    ),
-    dbg = debug,
-    expr = dplyr::filter(result, .data$datum_uhrzeit >= datetime_installation),
+  remove_measurements_before(
+    result, 
+    datetime = datetime_installation, 
+    reason = "installation in K10"
   )
 }
 
@@ -406,4 +403,23 @@ read_measurementchains_data <- function(
 order_measurement_chain_data <- function(data)
 {
   kwb.utils::orderBy(data, c("parameter", "sensor_id", "datum_uhrzeit"))
+}
+
+# remove_measurements_before ---------------------------------------------------
+remove_measurements_before <- function(
+    data, 
+    datetime, 
+    reason = "Why?", 
+    debug = TRUE
+)
+{
+  kwb.utils::catAndRun(
+    sprintf(
+      "Filtering out 'lab' measurements before '%s' (%s)", 
+      datetime, 
+      reason
+    ),
+    dbg = debug,
+    expr = dplyr::filter(data, .data$datum_uhrzeit >= datetime),
+  )
 }
