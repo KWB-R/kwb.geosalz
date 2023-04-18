@@ -149,7 +149,7 @@ head(mc_files)
 all_sftp_paths <- kwb.utils::selectColumns(mc_files, "sftp_path")
 
 # Download existing data from nextcloud
-old_mc_data <- get_measurement_chain_data_on_cloud()
+old_mc_data <- kwb.geosalz::get_measurement_chain_data_on_cloud()
   
 # Get SFTP paths from which data were originally retrieved
 old_sftp_paths <- kwb.utils::getAttribute(old_mc_data, "sftp_paths")
