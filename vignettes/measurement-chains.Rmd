@@ -157,17 +157,21 @@ old_sftp_paths <- kwb.utils::getAttribute(old_mc_data, "sftp_paths")
 # Determine the paths to the new files that need to be downloaded
 new_sftp_paths <- setdiff(all_sftp_paths, old_sftp_paths)
 
-message(length(new_sftp_paths), " new Files to download")
-
-# Download only the new measurement chain files (.csv) from the SFTP server
-csv_files <- try(kwb.geosalz::download_measurementchains_data(
-  sftp_paths = new_sftp_paths,
-  target_directory = paths$download_dir,
-  debug = TRUE
-))
+if (length(new_sftp_paths) > 0L) {
+  
+  # Download only the new measurement chain files (.csv) from the SFTP server
+  csv_files <- kwb.geosalz::download_measurementchains_data(
+    sftp_paths = new_sftp_paths,
+    target_directory = paths$download_dir,
+    debug = TRUE
+  )
+} else {
+  
+  csv_files <- data.frame()
+}
 
 # Print the paths to the downloaded files
-csv_files
+print(csv_files)
 ```
 
 ### Data Import
@@ -176,23 +180,27 @@ The following code imports the downloaded measurement chains files (.csv) into
 R:
 
 ```{r measurementchains_data-import,  eval = con_defined}
-# Stop in case that no csv file is available
-stopifnot(nrow(csv_files) > 0L) 
+# Set the current data to the old data
+mc_data <- old_mc_data
 
-# Import csv files using multiple CPU cores
-new_mc_data <- kwb.geosalz::read_measurementchains_data(
-  csv_files,
-  run_parallel = TRUE,
-  debug = TRUE
-)
-
-# Combine the new data with the existing data and reorder
-mc_data <- old_mc_data %>%
-  rbind(new_mc_data) %>%
-  kwb.geosalz::order_measurement_chain_data()
+# If new files have been downloaded, import them into R
+if (nrow(csv_files) > 0L) {
+  
+  # Import csv files using multiple CPU cores
+  new_mc_data <- kwb.geosalz::read_measurementchains_data(
+    csv_files,
+    run_parallel = TRUE,
+    debug = TRUE
+  )
+  
+  # Combine the new data with the existing data and reorder
+  mc_data <- mc_data %>%
+    rbind(new_mc_data) %>%
+    kwb.geosalz::order_measurement_chain_data()
+}
 ```
 
-The following datasets were imported into R: 
+The following datasets were imported into or already available in R: 
 
 ```{r measurementchains_data-import_stats, eval = con_defined}
 mc_data_stats <- mc_data %>%
