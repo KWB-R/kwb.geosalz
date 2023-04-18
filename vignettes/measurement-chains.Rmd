@@ -157,12 +157,14 @@ old_sftp_paths <- kwb.utils::getAttribute(old_mc_data, "sftp_paths")
 # Determine the paths to the new files that need to be downloaded
 new_sftp_paths <- setdiff(all_sftp_paths, old_sftp_paths)
 
+message(length(new_sftp_paths), " new Files to download")
+
 # Download only the new measurement chain files (.csv) from the SFTP server
-csv_files <- kwb.geosalz::download_measurementchains_data(
+csv_files <- try(kwb.geosalz::download_measurementchains_data(
   sftp_paths = new_sftp_paths,
   target_directory = paths$download_dir,
   debug = TRUE
-)
+))
 
 # Print the paths to the downloaded files
 csv_files
