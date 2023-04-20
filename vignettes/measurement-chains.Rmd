@@ -318,26 +318,16 @@ NEXTCLOUD_PASSWORD = "your-nextcloud-app-password" ### see details below
 Subsequently the following code is run for uploading the data:
 
 ```{r measurementchains_data-upload,  eval = con_defined & nc_defined}
-
-# Upload all files in "paths$export_dir"
-#upload_files <- list.files(paths$export_dir, full.names = TRUE)
-
-
 # List paths of files to upload explicitly
-upload_files <- c(
+upload_files <- kwb.geosalz:::exclude_missing_files(c(
   stats_path, 
   pdf_files,
   metadata_path, 
   files_path,
   data_zip_path
-)
+))
 
 for (file in upload_files) {
-  
-  if (!file.exists(file)) {
-    message("File does not exist: ", file)
-    next
-  }
   
   kwb.utils::catAndRun(
     messageText = paste("Uploading file", file),
