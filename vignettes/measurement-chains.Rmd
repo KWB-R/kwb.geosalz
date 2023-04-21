@@ -90,7 +90,7 @@ the pumping regime.
 paths <- kwb.utils::resolve(list(
   
   # Local temporary directory
-  local_dir = fs::path_abs(tempdir()),
+  local_dir = kwb.geosalz:::temp_dir(),
   
   # Target directory for downloaded measurement chain files (.csv)
   download_dir = "<local_dir>/download", 
