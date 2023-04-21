@@ -245,8 +245,8 @@ data_zip_path <- kwb.geosalz::write_measurementchains_data(
 size_data_zip <- fs::file_size(data_zip_path)
 size_data_csv / size_data_zip
 
-extract_data_timeperiod <- function(data_path) {
-  basename(data_path) %>% 
+extract_data_timeperiod <- function(file) {
+  basename(file) %>% 
     kwb.utils::replaceFileExtension("") %>%  
     stringr::str_remove("^mc[-|_]data")
 }
