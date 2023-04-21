@@ -2,6 +2,7 @@
 #'
 #' @param df data frame with samples in wide format
 #' @param col_sampleid column name of sample id
+#' @param path path to file from which \code{df} was read (for information only)
 #' @param sheet optional in case EXCEL is used (default: "")
 #'
 #' @return error in case duplicated samples were found

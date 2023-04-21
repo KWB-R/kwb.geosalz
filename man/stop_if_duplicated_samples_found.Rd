@@ -11,6 +11,8 @@ stop_if_duplicated_samples_found(df, col_sampleid, path, sheet = "")
 
 \item{col_sampleid}{column name of sample id}
 
+\item{path}{path to file from which \code{df} was read (for information only)}
+
 \item{sheet}{optional in case EXCEL is used (default: "")}
 }
 \value{
