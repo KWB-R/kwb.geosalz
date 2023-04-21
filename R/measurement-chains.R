@@ -87,59 +87,77 @@ get_measurementchains_files <- function(
     debug = FALSE
 )
 {
-  files <- sftp::sftp_list(
-    sftp_connection, 
-    recurse = TRUE, 
-    verbose = debug
-  )
+  file_info <- list_sftp_files(sftp_connection) %>%
+    kwb.utils::renameColumns(list(name = "sftp_path"))
+
+  folder_file <- file_info %>%
+    kwb.utils::selectColumns("sftp_path") %>%
+    split_into_folder_and_file()
   
-  files %>%
-    dplyr::filter(.data$type != "dir") %>%
-    tidyr::separate(
-      .data$name,
-      into = c("galerywellid", "sensorid_datetime"),
-      sep = "/",
-      remove = FALSE
-    ) %>%
-    dplyr::rename(sftp_path = .data$name) %>%
+  galery_well <- folder_file %>%
+    kwb.utils::selectColumns("folder") %>%
+    split_into_galery_and_well()
+
+  sensor_date_time <- folder_file %>%
+    kwb.utils::selectColumns("file") %>%
+    kwb.utils::removeExtension() %>%
+    split_into_sensor_and_datetime()
+
+  file_info %>%
+    cbind(galery_well, sensor_date_time) %>%
+    kwb.utils::resetRowNames()
+}
+
+# list_sftp_files --------------------------------------------------------------
+list_sftp_files <- function(
+    sftp_connection = create_sftp_connection(), 
+    debug = FALSE
+)
+{
+  sftp_connection %>% 
+    sftp::sftp_list(recurse = TRUE, verbose = debug) %>%
+    dplyr::filter(.data[["type"]] != "dir")
+}
+
+# split_into_folder_and_file ---------------------------------------------------
+split_into_folder_and_file <- function(x)
+{
+  data.frame(folder = dirname(x), file = basename(x))
+}
+
+# split_into_galery_and_well ---------------------------------------------------
+split_into_galery_and_well <- function(x)
+{
+  data.frame(
+    galerie = substr(x, 1L, 1L), 
+    brunnen_nummer = as.integer(substr(x, 2L, nchar(x)))
+  )
+}
+
+# split_into_sensor_and_datetime -----------------------------------------------
+split_into_sensor_and_datetime <- function(x)
+{
+  pattern <- "^(LF_)?(\\d{6}(\\d))[-_](\\d{4}-\\d{2}-\\d{2}-\\d{4})$"
+  
+  stopifnot(all(grepl(pattern, x)))
+  
+  kwb.utils::extractSubstring(pattern, x, c(
+    prefix = 1L, 
+    sensor_id = 2L, 
+    sensor_endnummer = 3L,
+    datum_uhrzeit = 4L
+  )) %>%
     dplyr::mutate(
-      galerie = stringr::str_extract(.data$galerywellid, "^[A-Z]"),
-      brunnen_nummer = stringr::str_extract(
-        .data$galerywellid, 
-        "[0-9]{1,3}$"
-      ) %>%
-        as.integer()
-    ) %>%
-    dplyr::mutate(
-      sensorid_datetime = stringr::str_replace(
-        .data$sensorid_datetime,
-        pattern = "-202",
-        "_202"
+      sensor_id = as.integer(.data[["sensor_id"]]),
+      sensor_endnummer = as.integer(.data[["sensor_endnummer"]]),
+      datum_uhrzeit = as.POSIXct(
+        .data[["datum_uhrzeit"]], 
+        format = "%Y-%m-%d-%H%M",
+        #data is always CET without switching
+        #https://stackoverflow.com/a/38333522
+        tz = "Etc/GMT-1"
       )
-    ) %>%
-    tidyr::separate(
-      .data$sensorid_datetime,
-      into = c("sensor_id", "datum_uhrzeit"),
-      sep = "_"
-    ) %>%
-    dplyr::mutate(
-      sensor_endnummer = stringr::str_extract(
-        .data$sensor_id, 
-        "[0-9]$"
-      ) %>%
-        as.integer(),
-      sensor_id = as.integer(.data$sensor_id),
-      datum_uhrzeit = stringr::str_remove(.data$datum_uhrzeit, "\\.csv$")
-    ) %>%
-    dplyr::mutate(datum_uhrzeit = as.POSIXct(
-      .data$datum_uhrzeit,
-      format = "%Y-%m-%d-%H%M",
-      #data is always CET without switching
-      #https://stackoverflow.com/a/38333522
-      tz = "Etc/GMT-1"
-    )) %>%
-    dplyr::select(-.data$galerywellid) %>%
-    tibble::as_tibble()
+    )
 }
 
 #' Measurement Chains: download data
