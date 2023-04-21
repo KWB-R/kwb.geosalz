@@ -28,7 +28,9 @@ Imports:
     janitor (>= 1.1.1),
     jsonlite,
     kwb.base,
-    kwb.utils (>= 0.4.0.9000),
+    kwb.file,
+    kwb.nextcloud,
+    kwb.utils,
     magrittr (>= 1.5),
     parallel,
     readODS,
@@ -46,9 +48,9 @@ Suggests:
     covr (>= 3.2.1),
     DT,
     ggforce,
+    htmltools,
     htmlwidgets,
     knitr (>= 1.21),
-    kwb.nextcloud,
     kwb.pkgbuild,
     leaflet,
     openxlsx,
@@ -61,7 +63,7 @@ VignetteBuilder:
 Remotes:
     github::KWB-R/geosalz.phreeqc,
     github::KWB-R/kwb.base,
-    github::KWB-R/kwb.nextcloud,
+    github::KWB-R/kwb.nextcloud@dev,
     github::KWB-R/kwb.pkgbuild,
     github::KWB-R/kwb.utils,
     github::KWB-R/wasserportal,
@@ -69,4 +71,4 @@ Remotes:
 ByteCompile: true
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
