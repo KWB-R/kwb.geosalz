@@ -71,9 +71,8 @@ utc_text_to_posix_gmt_plus_1 <- function(x)
   # All elements in x must look like this:
   # <year>-<month>-<day>T<hour><minute><second>Z
   stopifnot(all(grepl("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$", x)))
-  
-  structure(
-    as.POSIXct(x, format = "%Y-%m-%dT%H:%M:%SZ", tz = "UTC"),
-    tzone = "Etc/GMT-1"
-  )
+ 
+  times <- as.POSIXct(x, format = "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")
+
+  structure(times, tzone = "Etc/GMT-1")
 }
