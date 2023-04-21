@@ -73,13 +73,18 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>csv_files</dt>
-<dd><p>tibble as retrieved by <code><a href="download_measurementchains_data.html">download_measurementchains_data</a></code></p></dd>
+<dd><p>vector of paths as retrieved by
+<code><a href="download_measurementchains_data.html">download_measurementchains_data</a></code></p></dd>
 
 
 <dt>datetime_installation</dt>
 <dd><p>datetime of first logger installation in well K10. 
 Used to filter out older measurement data! (default: as.POSIXct("2022-09-27 11:00:00", 
 tz = "Etc/GMT-1")</p></dd>
+
+
+<dt>run_parallel</dt>
+<dd><p>default: TRUE</p></dd>
 
 
 <dt>debug</dt>
@@ -99,10 +104,10 @@ tz = "Etc/GMT-1")</p></dd>
 <span class="r-in"><span><span class="va">mc_files</span> <span class="op">&lt;-</span> <span class="fu">kwb.geosalz</span><span class="fu">::</span><span class="fu"><a href="get_measurementchains_files.html">get_measurementchains_files</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">target_directory</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">csv_files</span> <span class="op">&lt;-</span> <span class="fu">kwb.geosalz</span><span class="fu">::</span><span class="fu"><a href="download_measurementchains_data.html">download_measurementchains_data</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>sftp_paths <span class="op">=</span> <span class="va">mc_files</span><span class="op">$</span><span class="va">sftp_path</span>,</span></span>
-<span class="r-in"><span><span class="va">target_directory</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  sftp_paths <span class="op">=</span> <span class="va">mc_files</span><span class="op">$</span><span class="va">sftp_path</span>,</span></span>
+<span class="r-in"><span>  <span class="va">target_directory</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">mc_data</span> <span class="op">&lt;-</span> <span class="fu">kwb.geosalz</span><span class="fu">::</span><span class="fu">read_measurementchains_data</span><span class="op">(</span><span class="va">csv_files</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>

@@ -62,16 +62,25 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_measurement_chain_data_on_cloud</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_measurement_chain_data_on_cloud</span><span class="op">(</span>dbg <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+    <dl><dt>dbg</dt>
+<dd><p>logical indicating whether or not to show debug messages</p></dd>
+
+</dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
 <p>data frame with the content of "mc_data.zip" in the GeoSalz project
-  folder on the KWB nextcloud. The SFTP paths to the files from which the
-  data in "mc_data.zip" originate are returned in attribute "sftp_paths".</p>
+  folder on the Nextcloud server. The SFTP paths to the files from which the
+  data in "mc_data.zip" originate are returned in attribute "sftp_paths".
+  If either of the files "mc_data.zip" or "mc_files.csv" does not exist,</p>
+<p></p>
+<p><code>NULL</code> is returned.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
