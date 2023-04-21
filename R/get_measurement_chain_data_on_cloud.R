@@ -2,64 +2,53 @@
 
 #' Get Measurement Chain Data on KWB Cloud
 #' 
+#' @param dbg logical indicating whether or not to show debug messages
 #' @return data frame with the content of "mc_data.zip" in the GeoSalz project
 #'   folder on the Nextcloud server. The SFTP paths to the files from which the
 #'   data in "mc_data.zip" originate are returned in attribute "sftp_paths".
 #'   If either of the files "mc_data.zip" or "mc_files.csv" does not exist, 
 #'   \code{NULL} is returned.
+#' @importFrom dplyr mutate
+#' @importFrom kwb.nextcloud download_files list_files
 #' @importFrom kwb.utils selectColumns
-#' @importFrom kwb.nextcloud list_files
 #' @export
-get_measurement_chain_data_on_cloud <- function()
+get_measurement_chain_data_on_cloud <- function(dbg = TRUE)
 {
-  path <- "projects/GeoSalz/Monitoring/messketten"
-  suppressMessages(info <- kwb.nextcloud::list_files(path, full_info = TRUE))
+  # Path to file on Nextcloud server
+  path <- "projects/GeoSalz/Monitoring/messketten/mc_data.zip"
   
-  # Helper function to get href for a given file name
-  get_href <- function(file_name) {
-    is_match <- kwb.utils::selectColumns(info, "file") == file_name
-    if (any(is_match)) {
-      kwb.utils::selectColumns(info, "href")[is_match]
-    } else {
-      ""
-    }
-  }
-
-  # Try to get hrefs for files to be downloaded
-  href_data <- get_href("mc_data.zip")
-  href_files <- get_href("mc_files.csv")
-  
-  # Return NULL if any of the two required files is not available
-  if (href_data == "" || href_files == "") {
+  # Return NULL if the file is not available
+  if (!kwb.nextcloud::file_exists(path)) {
     return(NULL)
   }
   
-  # Download the two files
-  files <- kwb.nextcloud::download_files(hrefs = c(href_data, href_files))
+  # Download the file, unzip the one and only (csv) file in the zip archive,
+  # read it and convert the text timestamps to POSIXct
+  kwb.nextcloud::download_files(paths = path) %>%
+    unzip_first_file() %>%
+    read.csv() %>%
+    dplyr::mutate(
+      # Convert the date time character to POSIXct
+      datum_uhrzeit = utc_text_to_posix_gmt_plus_1(.data[["datum_uhrzeit"]])
+    )
+}
 
-  # Extract the zip file
-  zip_file <- files[1L]
-  exdir <- dirname(zip_file)
-  unzip(zip_file, exdir = exdir)
+# unzip_first_file -------------------------------------------------------------
+#' @importFrom kwb.utils safePath
+#' @importFrom utils unzip
+unzip_first_file <- function(file)
+{
+  # Get the name of the (only) file in the zip archive    
+  filename <- unzip(file, list = TRUE)$Name[1L]
   
-  # Get the full path to the extracted file
-  data_file <- dir(exdir, "mc_data.*\\.csv$", full.names = TRUE)
+  # Set the extraction folder to the folder of the zip file
+  exdir <- dirname(file)
   
-  # Read the data from the unzipped csv file
-  data <- read.csv(data_file)
+  # Extract the zip file to the extraction folder
+  utils::unzip(file, filename, exdir = exdir)
   
-  # Convert the date time character to posix
-  data[["datum_uhrzeit"]] <- kwb.utils::selectColumns(data, "datum_uhrzeit") %>%
-    utc_text_to_posix_gmt_plus_1()
-  
-  # Read information on the source files from which data originates
-  file_info <- read.csv(files[2L])
-  
-  # Return the data with the names of the source files in attribute "files"
-  structure(
-    data, 
-    sftp_paths = kwb.utils::selectColumns(file_info, "sftp_path")
-  )
+  # Return the full path to the unzipped file
+  kwb.utils::safePath(exdir, filename)
 }
 
 # utc_text_to_posix_gmt_plus_1 -------------------------------------------------

@@ -4,12 +4,17 @@
 \alias{get_measurement_chain_data_on_cloud}
 \title{Get Measurement Chain Data on KWB Cloud}
 \usage{
-get_measurement_chain_data_on_cloud()
+get_measurement_chain_data_on_cloud(dbg = TRUE)
+}
+\arguments{
+\item{dbg}{logical indicating whether or not to show debug messages}
 }
 \value{
 data frame with the content of "mc_data.zip" in the GeoSalz project
-  folder on the KWB nextcloud. The SFTP paths to the files from which the
+  folder on the Nextcloud server. The SFTP paths to the files from which the
   data in "mc_data.zip" originate are returned in attribute "sftp_paths".
+  If either of the files "mc_data.zip" or "mc_files.csv" does not exist, 
+  \code{NULL} is returned.
 }
 \description{
 Get Measurement Chain Data on KWB Cloud
