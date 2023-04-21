@@ -186,26 +186,42 @@ split_into_sensor_and_datetime <- function(x)
 #' }
 download_measurementchains_data <- function(
     sftp_paths,
-    target_directory = tempdir(),
+    target_directory = temp_dir(),
     sftp_connection = create_sftp_connection(),
     run_parallel = TRUE,
     debug = FALSE
 )
 {
-  fs::dir_create(target_directory)
-  
-  debug_message <- function(ncores) {
-    sprintf(
-      "Download %d measurement chains files (using %d CPU core%s)",
-      length(sftp_paths),
-      ncores, 
-      ifelse(ncores > 1L, "s", "")
-    )
+  # Helper function to create the full paths in the target directory
+  to_target_path <- function(x) file.path(target_directory, x)
+
+  # Helper function to download one file from the SFTP server
+  try_to_download <- function(path, verbose) {
+    try(sftp::sftp_download(
+      file = path,
+      sftp_connection = sftp_connection,
+      tofolder = target_directory,
+      verbose = verbose
+    ))
   }
   
-  if (run_parallel) {
+  # Create the target directory if it does not exist
+  kwb.utils::createDirectory(target_directory, dbg = debug)
+
+  # Exclude paths that already exist in the target directory
+  paths_to_download <- exclude_existing_paths(sftp_paths, target_directory)
+
+  # Return early if there is nothing to do  
+  if (length(paths_to_download) == 0L) {
+    return(to_target_path(sftp_paths))
+  }
+
+  # Number of cores to use  
+  ncores <- parallel::detectCores() - 1L
+  
+  # Prepare parallel processing if required
+  if (run_parallel && ncores > 1L) {
     
-    ncores <- parallel::detectCores()
     cl <- parallel::makeCluster(ncores)
     on.exit(parallel::stopCluster(cl))
     
@@ -214,35 +230,34 @@ download_measurementchains_data <- function(
     ncores <- 1L
   }
 
-  try_to_download <- function(file, verbose) {
-    try(sftp::sftp_download(
-      file = file,
-      sftp_connection = sftp_connection,
-      tofolder = target_directory,
-      verbose = verbose
-    ))
-  }
-
-  dl_list <- kwb.utils::catAndRun(
-    debug_message(ncores),
+  # Call the download function in a (parallel or sequential) loop
+  result_list <- kwb.utils::catAndRun(
+    sprintf(
+      "Download %d measurement chains files (using %d CPU core%s) to %s",
+      length(paths_to_download),
+      ncores, 
+      ifelse(ncores > 1L, "s", ""),
+      target_directory
+    ),
     dbg = debug,
     expr = if (run_parallel) {
-      parallel::parLapply(cl, sftp_paths, function(file) {
-        try_to_download(file, verbose = FALSE)
-      })
+      parallel::parLapply(
+        cl = cl, 
+        X = paths_to_download, 
+        fun = try_to_download, 
+        verbose = FALSE
+      )
     } else {
-      lapply(sftp_paths, function(file) {
-        try_to_download(file, verbose = debug)
-      })
+      lapply(
+        X = paths_to_download, 
+        FUN = try_to_download, 
+        verbose = debug
+      )
     }
   )
 
-  failed <- sapply(dl_list, kwb.utils::isTryError)
-  
-  if (any(failed)) {
-    message("Failed downloading data from the following FTP path(s):")
-    message(paste0(sftp_paths[failed], collapse = "\n"))
-  }
+  # For which files did the download fail?  
+  failed <- sapply(result_list, kwb.utils::isTryError)
   
   if (all(failed)) {
     kwb.utils::stopFormatted(
@@ -251,17 +266,31 @@ download_measurementchains_data <- function(
     )
   }
   
-  csv_paths <- sapply(sftp_paths[!failed], function(sftp_path) {
-    fs::path_join(parts = c(target_directory, sftp_path))
-  })
-  
-  tibble::tibble(
-    file_id = seq_along(csv_paths),
-    sftp_path = names(csv_paths),
-    local_path = as.character(csv_paths)
-  )
+  if (any(failed)) {
+    message("Failed downloading data from the following FTP path(s):")
+    message(paste0(sftp_paths[failed], collapse = "\n"))
+  }
+
+  # Return the local paths to the downloaded files  
+  to_target_path(sftp_paths[!failed])
 }
 
+# exclude_existing_paths -------------------------------------------------------
+exclude_existing_paths <- function(paths, target)
+{
+  #target <- kwb.geosalz:::temp_dir("R_kwb.geosalz/download")
+  existing <- dir(target, recursive = TRUE)
+  
+  common <- intersect(paths, existing)
+  n_common <- length(common)
+  
+  if (n_common) {
+    message(sprintf("Exclude %d paths that already exist locally.", n_common))
+    paths <- setdiff(paths, common)
+  }
+  
+  paths
+}
 
 #' Measurement Chain: read csv data from a single files
 #'
@@ -316,13 +345,16 @@ read_measurementchain_data <- function(path)
 
 #' Measurement Chains: read csv data from multiple files
 #'
-#' @param csv_files tibble as retrieved by \code{\link{download_measurementchains_data}}
+#' @param csv_files vector of paths as retrieved by
+#'   \code{\link{download_measurementchains_data}}
 #' @param datetime_installation datetime of first logger installation in well K10. 
 #' Used to filter out older measurement data! (default: as.POSIXct("2022-09-27 11:00:00", 
 #' tz = "Etc/GMT-1")
+#' @param run_parallel default: TRUE
 #' @param debug show debug messages (default: FALSE)
 #' @return data frame with imported data from csv files
 #' @export
+#' @importFrom kwb.file remove_common_root
 #' @importFrom kwb.utils catAndRun isNullOrEmpty
 #' @importFrom readr read_csv col_datetime
 #' @importFrom dplyr arrange mutate bind_rows
@@ -331,10 +363,10 @@ read_measurementchain_data <- function(path)
 #' mc_files <- kwb.geosalz::get_measurementchains_files()
 #' target_directory <- tempdir()
 #' csv_files <- kwb.geosalz::download_measurementchains_data(
-#' sftp_paths = mc_files$sftp_path,
-#' target_directory)
+#'   sftp_paths = mc_files$sftp_path,
+#'   target_directory
+#' )
 #' mc_data <- kwb.geosalz::read_measurementchains_data(csv_files)
-#'
 #' }
 read_measurementchains_data <- function(
     csv_files,
@@ -343,7 +375,7 @@ read_measurementchains_data <- function(
     debug = FALSE
 ) 
 {
-  files_exist <- fs::file_exists(csv_files$local_path)
+  files_exist <- fs::file_exists(csv_files)
   
   if (!all(files_exist)) {
     kwb.utils::stopFormatted(
@@ -358,18 +390,10 @@ read_measurementchains_data <- function(
     )
   }
   
-  debug_message <- function(ncores) {
-    sprintf(
-      "Importing %d measurement chains files (using %d CPU core%s)",
-      nrow(csv_files),
-      ncores,
-      ifelse(ncores > 1L, "s", "")
-    )
-  }
+  ncores <- parallel::detectCores() - 1L
   
-  if (run_parallel) {
+  if (run_parallel && ncores > 1L) {
     
-    ncores <- parallel::detectCores()
     cl <- parallel::makeCluster(ncores)
     on.exit(parallel::stopCluster(cl))
     
@@ -378,24 +402,25 @@ read_measurementchains_data <- function(
     ncores <- 1L
   }
   
-  files <- stats::setNames(
-    kwb.utils::selectColumns(csv_files, "local_path"),
-    kwb.utils::selectColumns(csv_files, "file_id")
-  )
-  
-  data_list <- kwb.utils::catAndRun(
-    debug_message(ncores),
+  result_list <- kwb.utils::catAndRun(
+    sprintf(
+      "Importing %d measurement chains files (using %d CPU core%s)",
+      length(csv_files),
+      ncores,
+      ifelse(ncores > 1L, "s", "")
+    ),
     dbg = debug,
     expr = if (run_parallel) {
-      parallel::parLapply(cl, files, read_measurementchain_data)
+      parallel::parLapply(cl, csv_files, read_measurementchain_data)
     } else {
-      lapply(files, read_measurementchain_data)
+      lapply(csv_files, read_measurementchain_data)
     }
   )
+
+  names(result_list) <- kwb.file::remove_common_root(csv_files, dbg = FALSE)
   
-  result <- data_list %>%
-    dplyr::bind_rows(.id = "file_id") %>%
-    dplyr::mutate(file_id = as.integer(.data$file_id)) %>%
+  result <- result_list %>%
+    dplyr::bind_rows(.id = "file") %>%
     order_measurement_chain_data()
   
   if (kwb.utils::isNullOrEmpty(datetime_installation)) {
