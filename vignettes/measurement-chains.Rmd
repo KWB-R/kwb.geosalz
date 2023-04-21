@@ -146,32 +146,44 @@ str(mc_files)
 head(mc_files)
 
 # All paths to files on the SFTP server
-all_sftp_paths <- kwb.utils::selectColumns(mc_files, "sftp_path")
+all_paths <- kwb.utils::selectColumns(mc_files, "sftp_path")
 
-# Download existing data from nextcloud
-old_mc_data <- kwb.geosalz::get_measurement_chain_data_on_cloud()
-  
-# Get SFTP paths from which data were originally retrieved
-old_sftp_paths <- kwb.utils::getAttribute(old_mc_data, "sftp_paths")
-  
-# Determine the paths to the new files that need to be downloaded
-new_sftp_paths <- setdiff(all_sftp_paths, old_sftp_paths)
+# Download existing data from the Nextcloud server. NULL is returned if there is
+# no file "mc_data.zip" in the Nextcloud folder 
+# "projects/GeoSalz/Monitoring/messketten"
+old_data <- kwb.geosalz::get_measurement_chain_data_on_cloud()
+#old_data <- NULL
 
-if (length(new_sftp_paths) > 0L) {
+# Determine the SFTP paths of the files to be downloaded. Download all available
+# files if there was no data on the Nextcloud yet. Otherwise, download only
+# those files that have been added to the SFTP server since when this script was
+# run the last time.
+new_paths <- if (is.null(old_data)) {
+  
+  all_paths
+  
+} else {
+  
+  # Get SFTP paths from which data were originally retrieved
+  old_paths <- unique(kwb.utils::selectColumns(old_data, "file"))
+  
+  # Determine the paths to the new files that need to be downloaded
+  setdiff(all_paths, old_paths)
+}
+
+# If there are new files to download, download them.
+csv_files <- if (length(new_paths)) {
   
   # Download only the new measurement chain files (.csv) from the SFTP server
-  csv_files <- kwb.geosalz::download_measurementchains_data(
-    sftp_paths = new_sftp_paths,
+  kwb.geosalz::download_measurementchains_data(
+    sftp_paths = new_paths,
     target_directory = paths$download_dir,
     debug = TRUE
   )
-} else {
   
-  csv_files <- data.frame()
-}
+} # else NULL implicitly
 
-# Print the paths to the downloaded files
-print(csv_files)
+str(csv_files)
 ```
 
 ### Data Import
@@ -180,14 +192,14 @@ The following code imports the downloaded measurement chains files (.csv) into
 R:
 
 ```{r measurementchains_data-import,  eval = con_defined}
-# Set the current data to the old data
-mc_data <- old_mc_data
+# Set the current data to the old data (may be NULL)
+mc_data <- old_data
 
 # If new files have been downloaded, import them into R
-if (nrow(csv_files) > 0L) {
+if (length(csv_files)) {
   
   # Import csv files using multiple CPU cores
-  new_mc_data <- kwb.geosalz::read_measurementchains_data(
+  new_data <- kwb.geosalz::read_measurementchains_data(
     csv_files,
     run_parallel = TRUE,
     debug = TRUE
@@ -195,12 +207,12 @@ if (nrow(csv_files) > 0L) {
   
   # Combine the new data with the existing data and reorder
   mc_data <- mc_data %>%
-    rbind(new_mc_data) %>%
+    rbind(new_data) %>%
     kwb.geosalz::order_measurement_chain_data()
 }
 ```
 
-The following datasets were imported into or already available in R: 
+The following datasets were imported into R or already available in R: 
 
 ```{r measurementchains_data-import_stats, eval = con_defined}
 mc_data_stats <- mc_data %>%
