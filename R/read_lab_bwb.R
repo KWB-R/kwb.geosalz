@@ -107,6 +107,7 @@ read_lab_bwb <- function(path)
   stop_if_duplicated_samples_found(
     df = lab_bwb, 
     col_sampleid = "Probe-Nr.", 
+    path,
     sheet = sheet
   )
   

@@ -8,7 +8,7 @@
 #' @export
 #'
 #' @importFrom kwb.utils isNullOrEmpty selectColumns stopFormatted
-stop_if_duplicated_samples_found <- function(df, col_sampleid, sheet = "")
+stop_if_duplicated_samples_found <- function(df, col_sampleid, path, sheet = "")
 {
   sample_ids <- kwb.utils::selectColumns(df, col_sampleid)
   

@@ -30,6 +30,7 @@ read_isotopes <- function(path)
   stop_if_duplicated_samples_found(
     df = isotopes, 
     col_sampleid = "probe_nr", 
+    path,
     sheet = ""
   )
   
