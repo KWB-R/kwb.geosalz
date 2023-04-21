@@ -19,10 +19,10 @@ get_measurmentchains_data_stats <- function(mc_data) {
     datetime_min = min(.data$datum_uhrzeit), 
     datetime_max = max(.data$datum_uhrzeit),
     min = min(.data$messwert, na.rm = TRUE), 
-    q10 = quantile(.data$messwert, 0.1, na.rm = TRUE), 
+    q10 = stats::quantile(.data$messwert, 0.1, na.rm = TRUE), 
     mean = mean(.data$messwert, na.rm = TRUE), 
-    median = median(.data$messwert, na.rm = TRUE),
-    q90 = quantile(.data$messwert, 0.9, na.rm = TRUE), 
+    median = stats::median(.data$messwert, na.rm = TRUE),
+    q90 = stats::quantile(.data$messwert, 0.9, na.rm = TRUE), 
     max = max(.data$messwert, na.rm = TRUE), 
     number_of_samples = dplyr::n()
   ) %>% 

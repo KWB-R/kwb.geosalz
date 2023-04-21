@@ -6,7 +6,7 @@
 \usage{
 download_measurementchains_data(
   sftp_paths,
-  target_directory = tempdir(),
+  target_directory = temp_dir(),
   sftp_connection = create_sftp_connection(),
   run_parallel = TRUE,
   debug = FALSE

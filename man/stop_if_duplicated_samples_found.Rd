@@ -4,12 +4,14 @@
 \alias{stop_if_duplicated_samples_found}
 \title{Helper function: stop if duplicated sample ids are found}
 \usage{
-stop_if_duplicated_samples_found(df, col_sampleid, sheet = "")
+stop_if_duplicated_samples_found(df, col_sampleid, path, sheet = "")
 }
 \arguments{
 \item{df}{data frame with samples in wide format}
 
 \item{col_sampleid}{column name of sample id}
+
+\item{path}{path to file from which \code{df} was read (for information only)}
 
 \item{sheet}{optional in case EXCEL is used (default: "")}
 }

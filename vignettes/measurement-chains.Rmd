@@ -72,9 +72,9 @@ measures two parameters with the following characteristics:
     + typical accuracy: +/- 1.5 % of measurement value
 
 - temperature:
-    + measurement range: 0 - 50 `r cat("\u00B0")` Celsius
-    + measurement resolution: 0.1 `r cat("\u00B0")` Celsius
-    + typical accuracy: <= 0.1 `r cat("\u00B0")` Celsius
+    + measurement range: 0 - 50 degree Celsius
+    + measurement resolution: 0.1 Kelvin
+    + typical accuracy: <= 0.1 Kelvin
 
 The maximum temporal resolution that a sensor can provide is "every second".
 Within the GeoSalz project, measurements are taken every 5 minutes. This should
@@ -90,7 +90,7 @@ the pumping regime.
 paths <- kwb.utils::resolve(list(
   
   # Local temporary directory
-  local_dir = fs::path_abs(tempdir()),
+  local_dir = kwb.geosalz:::temp_dir(),
   
   # Target directory for downloaded measurement chain files (.csv)
   download_dir = "<local_dir>/download", 
@@ -145,15 +145,45 @@ mc_files <- kwb.geosalz::get_measurementchains_files()
 str(mc_files)
 head(mc_files)
 
-# Download measurement chain files (.csv) from SFTP server
-csv_files <- kwb.geosalz::download_measurementchains_data(
-  sftp_paths = mc_files$sftp_path,
-  target_directory = paths$download_dir,
-  debug = TRUE
-)
+# All paths to files on the SFTP server
+all_paths <- kwb.utils::selectColumns(mc_files, "sftp_path")
 
-# Print the paths to the downloaded files
-csv_files
+# Download existing data from the Nextcloud server. NULL is returned if there is
+# no file "mc_data.zip" in the Nextcloud folder 
+# "projects/GeoSalz/Monitoring/messketten"
+old_data <- kwb.geosalz::get_measurement_chain_data_on_cloud()
+#old_data <- NULL
+
+# Determine the SFTP paths of the files to be downloaded. Download all available
+# files if there was no data on the Nextcloud yet. Otherwise, download only
+# those files that have been added to the SFTP server since when this script was
+# run the last time.
+new_paths <- if (is.null(old_data)) {
+  
+  all_paths
+  
+} else {
+  
+  # Get SFTP paths from which data were originally retrieved
+  old_paths <- unique(kwb.utils::selectColumns(old_data, "file"))
+  
+  # Determine the paths to the new files that need to be downloaded
+  setdiff(all_paths, old_paths)
+}
+
+# If there are new files to download, download them.
+csv_files <- if (length(new_paths)) {
+  
+  # Download only the new measurement chain files (.csv) from the SFTP server
+  kwb.geosalz::download_measurementchains_data(
+    sftp_paths = new_paths,
+    target_directory = paths$download_dir,
+    debug = TRUE
+  )
+  
+} # else NULL implicitly
+
+str(csv_files)
 ```
 
 ### Data Import
@@ -162,18 +192,27 @@ The following code imports the downloaded measurement chains files (.csv) into
 R:
 
 ```{r measurementchains_data-import,  eval = con_defined}
-# Stop in case that no csv file is available
-stopifnot(nrow(csv_files) > 0L) 
+# Set the current data to the old data (may be NULL)
+mc_data <- old_data
 
-# Import csv files using multiple CPU cores
-mc_data <- kwb.geosalz::read_measurementchains_data(
-  csv_files,
-  run_parallel = TRUE,
-  debug = TRUE
-)
+# If new files have been downloaded, import them into R
+if (length(csv_files)) {
+  
+  # Import csv files using multiple CPU cores
+  new_data <- kwb.geosalz::read_measurementchains_data(
+    csv_files,
+    run_parallel = TRUE,
+    debug = TRUE
+  )
+  
+  # Combine the new data with the existing data and reorder
+  mc_data <- mc_data %>%
+    rbind(new_data) %>%
+    kwb.geosalz::order_measurement_chain_data()
+}
 ```
 
-The following datasets were imported into R: 
+The following datasets were imported into R or already available in R: 
 
 ```{r measurementchains_data-import_stats, eval = con_defined}
 mc_data_stats <- mc_data %>%
@@ -218,8 +257,8 @@ data_zip_path <- kwb.geosalz::write_measurementchains_data(
 size_data_zip <- fs::file_size(data_zip_path)
 size_data_csv / size_data_zip
 
-extract_data_timeperiod <- function(data_path) {
-  basename(data_path) %>% 
+extract_data_timeperiod <- function(file) {
+  basename(file) %>% 
     kwb.utils::replaceFileExtension("") %>%  
     stringr::str_remove("^mc[-|_]data")
 }
@@ -291,26 +330,16 @@ NEXTCLOUD_PASSWORD = "your-nextcloud-app-password" ### see details below
 Subsequently the following code is run for uploading the data:
 
 ```{r measurementchains_data-upload,  eval = con_defined & nc_defined}
-
-# Upload all files in "paths$export_dir"
-#upload_files <- list.files(paths$export_dir, full.names = TRUE)
-
-
 # List paths of files to upload explicitly
-upload_files <- c(
+upload_files <- kwb.geosalz:::exclude_missing_files(c(
   stats_path, 
   pdf_files,
   metadata_path, 
   files_path,
   data_zip_path
-)
+))
 
 for (file in upload_files) {
-  
-  if (!file.exists(file)) {
-    message("File does not exist: ", file)
-    next
-  }
   
   kwb.utils::catAndRun(
     messageText = paste("Uploading file", file),
