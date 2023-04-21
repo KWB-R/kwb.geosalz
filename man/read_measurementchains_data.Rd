@@ -12,11 +12,14 @@ read_measurementchains_data(
 )
 }
 \arguments{
-\item{csv_files}{tibble as retrieved by \code{\link{download_measurementchains_data}}}
+\item{csv_files}{vector of paths as retrieved by
+\code{\link{download_measurementchains_data}}}
 
 \item{datetime_installation}{datetime of first logger installation in well K10. 
 Used to filter out older measurement data! (default: as.POSIXct("2022-09-27 11:00:00", 
 tz = "Etc/GMT-1")}
+
+\item{run_parallel}{default: TRUE}
 
 \item{debug}{show debug messages (default: FALSE)}
 }
@@ -31,9 +34,9 @@ Measurement Chains: read csv data from multiple files
 mc_files <- kwb.geosalz::get_measurementchains_files()
 target_directory <- tempdir()
 csv_files <- kwb.geosalz::download_measurementchains_data(
-sftp_paths = mc_files$sftp_path,
-target_directory)
+  sftp_paths = mc_files$sftp_path,
+  target_directory
+)
 mc_data <- kwb.geosalz::read_measurementchains_data(csv_files)
-
 }
 }
