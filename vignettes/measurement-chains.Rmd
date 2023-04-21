@@ -72,9 +72,9 @@ measures two parameters with the following characteristics:
     + typical accuracy: +/- 1.5 % of measurement value
 
 - temperature:
-    + measurement range: 0 - 50 `r cat("\u00B0")` Celsius
-    + measurement resolution: 0.1 `r cat("\u00B0")` Celsius
-    + typical accuracy: <= 0.1 `r cat("\u00B0")` Celsius
+    + measurement range: 0 - 50 degree Celsius
+    + measurement resolution: 0.1 Kelvin
+    + typical accuracy: <= 0.1 Kelvin
 
 The maximum temporal resolution that a sensor can provide is "every second".
 Within the GeoSalz project, measurements are taken every 5 minutes. This should
