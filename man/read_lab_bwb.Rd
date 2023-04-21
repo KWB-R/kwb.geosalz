@@ -4,10 +4,12 @@
 \alias{read_lab_bwb}
 \title{Read Lab BWB}
 \usage{
-read_lab_bwb(path)
+read_lab_bwb(path, sheet = "Analysen")
 }
 \arguments{
 \item{path}{path to file with lab BWB data}
+
+\item{sheet}{name of sheet containing analysis data. Default: "Analysen"}
 }
 \value{
 cleaned data frame with master data and lab values for all samples but 

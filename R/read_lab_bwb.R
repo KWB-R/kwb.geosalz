@@ -55,7 +55,7 @@ stop_on_missing_sheets <- function(path, sheets_needed)
 #' Read Lab BWB
 #'
 #' @param path path to file with lab BWB data
-#'
+#' @param sheet name of sheet containing analysis data. Default: "Analysen"
 #' @return cleaned data frame with master data and lab values for all samples but 
 #' only for selected parameters (columns A-BA and HB-HC)
 #' @export
@@ -70,26 +70,24 @@ stop_on_missing_sheets <- function(path, sheets_needed)
 #' @importFrom dplyr filter if_else mutate relocate
 #' @importFrom tibble as_tibble
 
-read_lab_bwb <- function(path)
+read_lab_bwb <- function(path, sheet = "Analysen")
 {
-  sheets_needed <- c("Stammdaten", "Analysen")
-  
-  stop_on_missing_sheets(path, sheets_needed)
+  stop_on_missing_sheets(path, c("Stammdaten", sheet))
   
   rows_to_skip <- 5L
-  
+
   lab_bwb_01 <- readxl::read_xlsx(
     path = path,
-    sheet = "Analysen",
+    sheet = sheet,
     range = cellranger::cell_limits(
-      ul = c(rows_to_skip,1L), 
+      ul = c(rows_to_skip, 1L), 
       lr = c(NA, 53L)
     )
   )
   
   lab_bwb_02 <- readxl::read_xlsx(
     path = path,
-    sheet = "Analysen",
+    sheet = sheet,
     range = cellranger::cell_limits(
       ul = c(rows_to_skip, 210L), 
       lr = c(NA, 211L)
