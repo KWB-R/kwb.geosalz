@@ -7,7 +7,7 @@
 read_bwb_header1_meta(
   file,
   meta_pattern = "META",
-  keep_pattern = gather_ignore(),
+  keep_pattern = column_pattern_gather_ignore(),
   dbg = FALSE
 )
 }
@@ -16,7 +16,7 @@ read_bwb_header1_meta(
 
 \item{meta_pattern}{meta_pattern default("META")}
 
-\item{keep_pattern}{keep_pattern (default: \code{gather_ignore})}
+\item{keep_pattern}{keep_pattern (default: \code{column_pattern_gather_ignore})}
 
 \item{dbg}{debug (default: FALSE)}
 }

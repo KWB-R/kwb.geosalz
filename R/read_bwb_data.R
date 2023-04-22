@@ -2,7 +2,7 @@
 #'
 #' @param file path(s) to EXCEL spreadsheet
 #' @param meta_pattern meta_pattern default("META")
-#' @param keep_pattern keep_pattern (default: \code{gather_ignore})
+#' @param keep_pattern keep_pattern (default: \code{column_pattern_gather_ignore})
 #' @param dbg debug (default: FALSE)
 #' @return data.table with imported xls(x) files
 #' @importFrom readxl excel_sheets
@@ -15,7 +15,7 @@
 read_bwb_header1_meta <- function(
     file, 
     meta_pattern = "META", 
-    keep_pattern = gather_ignore(),
+    keep_pattern = column_pattern_gather_ignore(),
     dbg = FALSE
 ) 
 {
@@ -95,7 +95,7 @@ get_meta_sheet_or_stop <- function(sheets, pattern, file)
 #'
 #' @param file file path(s) to EXCEL spreadsheet
 #' @param skip number of rows to skip in each sheet (default: 2)
-#' @param keep_pattern (default: gather_ignore())
+#' @param keep_pattern (default: column_pattern_gather_ignore())
 #' @param site_id_pattern (default: "^[0-9]{1,4}")
 #' @param dbg debug (default: TRUE)
 #' @return data.table with imported xls(x) files
@@ -109,7 +109,7 @@ get_meta_sheet_or_stop <- function(sheets, pattern, file)
 read_bwb_header2 <- function(
     file, 
     skip = 2, 
-    keep_pattern = gather_ignore(),
+    keep_pattern = column_pattern_gather_ignore(),
     site_id_pattern = "^[0-9]{1,4}", 
     dbg = TRUE
 ) 
@@ -178,7 +178,7 @@ read_bwb_header2 <- function(
 #'
 #' @param file file path(s) to EXCEL spreadsheet
 #' @param skip number of rows to skip in each sheet (default: 4)
-#' @param keep_pattern (default: gather_ignore())
+#' @param keep_pattern (default: column_pattern_gather_ignore())
 #' @param site_id_pattern (default: "^[0-9]{1,4}")
 #' @param dbg debug (default: TRUE)
 #' @return data.table with imported xls(x) files
@@ -191,7 +191,7 @@ read_bwb_header2 <- function(
 read_bwb_header4 <- function(
     file, 
     skip = 4, 
-    keep_pattern = gather_ignore(),
+    keep_pattern = column_pattern_gather_ignore(),
     site_id_pattern = "^[0-9]{1,4}", 
     dbg = TRUE
 ) 
@@ -436,7 +436,7 @@ gather_and_join_2 <- function(tmp_content, columns_keep, header)
 #' \code{read_bwb_header1_meta}
 #' @param files file path(s) to EXCEL spreadsheet
 #' @param meta_pattern (default: "META")
-#' @param keep_pattern  (default: \code{gather_ignore})
+#' @param keep_pattern  (default: \code{column_pattern_gather_ignore})
 #' @param site_id_pattern (default: "^[0-9]{1,4}")
 #' @param dbg debug (default: TRUE)
 #' @return data.table with imported xls(x) files
@@ -448,7 +448,7 @@ gather_and_join_2 <- function(tmp_content, columns_keep, header)
 read_bwb_data <- function(
     files, 
     meta_pattern = "META", 
-    keep_pattern = gather_ignore(),
+    keep_pattern = column_pattern_gather_ignore(),
     site_id_pattern = "^[0-9]{1,4}", 
     dbg = TRUE
 )

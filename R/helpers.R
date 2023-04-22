@@ -10,7 +10,7 @@ get_site_id <- function(string, pattern = "^[0-9]{1,4}")
   as.numeric(stringr::str_extract(string, pattern))
 }
 
-#' Helper function: gather_ignore
+#' Helper function: column_pattern_gather_ignore
 #'
 #' @param fields column names to be ignored for gathering (default: c(
 #' "Datum", "KN", "[iI]nterne Nr.", "Name der", "Ort", "Probe", "Pr\\u00FC",
@@ -20,7 +20,7 @@ get_site_id <- function(string, pattern = "^[0-9]{1,4}")
 #' @importFrom kwb.utils collapsed
 #' @export
 #'
-gather_ignore <- function(
+column_pattern_gather_ignore <- function(
     fields = c(
       "Datum", "KN", "[iI]nterne Nr.", "Name der", "Ort", "Probe",
       "Pr\u00FC", "Untersuchung", "Labor", "Jahr", "Galer", "Detail",
@@ -31,7 +31,7 @@ gather_ignore <- function(
   or_pattern(fields)
 }
 
-#' Helper function: gather_ignore_clean
+#' Helper function: column_pattern_gather_ignore_clean
 #'
 #' @param fields column names to be ignored for gathering (default:
 #' c("LabSampleCode", "Date", "Time", "Waterbody", "ExSiteCode", Site")
@@ -39,7 +39,7 @@ gather_ignore <- function(
 #' @importFrom kwb.utils collapsed
 #' @export
 #'
-gather_ignore_clean <- function(
+column_pattern_gather_ignore_clean <- function(
     fields = c(
       "LabSampleCode", "Date", "Time", "Waterbody", "ExSiteCode", "Site"
     )
