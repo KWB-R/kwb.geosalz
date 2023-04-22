@@ -394,7 +394,6 @@ for (water_type in water_types) {
 
 ```{r plattform, eval = TRUE, echo= FALSE}
 environment <- sessioninfo::session_info()  
-
 knitr::kable(tibble::enframe(unlist(environment$platform)))
 ```
 
@@ -407,14 +406,5 @@ environment$packages
 ### Pandoc
 
 ```{r pandoc, eval = TRUE, echo= FALSE}
-
-if (rmarkdown::pandoc_available()) {
-  data.frame(
-    pandoc_directory = rmarkdown::pandoc_exec(),
-    pandoc_version = as.character(rmarkdown::pandoc_version()), 
-    stringsAsFactors = FALSE
-  )
-} else {
-  print("No PANDOC installed!")
-}
+get_pandoc_info()
 ```

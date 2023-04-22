@@ -129,7 +129,9 @@ swl_data <- stats::setNames(
   dplyr::bind_rows(.id = "Messstellennummer") %>% 
   dplyr::mutate(Datum = as.Date(.data$Datum, format = "%d.%m.%Y")) %>% 
   dplyr::filter(.data$Tagesmittelwert != -777) %>% 
-  dplyr::rename(Tagesmittelwert_cm_ueber_Pegelnullpunkt = .data$Tagesmittelwert) %>% 
+  dplyr::rename(
+    Tagesmittelwert_cm_ueber_Pegelnullpunkt = .data$Tagesmittelwert
+  ) %>% 
   dplyr::left_join(
     swl_master[, c("Nummer", "Pegelnullpunkt_m")],
     by = c("Messstellennummer" = "Nummer")
@@ -416,4 +418,3 @@ stats for `Chloride`
 ```{r tbl_gwq}
 DT::datatable(gwq_chloride_data_stats_export)
 ```
-

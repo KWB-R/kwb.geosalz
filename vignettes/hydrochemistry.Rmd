@@ -157,7 +157,7 @@ sims_list_master <- stats::setNames(
   
   lapply(seq_len(n_components), function(i) {
     
-    if(i %in% 1:2) {
+    if (i %in% 1:2) {
       
       sims_list[[i]]
       
@@ -193,7 +193,6 @@ export_data <- c(
   sims_list
 )
 
-
 openxlsx::write.xlsx(
   x = export_data,
   file = paths$phreeqc_xlsx,
@@ -201,14 +200,12 @@ openxlsx::write.xlsx(
 )
 ```
 
-
 # 6 Session Info 
 
 ## Plattform
 
 ```{r plattform, eval = TRUE, echo= FALSE}
 environment <- sessioninfo::session_info()  
-
 knitr::kable(tibble::enframe(unlist(environment$platform)))
 ```
 
@@ -221,13 +218,5 @@ environment$packages
 ### Pandoc
 
 ```{r pandoc, eval = TRUE, echo= FALSE}
-if (rmarkdown::pandoc_available()) {
-  data.frame(
-    pandoc_directory = rmarkdown::pandoc_exec(),
-    pandoc_version = as.character(rmarkdown::pandoc_version()), 
-    stringsAsFactors = FALSE
-  )
-} else {
-  print("No PANDOC installed!")
-}
+get_pandoc_info()
 ```
