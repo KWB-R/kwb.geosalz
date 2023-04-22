@@ -78,13 +78,10 @@ Check and in case the export directory is not available create it:
 
 ```{r}
 # Check if exists and if not create it
-
-if (!dir.exists(paths$export_dir)) {
-  print(sprintf("Creating export directory: %s", paths$export_dir))
-  fs::dir_create(paths$export_dir)
-}
-
-export_dir <- kwb.utils::safePath(kwb.utils::selectElements(paths, "export_dir"))
+export_dir <- paths %>%
+  kwb.utils::selectElements("export_dir") %>%
+  kwb.utils::createDirectory() %>%
+  kwb.utils::safePath()
 ```
 
 ```{r eval = FALSE}
