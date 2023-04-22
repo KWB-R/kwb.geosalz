@@ -5,8 +5,10 @@ date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Data Availability Waterworks Friedrichshagen}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include = FALSE}
@@ -69,16 +71,14 @@ Checkout the [Workflow](../workflow/) vignette for reproducing the creation of
 ```{r}
 library(kwb.geosalz)
 
-## Load water quality data (<= 2000, prepared within first phase of Geosalz project!)
-## for creation see the "workflow.Rmd" vignette
-
-load(file = file.path(paths$cleaned_data_rds))
+## Load water quality data (<= 2000, prepared within first phase of Geosalz
+## project!); for creation see the "workflow.Rmd" vignette
+load(file = paths$cleaned_data_rds)
 
 foerdermengen_ww <- kwb.geosalz::get_foerdermengen(paths$foerdermengen)
 
-foerdermengen_fri_gal <- kwb.geosalz::get_foerdermengen_gal_fri(
-  path = paths$foerdermengen
-) %>% 
+foerdermengen_fri_gal <- paths$foerdermengen %>%
+  kwb.geosalz::get_foerdermengen_gal_fri() %>% 
   dplyr::filter(!is.na(!.data$foerdermenge_m3))
 
 readr::write_csv2(
@@ -112,7 +112,9 @@ labordaten_ww_stats <- labordaten_ww_timeseries %>%
     date_max = as.Date(max(.data$Date)),
     period_days = diff(c(.data$date_min, .data$date_max)),
     number_of_samples = dplyr::n(), 
-    mean_sampling_intervall_days = round(.data$period_days/.data$number_of_samples)
+    mean_sampling_intervall_days = round(
+      .data$period_days/.data$number_of_samples
+    )
   ) %>% 
   dplyr::arrange(.data$para_id, .data$galerie)
 
