@@ -27,6 +27,12 @@ get_environment_variables <- function(...)
   lapply(list(...), Sys.getenv)
 }
 
+# or_pattern -------------------------------------------------------------------
+or_pattern <- function(x)
+{
+  paste(x, collapse = "|")
+}
+
 # temp_dir ---------------------------------------------------------------------
 temp_dir <- function(subfolder = "R_kwb.geosalz", dbg = TRUE)
 {
