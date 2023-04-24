@@ -37,6 +37,7 @@ Imports:
     readr(>= 1.4.0),
     readxl (>= 1.2.0),
     rlang (>= 0.3.1),
+    rmarkdown (>= 1.11),
     sf,
     sftp,
     stringr (>= 1.4.0),
@@ -55,7 +56,6 @@ Suggests:
     leaflet,
     openxlsx,
     phreeqc,
-    rmarkdown (>= 1.11),
     sessioninfo (>= 1.1.1),
     wasserportal
 VignetteBuilder: 

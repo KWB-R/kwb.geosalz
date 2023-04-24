@@ -134,7 +134,9 @@ on your local device.
 
 ### Data Download
 
-```{r measurementchains_data-download,  eval = con_defined}
+#### What files are available on the SFTP server?
+
+```{r measurement-chains_data-download_1,  eval = con_defined}
 # Metadata of measurement chains (see also Table 1 above)
 metadata <- kwb.geosalz::get_measurementchains_metadata()
 str(metadata)
@@ -147,13 +149,21 @@ head(mc_files)
 
 # All paths to files on the SFTP server
 all_paths <- kwb.utils::selectColumns(mc_files, "sftp_path")
+```
 
+#### What data are already available on the Nextcloud server?
+
+```{r measurement-chains_data-download_2, eval = con_defined}
 # Download existing data from the Nextcloud server. NULL is returned if there is
 # no file "mc_data.zip" in the Nextcloud folder 
 # "projects/GeoSalz/Monitoring/messketten"
 old_data <- kwb.geosalz::get_measurement_chain_data_on_cloud()
 #old_data <- NULL
+```
 
+#### What files need to be downloaded from the SFTP server?
+
+```{r measurement-chains_data-download_3, eval = con_defined}
 # Determine the SFTP paths of the files to be downloaded. Download all available
 # files if there was no data on the Nextcloud yet. Otherwise, download only
 # those files that have been added to the SFTP server since when this script was
@@ -170,7 +180,11 @@ new_paths <- if (is.null(old_data)) {
   # Determine the paths to the new files that need to be downloaded
   setdiff(all_paths, old_paths)
 }
+```
 
+#### Download the new files from the SFTP server
+
+```{r measurement-chains_data-download_4, eval = con_defined}
 # If there are new files to download, download them.
 csv_files <- if (length(new_paths)) {
   

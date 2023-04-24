@@ -78,13 +78,10 @@ Check and in case the export directory is not available create it:
 
 ```{r}
 # Check if exists and if not create it
-
-if (!dir.exists(paths$export_dir)) {
-  print(sprintf("Creating export directory: %s", paths$export_dir))
-  fs::dir_create(paths$export_dir)
-}
-
-export_dir <- kwb.utils::safePath(kwb.utils::selectElements(paths, "export_dir"))
+export_dir <- paths %>%
+  kwb.utils::selectElements("export_dir") %>%
+  kwb.utils::createDirectory() %>%
+  kwb.utils::safePath()
 ```
 
 ```{r eval = FALSE}
@@ -394,7 +391,6 @@ for (water_type in water_types) {
 
 ```{r plattform, eval = TRUE, echo= FALSE}
 environment <- sessioninfo::session_info()  
-
 knitr::kable(tibble::enframe(unlist(environment$platform)))
 ```
 
@@ -407,14 +403,5 @@ environment$packages
 ### Pandoc
 
 ```{r pandoc, eval = TRUE, echo= FALSE}
-
-if (rmarkdown::pandoc_available()) {
-  data.frame(
-    pandoc_directory = rmarkdown::pandoc_exec(),
-    pandoc_version = as.character(rmarkdown::pandoc_version()), 
-    stringsAsFactors = FALSE
-  )
-} else {
-  print("No PANDOC installed!")
-}
+kwb.geosalz::get_pandoc_info()
 ```

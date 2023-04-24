@@ -7,7 +7,7 @@
 read_bwb_header4(
   file,
   skip = 4,
-  keep_pattern = gather_ignore(),
+  keep_pattern = column_pattern_gather_ignore(),
   site_id_pattern = "^[0-9]{1,4}",
   dbg = TRUE
 )
@@ -17,7 +17,7 @@ read_bwb_header4(
 
 \item{skip}{number of rows to skip in each sheet (default: 4)}
 
-\item{keep_pattern}{(default: gather_ignore())}
+\item{keep_pattern}{(default: column_pattern_gather_ignore())}
 
 \item{site_id_pattern}{(default: "^[0-9]{1,4}")}
 

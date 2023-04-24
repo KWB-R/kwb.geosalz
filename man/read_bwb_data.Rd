@@ -7,7 +7,7 @@
 read_bwb_data(
   files,
   meta_pattern = "META",
-  keep_pattern = gather_ignore(),
+  keep_pattern = column_pattern_gather_ignore(),
   site_id_pattern = "^[0-9]{1,4}",
   dbg = TRUE
 )
@@ -17,7 +17,7 @@ read_bwb_data(
 
 \item{meta_pattern}{(default: "META")}
 
-\item{keep_pattern}{(default: \code{gather_ignore})}
+\item{keep_pattern}{(default: \code{column_pattern_gather_ignore})}
 
 \item{site_id_pattern}{(default: "^[0-9]{1,4}")}
 
