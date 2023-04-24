@@ -73,6 +73,12 @@
     <loc>https://kwb-r.github.io/kwb.geosalz/reference/cat_red_bold_0.html</loc>
   </url>
   <url>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/column_pattern_gather_ignore.html</loc>
+  </url>
+  <url>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/column_pattern_gather_ignore_clean.html</loc>
+  </url>
+  <url>
     <loc>https://kwb-r.github.io/kwb.geosalz/reference/convert_phreeqc_input_to_wide.html</loc>
   </url>
   <url>
@@ -143,6 +149,9 @@
   </url>
   <url>
     <loc>https://kwb-r.github.io/kwb.geosalz/reference/get_meta_sheet_or_stop.html</loc>
+  </url>
+  <url>
+    <loc>https://kwb-r.github.io/kwb.geosalz/reference/get_pandoc_info.html</loc>
   </url>
   <url>
     <loc>https://kwb-r.github.io/kwb.geosalz/reference/get_parameters_meta.html</loc>
