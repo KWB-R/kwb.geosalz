@@ -395,7 +395,11 @@ read_measurementchains_data <- function(
   
   ncores <- parallel::detectCores() - 1L
   
-  if (run_parallel && ncores > 1L) {
+  # Can we do parallel processing?
+  do_run_parallel <- run_parallel && ncores > 1L
+  
+  # Prepare parallel processing if required
+  if (do_run_parallel) {
     
     cl <- parallel::makeCluster(ncores)
     on.exit(parallel::stopCluster(cl))
@@ -413,7 +417,7 @@ read_measurementchains_data <- function(
       ifelse(ncores > 1L, "s", "")
     ),
     dbg = debug,
-    expr = if (run_parallel) {
+    expr = if (do_run_parallel) {
       parallel::parLapply(cl, csv_files, read_measurementchain_data)
     } else {
       lapply(csv_files, read_measurementchain_data)
