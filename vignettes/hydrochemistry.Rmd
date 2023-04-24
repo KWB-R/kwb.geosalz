@@ -218,5 +218,5 @@ environment$packages
 ### Pandoc
 
 ```{r pandoc, eval = TRUE, echo= FALSE}
-get_pandoc_info()
+kwb.geosalz::get_pandoc_info()
 ```
