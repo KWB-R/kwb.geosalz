@@ -112,11 +112,11 @@ Rustler</h4>
 <span>  project <span class="op">=</span> <span class="st">"geosalz"</span>,</span>
 <span>  root_project <span class="op">=</span> <span class="st">"&lt;root_server&gt;/&lt;project&gt;"</span>,</span>
 <span>  monitoring <span class="op">=</span> <span class="st">"&lt;root_project&gt;/Work-packages/AP2_Monitoring"</span>,</span>
-<span>  samples_bwb_dir <span class="op">=</span> <span class="st">"&lt;monitoring&gt;/Beprobung/BWB-lab"</span>,</span>
-<span>  version <span class="op">=</span> <span class="st">"1.0.6"</span>,</span>
+<span>  samples_bwb_dir <span class="op">=</span> <span class="st">"&lt;monitoring&gt;/Beprobung"</span>,</span>
+<span>  version <span class="op">=</span> <span class="st">"1.12"</span>,</span>
 <span>  samples_bwb <span class="op">=</span> <span class="st">"&lt;samples_bwb_dir&gt;/Hydrochemie_Gesamt_Geosalz_v&lt;version&gt;.xlsx"</span>,</span>
 <span>  master_data <span class="op">=</span> <span class="st">"&lt;samples_bwb&gt;"</span>,</span>
-<span>  isotopes_dir <span class="op">=</span>  <span class="st">"&lt;monitoring&gt;/Isotope"</span>,</span>
+<span>  isotopes_dir <span class="op">=</span>  <span class="st">"&lt;monitoring&gt;/Isotope/data"</span>,</span>
 <span>  isotopes <span class="op">=</span> <span class="st">"&lt;isotopes_dir&gt;/Isotope.csv"</span>,</span>
 <span>  phreeqc_dir <span class="op">=</span> <span class="st">"&lt;samples_bwb_dir&gt;/phreeqc"</span>,</span>
 <span>  phreeqc_txt <span class="op">=</span> <span class="st">"&lt;phreeqc_dir&gt;/phreeqc_output_v%s.txt"</span>,</span>
@@ -133,7 +133,7 @@ Rustler</h4>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">master_data</span> <span class="op">&lt;-</span> <span class="fu">kwb.geosalz</span><span class="fu">::</span><span class="fu"><a href="../reference/read_master_data.html">read_master_data</a></span><span class="op">(</span><span class="va">paths</span><span class="op">$</span><span class="va">master_data</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">lab_bwb</span> <span class="op">&lt;-</span> <span class="fu">kwb.geosalz</span><span class="fu">::</span><span class="fu"><a href="../reference/read_lab_bwb.html">read_lab_bwb</a></span><span class="op">(</span><span class="va">paths</span><span class="op">$</span><span class="va">samples_bwb</span><span class="op">)</span></span>
+<span><span class="va">lab_bwb</span> <span class="op">&lt;-</span> <span class="fu">kwb.geosalz</span><span class="fu">::</span><span class="fu"><a href="../reference/read_lab_bwb.html">read_lab_bwb</a></span><span class="op">(</span><span class="va">paths</span><span class="op">$</span><span class="va">samples_bwb</span>, sheet <span class="op">=</span> <span class="st">'phreeqc_analysen'</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">lab_ufz</span> <span class="op">&lt;-</span> <span class="fu">kwb.geosalz</span><span class="fu">::</span><span class="fu"><a href="../reference/read_isotopes.html">read_isotopes</a></span><span class="op">(</span><span class="va">paths</span><span class="op">$</span><span class="va">isotopes</span><span class="op">)</span></span>
 <span></span>
@@ -176,7 +176,7 @@ Rustler</h4>
 <code class="sourceCode R"><span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/create.html" class="external-link">dir_create</a></span><span class="op">(</span><span class="va">paths</span><span class="op">$</span><span class="va">phreeqc_dir</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">### Load PHREEQC database "phreeqc.dat"</span></span>
-<span><span class="fu">phreeqc</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/phreeqc/man/phrLoadDatabaseString.html" class="external-link">phrLoadDatabaseString</a></span><span class="op">(</span><span class="fu">phreeqc</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/phreeqc/man/minteq.dat.html" class="external-link">minteq.dat</a></span><span class="op">)</span></span>
+<span><span class="fu">phreeqc</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/phreeqc/man/phrLoadDatabaseString.html" class="external-link">phrLoadDatabaseString</a></span><span class="op">(</span><span class="fu">phreeqc</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/phreeqc/man/phreeqc.dat.html" class="external-link">phreeqc.dat</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">### Capture PHREEQC output normally sent to output file into a buffer</span></span>
 <span><span class="fu">phreeqc</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/phreeqc/man/phrSetOutputStringsOn.html" class="external-link">phrSetOutputStringsOn</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span></span>
