@@ -41,11 +41,11 @@ paths_list <- list(
   project = "geosalz",
   root_project = "<root_server>/<project>",
   monitoring = "<root_project>/Work-packages/AP2_Monitoring",
-  samples_bwb_dir = "<monitoring>/Beprobung/BWB-lab",
-  version = "1.0.6",
+  samples_bwb_dir = "<monitoring>/Beprobung",
+  version = "1.12",
   samples_bwb = "<samples_bwb_dir>/Hydrochemie_Gesamt_Geosalz_v<version>.xlsx",
   master_data = "<samples_bwb>",
-  isotopes_dir =  "<monitoring>/Isotope",
+  isotopes_dir =  "<monitoring>/Isotope/data",
   isotopes = "<isotopes_dir>/Isotope.csv",
   phreeqc_dir = "<samples_bwb_dir>/phreeqc",
   phreeqc_txt = "<phreeqc_dir>/phreeqc_output_v%s.txt",
@@ -67,7 +67,7 @@ knitr::opts_chunk$set(eval = dir_exists, message = FALSE, echo = TRUE)
 ```{r}
 master_data <- kwb.geosalz::read_master_data(paths$master_data)
 
-lab_bwb <- kwb.geosalz::read_lab_bwb(paths$samples_bwb)
+lab_bwb <- kwb.geosalz::read_lab_bwb(paths$samples_bwb, sheet = 'phreeqc_analysen')
 
 lab_ufz <- kwb.geosalz::read_isotopes(paths$isotopes)
 
@@ -114,7 +114,7 @@ cat(solutions_input)
 fs::dir_create(paths$phreeqc_dir)
 
 ### Load PHREEQC database "phreeqc.dat"
-phreeqc::phrLoadDatabaseString(phreeqc::minteq.dat)
+phreeqc::phrLoadDatabaseString(phreeqc::phreeqc.dat)
 
 ### Capture PHREEQC output normally sent to output file into a buffer
 phreeqc::phrSetOutputStringsOn(TRUE)
