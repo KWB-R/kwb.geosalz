@@ -366,7 +366,7 @@ for (file in upload_files) {
 }
 ```
 
-```{r measurementchains_data-delete, echo = FALSE, eval = con_defined & is_ghactions}
+```{r measurementchains_data-delete, echo = FALSE, eval = local}
 files <- list.files(paths$export_dir, full.names = TRUE)
 
 result <- try(fs::file_delete(path = files))
