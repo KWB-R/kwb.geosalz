@@ -324,19 +324,10 @@ print(sprintf("Export figures/plots to: %s", paths$figures_dir))
 para_info <- kwb.geosalz::get_parameters_meta(paths$parameters)
 water_types <- c("Reinwasser", "Rohwasser")
 
-for (water_type in water_types) {
-  
-  pdf_file <- file.path(
-    paths$figures_dir,
-    sprintf(
-      "Zeitreihen_Jahresmittelwerte_Werke_%s.pdf",
-      water_type
-    )
-  )
-  
-  cat(sprintf("Creating plot:\n%s\n", pdf_file))
-  
+plot_to_pdf <- function(pdf_file, labordaten_ww, para_info, water_type, paths)
+{
   pdf(file = pdf_file, width = 14, height = 9)
+  on.exit(dev.off())
   
   for (sel_para_id in unique(labordaten_ww$para_id)) {
     
@@ -381,7 +372,21 @@ for (water_type in water_types) {
       cat(sprintf("not data availabe for %s\n", my_selection))
     }
   }
-  dev.off()
+}
+
+
+for (water_type in water_types) {
+  
+  pdf_file <- file.path(
+    paths$figures_dir,
+    sprintf(
+      "Zeitreihen_Jahresmittelwerte_Werke_%s.pdf",
+      water_type
+    )
+  )
+  
+  cat(sprintf("Creating plot:\n%s\n", pdf_file))
+  plot_to_pdf(pdf_file, labordaten_ww, para_info, water_type, paths)
 }
 ```
 
