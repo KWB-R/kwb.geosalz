@@ -367,5 +367,15 @@ for (file in upload_files) {
 ```
 
 ```{r measurementchains_data-delete, echo = FALSE, eval = con_defined & is_ghactions}
-fs::file_delete(path = list.files(paths$export_dir, full.names = TRUE))
+files <- list.files(paths$export_dir, full.names = TRUE)
+
+result <- try(fs::file_delete(path = files))
+
+if (kwb.utils::isTryError(result)) {
+  message(
+    "Error when trying to delete these files:\n- ", 
+    paste(basename(files), collapse = "\n- "),
+    
+  )
+}
 ```
