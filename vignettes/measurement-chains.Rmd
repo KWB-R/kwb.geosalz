@@ -305,9 +305,9 @@ plot_to_pdf <- function(mc_data, para, target_dir = ".", debug = TRUE) {
       sprintf("Writting '%s' to '%s'", name, path),
       expr = {
         kwb.utils::preparePdf(path, width.cm = 25, height.cm = 15)
+        on.exit(dev.off())
         print(plots[[name]])
-        dev.off()
-        path 
+        path
       }, 
       dbg = debug
     )
