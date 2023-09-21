@@ -75,6 +75,10 @@ swl_map <- NULL
 gwl_map <- NULL
 gwq_map <- NULL
 
+swl_data_stats_export <- NULL
+gwl_data_stats_export <- NULL
+gwq_chloride_data_stats_export <- NULL
+
 try({
   library(kwb.geosalz)
   
@@ -410,7 +414,7 @@ for [Groundwater Levels](#groundwater-levels) and [Groundwater Levels](#groundwa
 
 #### SW Levels 
 
-```{r tbl_swl}
+```{r tbl_swl, eval = !is.null(swl_data_stats_export)}
 DT::datatable(swl_data_stats_export)
 ```
 
@@ -418,7 +422,7 @@ DT::datatable(swl_data_stats_export)
 
 stats for `groundwater levels`
 
-```{r tbl_gwl}
+```{r tbl_gwl, eval = !is.null(gwl_data_stats_export)}
 DT::datatable(gwl_data_stats_export)
 ```
 
@@ -426,6 +430,6 @@ DT::datatable(gwl_data_stats_export)
 
 stats for `Chloride`
 
-```{r tbl_gwq}
+```{r tbl_gwq, eval = !is.null(gwq_chloride_data_stats_export)}
 DT::datatable(gwq_chloride_data_stats_export)
 ```
