@@ -3,8 +3,10 @@ title: "Wasserportal"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Wasserportal}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r, include = FALSE}
@@ -133,6 +135,9 @@ try({
     nm = swl_master$Nummer
   )
   
+  column_level_zero <- "Pegelnullpunkt_m_NHN"
+  key_columns <- c("Nummer", column_level_zero)
+
   swl_data <- stats::setNames(
     lapply(names(swl_data_list), function(name) {
       swl_data_list[[name]][[1]]
@@ -143,17 +148,17 @@ try({
     dplyr::mutate(Datum = as.Date(.data$Datum, format = "%d.%m.%Y")) %>% 
     dplyr::filter(.data$Tagesmittelwert != -777) %>% 
     dplyr::rename(
-      Tagesmittelwert_cm_ueber_Pegelnullpunkt = .data$Tagesmittelwert
+      Tagesmittelwert_cm_ueber_Pegelnullpunkt = "Tagesmittelwert"
     ) %>% 
     dplyr::left_join(
-      swl_master[, c("Nummer", "Pegelnullpunkt_m")],
-      by = c("Messstellennummer" = "Nummer")
+      swl_master[, ..key_columns],
+      by = c(Messstellennummer = "Nummer")
     ) %>%  
     dplyr::mutate(
-      Tagesmittelwert_Pegelstand_mNN = as.numeric(.data$Pegelnullpunkt_m) +
-        .data$Tagesmittelwert_cm_ueber_Pegelnullpunkt/100
+      Tagesmittelwert_Pegelstand_mNN = as.numeric(.data[[column_level_zero]]) +
+        .data$Tagesmittelwert_cm_ueber_Pegelnullpunkt / 100
     ) %>% 
-    dplyr::select(- .data$Pegelnullpunkt_m)
+    dplyr::select(- .data[[column_level_zero]])
   
   readr::write_csv2(swl_data, file = "swl_data.csv")
   
