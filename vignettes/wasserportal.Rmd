@@ -78,28 +78,32 @@ gwq_map <- NULL
 swl_data_stats_export <- NULL
 gwl_data_stats_export <- NULL
 gwq_chloride_data_stats_export <- NULL
+```
 
+```{r}
+library(kwb.geosalz)
+
+### Set target CRS
+crs_target <- 4326
+
+### Load SVM Boundaries
+shp_svm_path <- system.file(
+  "extdata/gis/shapefiles/svm_south.shp", 
+  package = "kwb.geosalz"
+)
+
+svm <- sf::st_read(shp_svm_path) %>%
+  sf::st_transform(crs = crs_target)
+
+sf::st_crs(svm)
+
+polygon_svm_fri <- svm$geometry[svm$name == "Friedrichshagen"]
+
+stations <- wasserportal::get_stations()
+```
+
+```{r surfacewater_level}
 try({
-  library(kwb.geosalz)
-  
-  ### Set target CRS
-  crs_target <- 4326
-  
-  ### Load SVM Boundaries
-  shp_svm_path <- system.file(
-    "extdata/gis/shapefiles/svm_south.shp", 
-    package = "kwb.geosalz"
-  )
-  
-  svm <- sf::st_read(shp_svm_path) %>%
-    sf::st_transform(crs = crs_target)
-  
-  sf::st_crs(svm)
-  
-  polygon_svm_fri <- svm$geometry[svm$name == "Friedrichshagen"]
-  
-  stations <- wasserportal::get_stations()
-  
   swl_master <- wasserportal::get_wasserportal_masters_data(
     master_urls = stations$overview_list$surface_water.water_level %>%
       dplyr::filter(.data$Betreiber == "Land Berlin") %>%
@@ -163,7 +167,12 @@ try({
     )
   
   readr::write_csv2(swl_data_stats_export, file = "swl_data_stats.csv")
-  
+})
+```
+
+```{r groundwater_level}
+try({
+
   gwl_master <- jsonlite::fromJSON(
     "https://kwb-r.github.io/wasserportal/stations_gwl_master.json"
   )
@@ -200,10 +209,16 @@ try({
     dplyr::left_join(gwl_data_stats, by = c("Nummer" = "Messstellennummer")) %>%
     add_label()
   
+})
+```
+
+```{r groundwater_quality}
+try({
+  
   gwq_master <- jsonlite::fromJSON(
     "https://kwb-r.github.io/wasserportal/stations_gwq_master.json"
   )
-  
+
   gwq_master_sf <- gwq_master %>%
     kwb.geosalz::convert_to_sf(crs_target = crs_target) %>%
     sf::st_filter(y = polygon_svm_fri)
@@ -275,6 +290,12 @@ try({
     gwq_chloride_master_stats, 
     file = "gwq_chloride_master_stats.csv"
   )
+})
+```
+
+
+```{r print_maps}
+try({
   
   # Print Map
   basemap <- svm %>%
@@ -283,7 +304,7 @@ try({
     leaflet::addProviderTiles(leaflet::providers$CartoDB.Positron) %>%
     leaflet::addPolygons(color = "red", fill = FALSE)
   
-  swl_map <-  basemap %>%
+  swl_map <- basemap %>%
     leaflet::addCircles(
       data = swl_master_sf,
       color = "blue",
@@ -297,7 +318,7 @@ try({
       title = "Legende"
     )
   
-  gwl_map <-  basemap %>%
+  gwl_map <- basemap %>%
     leaflet::addCircles(
       data = kwb.geosalz::convert_to_sf(gwl_master_stats),
       color = "blue",
@@ -311,7 +332,7 @@ try({
       title = "Legende"
     )
   
-  gwq_map <-  basemap %>%
+  gwq_map <- basemap %>%
     leaflet::addCircles(
       data = kwb.geosalz::convert_to_sf(gwq_chloride_master_stats),
       color = "orange",
