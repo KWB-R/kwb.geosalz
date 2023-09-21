@@ -305,9 +305,9 @@ plot_to_pdf <- function(mc_data, para, target_dir = ".", debug = TRUE) {
       sprintf("Writting '%s' to '%s'", name, path),
       expr = {
         kwb.utils::preparePdf(path, width.cm = 25, height.cm = 15)
+        on.exit(dev.off())
         print(plots[[name]])
-        dev.off()
-        path 
+        path
       }, 
       dbg = debug
     )
@@ -366,6 +366,16 @@ for (file in upload_files) {
 }
 ```
 
-```{r measurementchains_data-delete, echo = FALSE, eval = con_defined & is_ghactions}
-fs::file_delete(path = list.files(paths$export_dir, full.names = TRUE))
+```{r measurementchains_data-delete, echo = FALSE, eval = local}
+files <- list.files(paths$export_dir, full.names = TRUE)
+
+result <- try(fs::file_delete(path = files))
+
+if (kwb.utils::isTryError(result)) {
+  message(
+    "Error when trying to delete these files:\n- ", 
+    paste(basename(files), collapse = "\n- "),
+    
+  )
+}
 ```
