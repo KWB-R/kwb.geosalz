@@ -71,6 +71,10 @@ remove_na_and_geometry <- function(df) {
 ```
 
 ```{r setup}
+swl_map <- NULL
+gwl_map <- NULL
+gwq_map <- NULL
+
 try({
   library(kwb.geosalz)
   
@@ -328,19 +332,23 @@ try({
 
 Save maps for full page view:
 
-```{r save_maps}
+```{r save_swl_map, eval = !is.null(swl_map)}
 htmlwidgets::saveWidget(
   swl_map, 
   "./map_swl.html", 
   title = "SW level"
 )
+```
 
+```{r save_gwl_map, eval = !is.null(gwl_map)}
 htmlwidgets::saveWidget(
   gwl_map, 
   "./map_gwl.html", 
   title = "GW level"
 )
+```
 
+```{r save_gwq_map, eval = !is.null(gwq_map)}
 htmlwidgets::saveWidget(
   gwq_map, 
   "./map_gwq.html", 
