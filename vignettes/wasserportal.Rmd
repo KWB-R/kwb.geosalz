@@ -312,57 +312,49 @@ try({
 ## Create Maps
 
 ```{r print_maps}
-swl_map <- NULL
-gwl_map <- NULL
-gwq_map <- NULL
+basemap <- svm %>%
+  leaflet::leaflet() %>%
+  leaflet::addTiles() %>%
+  leaflet::addProviderTiles(leaflet::providers$CartoDB.Positron) %>%
+  leaflet::addPolygons(color = "red", fill = FALSE)
 
-try({
-  
-  basemap <- svm %>%
-    leaflet::leaflet() %>%
-    leaflet::addTiles() %>%
-    leaflet::addProviderTiles(leaflet::providers$CartoDB.Positron) %>%
-    leaflet::addPolygons(color = "red", fill = FALSE)
-  
-  swl_map <- create_map(
-    basemap,
-    data = swl_master_sf, 
-    labels = swl_master_sf$label,
-    legend_label = "OW-Stand (Wasserportal)",
-    legend_color = "darkblue",
-    circle_color = "blue"
-  )
-  
-  gwl_map <- create_map(
-    basemap,
-    data = kwb.geosalz::convert_to_sf(gwl_master_stats),
-    labels = gwl_master_stats$label,
-    legend_label = "GW-Stand (Wasserportal)",
-    legend_color = "blue",
-    circle_color = "blue"
-  )
-  
-  gwq_map <- create_map(
-    basemap,
-    data = kwb.geosalz::convert_to_sf(gwq_chloride_master_stats),
-    labels = gwq_chloride_master_stats$label,
-    legend_label = "GW-G\u00FCte (Wasserportal)",
-    legend_color = "orange",
-    circle_color = "orange"
-  )
-  
-  print(swl_map)
-  print(gwl_map)
-  print(gwq_map)
-})
+swl_map <- try(create_map(
+  basemap,
+  data = swl_master_sf, 
+  labels = swl_master_sf$label,
+  legend_label = "OW-Stand (Wasserportal)",
+  legend_color = "darkblue",
+  circle_color = "blue"
+))
 
+gwl_map <- try(create_map(
+  basemap,
+  data = kwb.geosalz::convert_to_sf(gwl_master_stats),
+  labels = gwl_master_stats$label,
+  legend_label = "GW-Stand (Wasserportal)",
+  legend_color = "blue",
+  circle_color = "blue"
+))
+
+gwq_map <- try(create_map(
+  basemap,
+  data = kwb.geosalz::convert_to_sf(gwq_chloride_master_stats),
+  labels = gwq_chloride_master_stats$label,
+  legend_label = "GW-G\u00FCte (Wasserportal)",
+  legend_color = "orange",
+  circle_color = "orange"
+))
+
+print(swl_map)
+print(gwl_map)
+print(gwq_map)
 ```
 
 ## Save Maps 
 
 Save maps for full page view:
 
-```{r save_swl_map, eval = !is.null(swl_map)}
+```{r save_swl_map, eval = !kwb.utils::isTryError(swl_map)}
 htmlwidgets::saveWidget(
   swl_map, 
   "./map_swl.html", 
@@ -370,7 +362,7 @@ htmlwidgets::saveWidget(
 )
 ```
 
-```{r save_gwl_map, eval = !is.null(gwl_map)}
+```{r save_gwl_map, eval = !kwb.utils::isTryError(gwl_map)}
 htmlwidgets::saveWidget(
   gwl_map, 
   "./map_gwl.html", 
@@ -378,7 +370,7 @@ htmlwidgets::saveWidget(
 )
 ```
 
-```{r save_gwq_map, eval = !is.null(gwq_map)}
+```{r save_gwq_map, eval = !kwb.utils::isTryError(gwq_map)}
 htmlwidgets::saveWidget(
   gwq_map, 
   "./map_gwq.html", 
