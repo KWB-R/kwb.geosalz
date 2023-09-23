@@ -128,30 +128,22 @@ try({
   swl_master <- swl_master %>% 
     dplyr::filter(.data$Nummer %in% swl_master_sf$Nummer) 
   
-  readr::write_csv2(swl_master, file = "swl_master.csv")
+  write_csv(swl_master, file = "swl_master.csv")
   
-  swl_data_list <- stats::setNames(
-    lapply(swl_master$Nummer, function(station) {
-      wasserportal::read_wasserportal(
-        station = station, 
-        from_date = "1900-01-01",
-        variables = "ows", 
-        type = "daily",
-        stations_crosstable = stations$crosstable
-      )
-    }), 
-    nm = swl_master$Nummer
+  swl_data_list <- lapply(
+    X = stats::setNames(nm = swl_master$Nummer),
+    FUN = wasserportal::read_wasserportal,
+    from_date = "1900-01-01",
+    variables = "ows", 
+    type = "daily",
+    stations_crosstable = stations$crosstable
   )
   
   column_level_zero <- "Pegelnullpunkt_m_NHN"
   key_columns <- c("Nummer", column_level_zero)
 
-  swl_data <- stats::setNames(
-    lapply(names(swl_data_list), function(name) {
-      swl_data_list[[name]][[1]]
-    }),
-    names(swl_data_list)
-  ) %>% 
+  swl_data <- stats::setNames(nm = names(swl_data_list)) %>%
+    lapply(function(name) swl_data_list[[name]][[1]]) %>% 
     dplyr::bind_rows(.id = "Messstellennummer") %>% 
     dplyr::mutate(Datum = as.Date(.data$Datum, format = "%d.%m.%Y")) %>% 
     dplyr::filter(.data$Tagesmittelwert != -777) %>% 
