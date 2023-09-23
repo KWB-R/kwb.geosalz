@@ -1,7 +1,7 @@
 #' Measurement Chains: Get Metadata
 #'
-#' @param file path to measurement chains metadata file (default:
-#' system.file("extdata/metadata_messketten.csv", package = "kwb.geosalz"))
+#' @param file path to measurement chains metadata file. Default:
+#' kwb.geosalz:::extdata_file("metadata_messketten.csv")
 #' @return tibble with measurement chains metadata
 #' @export
 #' @importFrom readr cols col_character col_integer col_double read_csv
@@ -10,27 +10,27 @@
 #' str(mc_metadata)
 #' mc_metadata
 get_measurementchains_metadata <- function(
-    file = system.file(
-      "extdata/metadata_messketten.csv", 
-      package = "kwb.geosalz"
-    )
+    file = extdata_file("metadata_messketten.csv")
 )
 {
-  readr::read_csv(
-    file = file,
-    col_types = readr::cols(
-      "galerie" = readr::col_character(),
-      "brunnen_nummer" = readr::col_integer(),
-      "dn" = readr::col_integer(),
-      "einbau_pumpe" = readr::col_character(),
-      "einbau_messkette" = readr::col_character(),
-      "filteroberkante_muGOK" = readr::col_double(),
-      "filterunterkante_muGOK" = readr::col_double(),
-      "sensor_id" = readr::col_integer(),
-      "sensor_endnummer" = readr::col_integer(),
-      "einbau_sensor_muGOK" = readr::col_double()
-    )
+  chr <- readr::col_character()
+  int <- readr::col_integer()
+  dbl <- readr::col_double()
+
+  col_types <- readr::cols(
+    galerie = chr,
+    brunnen_nummer = int,
+    dn = int,
+    einbau_pumpe = chr,
+    einbau_messkette = chr,
+    filteroberkante_muGOK = dbl,
+    filterunterkante_muGOK = dbl,
+    sensor_id = int,
+    sensor_endnummer = int,
+    einbau_sensor_muGOK = dbl
   )
+  
+  readr::read_csv(file, col_types = col_types)
 }
 
 #' Measurement Chains: Create an SFTP Connection
