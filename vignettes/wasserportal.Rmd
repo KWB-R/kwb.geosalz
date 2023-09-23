@@ -47,7 +47,7 @@ get_data_stats <- function(df, group_col = "Messstellennummer") {
       end = max(as.Date(.data$Datum)),
       period = diff(c(.data$start, .data$end)),
       n = dplyr::n(),
-      interval = round(.data$period / .data$n, 0)
+      interval = round(.data$period / .data$n)
     )
 }
 
