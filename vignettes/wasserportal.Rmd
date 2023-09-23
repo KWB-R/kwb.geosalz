@@ -54,8 +54,8 @@ get_data_stats <- function(df, group_col = "Messstellennummer") {
 difftime_to_numeric <- function(df) {
   df %>%  
     dplyr::rename(
-      period_days = .data$period, 
-      interval_days = .data$interval
+      period_days = "period", 
+      interval_days = "interval"
     ) %>% 
     dplyr::mutate(
       period_days = as.numeric(.data$period_days),
