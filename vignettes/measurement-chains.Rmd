@@ -16,11 +16,6 @@ knitr::opts_chunk$set(
 # Load pipe operator
 `%>%` <- magrittr::`%>%`
 
-# Helper function to check if all strings are not empty
-all_defined <- function(x) {
-  all(sapply(x, stringr::str_length) > 0L)
-}
-
 # Get environment variables for access to SFTP server with input data
 con <- kwb.geosalz:::get_environment_variables(
   server = "MESSKETTEN_SERVER", 
@@ -36,8 +31,8 @@ nc <- kwb.geosalz:::get_environment_variables(
 )
 
 # Are all environment variables defined?
-con_defined <- all_defined(con)
-nc_defined <- all_defined(nc)
+con_defined <- kwb.geosalz:::all_defined(con)
+nc_defined <- kwb.geosalz:::all_defined(nc)
 
 # Is this script running on a GitHub server?
 is_ghactions <- identical(Sys.getenv("CI"), "true")

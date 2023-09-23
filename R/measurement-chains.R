@@ -42,23 +42,13 @@ get_measurementchains_metadata <- function(
 #' @importFrom stringr str_length
 create_sftp_connection <- function()
 {
-  con_vars <- c(
+  con <- get_environment_variables(
     server = "MESSKETTEN_SERVER", 
     username = "MESSKETTEN_USER", 
-    password = "MESSKETTEN_PASSWORD"
+    password = "MESSKETTEN_PASSWORD",
+    check. = TRUE
   )
-  
-  con <- do.call(get_environment_variables, as.list(con_vars))
-  
-  not_defined <- sapply(con, stringr::str_length) == 0L
-  
-  if (any(not_defined)) {
-    kwb.utils::stopFormatted(
-      "The following required environment variables are undefined/empty:\n%s",
-      paste0(con_vars[not_defined], collapse = ", ")
-    )
-  }
-  
+
   do.call(sftp::sftp_connect, con)
 }
 
