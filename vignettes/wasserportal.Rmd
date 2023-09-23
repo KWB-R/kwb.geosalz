@@ -60,15 +60,15 @@ difftime_to_numeric <- function(df) {
 }
 
 remove_na_and_geometry <- function(df) {
-  
-  if (any(names(df) == "label")) {
-    df <- dplyr::select(df, - .data$label)
-  }
-  
+  df %>%
+    kwb.utils::removeColumns("label") %>%
+    kwb.utils::removeEmptyColumns(dbg = FALSE) %>%
+    remove_geometry()
+}
+
+remove_geometry <- function(df) {
   sf::st_geometry(df) <- NULL
-  
-  df %>% 
-    dplyr::select_if(function(x){!all(is.na(x))})
+  df
 }
 ```
 
