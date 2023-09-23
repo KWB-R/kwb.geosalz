@@ -146,7 +146,7 @@ split_into_sensor_and_datetime <- function(x)
       sensor_endnummer = as.integer(.data[["sensor_endnummer"]]),
       datum_uhrzeit = as_gmt_plus_one(
         .data[["datum_uhrzeit"]], 
-        format = "%Y-%m-%d-%H%M",
+        format = "%Y-%m-%d-%H%M"
       )
     )
 }
