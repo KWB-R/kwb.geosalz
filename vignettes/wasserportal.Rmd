@@ -81,15 +81,31 @@ write_csv <- function(x, file) {
     readr::write_csv2(x, file)
   )
 }
+
+# Function to create a map
+create_map <- function(
+    basemap, data, labels, legend_label, legend_color, circle_color
+)
+{
+  basemap %>%
+    leaflet::addCircles(
+      data = data,
+      color = circle_color,
+      opacity = 0.4,
+      label = lapply(labels, htmltools::HTML)
+    ) %>%
+    leaflet::addLegend(
+      position = "topright",
+      colors = c("red", legend_color),
+      labels = c("SVM Modellgrenze", legend_label),
+      title = "Legende"
+    )
+}
 ```
 
 ## Initialise objects
 
 ```{r setup}
-swl_map <- NULL
-gwl_map <- NULL
-gwq_map <- NULL
-
 swl_data_stats_export <- NULL
 gwl_data_stats_export <- NULL
 gwq_chloride_data_stats_export <- NULL
@@ -296,56 +312,44 @@ try({
 ## Create Maps
 
 ```{r print_maps}
+swl_map <- NULL
+gwl_map <- NULL
+gwq_map <- NULL
+
 try({
   
-  # Print Map
   basemap <- svm %>%
     leaflet::leaflet() %>%
     leaflet::addTiles() %>%
     leaflet::addProviderTiles(leaflet::providers$CartoDB.Positron) %>%
     leaflet::addPolygons(color = "red", fill = FALSE)
   
-  swl_map <- basemap %>%
-    leaflet::addCircles(
-      data = swl_master_sf,
-      color = "blue",
-      opacity = 0.4,
-      label = lapply(swl_master_sf$label, htmltools::HTML)
-    ) %>%
-    leaflet::addLegend(
-      position = "topright",
-      colors = c("red", "darkblue"),
-      labels = c("SVM Modellgrenze", "OW-Stand (Wasserportal)"),
-      title = "Legende"
-    )
+  swl_map <- create_map(
+    basemap,
+    data = swl_master_sf, 
+    labels = swl_master_sf$label,
+    legend_label = "OW-Stand (Wasserportal)",
+    legend_color = "darkblue",
+    circle_color = "blue"
+  )
   
-  gwl_map <- basemap %>%
-    leaflet::addCircles(
-      data = kwb.geosalz::convert_to_sf(gwl_master_stats),
-      color = "blue",
-      opacity = 0.4,
-      label = lapply(gwl_master_stats$label, htmltools::HTML)
-    ) %>%
-    leaflet::addLegend(
-      position = "topright",
-      colors = c("red", "blue"),
-      labels = c("SVM Modellgrenze", "GW-Stand (Wasserportal)"),
-      title = "Legende"
-    )
+  gwl_map <- create_map(
+    basemap,
+    data = kwb.geosalz::convert_to_sf(gwl_master_stats),
+    labels = gwl_master_stats$label,
+    legend_label = "GW-Stand (Wasserportal)",
+    legend_color = "blue",
+    circle_color = "blue"
+  )
   
-  gwq_map <- basemap %>%
-    leaflet::addCircles(
-      data = kwb.geosalz::convert_to_sf(gwq_chloride_master_stats),
-      color = "orange",
-      opacity = 0.4,
-      label = lapply(gwq_chloride_master_stats$label, htmltools::HTML)
-    ) %>%
-    leaflet::addLegend(
-      position = "topright",
-      colors = c("red", "orange"),
-      labels = c("SVM Modellgrenze", "GW-G\u00FCte (Wasserportal)"),
-      title = "Legende"
-    )
+  gwq_map <- create_map(
+    basemap,
+    data = kwb.geosalz::convert_to_sf(gwq_chloride_master_stats),
+    labels = gwq_chloride_master_stats$label,
+    legend_label = "GW-G\u00FCte (Wasserportal)",
+    legend_color = "orange",
+    circle_color = "orange"
+  )
   
   print(swl_map)
   print(gwl_map)
