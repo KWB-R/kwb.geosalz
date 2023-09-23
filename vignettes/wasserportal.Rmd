@@ -83,19 +83,19 @@ gwq_chloride_data_stats_export <- NULL
 ```
 
 ```{r}
-library(kwb.geosalz)
-
-### Load SVM Boundaries
+# Load SVM boundaries and transform coordinate reference system (CRS)
 svm <- "extdata/gis/shapefiles/svm_south.shp" %>%
   system.file(package = "kwb.geosalz") %>%
   sf::st_read() %>%
-  # Transform to required coordinate reference system (CRS)
   sf::st_transform(crs = 4326)
 
+# Print information on the CRS
 sf::st_crs(svm)
 
+# Select polygon of interest
 polygon_svm_fri <- svm$geometry[svm$name == "Friedrichshagen"]
 
+# Get information on "Wasserportal"-stations 
 stations <- wasserportal::get_stations()
 ```
 
