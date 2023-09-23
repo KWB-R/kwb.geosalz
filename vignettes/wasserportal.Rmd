@@ -89,12 +89,9 @@ library(kwb.geosalz)
 crs_target <- 4326
 
 ### Load SVM Boundaries
-shp_svm_path <- system.file(
-  "extdata/gis/shapefiles/svm_south.shp", 
-  package = "kwb.geosalz"
-)
-
-svm <- sf::st_read(shp_svm_path) %>%
+svm <- "extdata/gis/shapefiles/svm_south.shp" %>%
+  system.file(package = "kwb.geosalz") %>%
+  sf::st_read() %>%
   sf::st_transform(crs = crs_target)
 
 sf::st_crs(svm)
