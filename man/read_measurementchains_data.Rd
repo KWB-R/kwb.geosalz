@@ -6,7 +6,7 @@
 \usage{
 read_measurementchains_data(
   csv_files,
-  datetime_installation = as.POSIXct("2022-09-27 11:00:00", tz = "Etc/GMT-1"),
+  datetime_installation = as_gmt_plus_one("2022-09-27 11:00:00"),
   run_parallel = TRUE,
   debug = FALSE
 )
@@ -16,8 +16,8 @@ read_measurementchains_data(
 \code{\link{download_measurementchains_data}}}
 
 \item{datetime_installation}{datetime of first logger installation in well K10. 
-Used to filter out older measurement data! (default: as.POSIXct("2022-09-27 11:00:00", 
-tz = "Etc/GMT-1")}
+Used to filter out older measurement data! Default: 
+kwb.geosalz:::as_gmt_plus_one("2022-09-27 11:00:00")}
 
 \item{run_parallel}{default: TRUE}
 

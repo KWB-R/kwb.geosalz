@@ -1,7 +1,7 @@
 #' Measurement Chains: Get Metadata
 #'
-#' @param file path to measurement chains metadata file (default:
-#' system.file("extdata/metadata_messketten.csv", package = "kwb.geosalz"))
+#' @param file path to measurement chains metadata file. Default:
+#' kwb.geosalz:::extdata_file("metadata_messketten.csv")
 #' @return tibble with measurement chains metadata
 #' @export
 #' @importFrom readr cols col_character col_integer col_double read_csv
@@ -10,27 +10,27 @@
 #' str(mc_metadata)
 #' mc_metadata
 get_measurementchains_metadata <- function(
-    file = system.file(
-      "extdata/metadata_messketten.csv", 
-      package = "kwb.geosalz"
-    )
+    file = extdata_file("metadata_messketten.csv")
 )
 {
-  readr::read_csv(
-    file = file,
-    col_types = readr::cols(
-      "galerie" = readr::col_character(),
-      "brunnen_nummer" = readr::col_integer(),
-      "dn" = readr::col_integer(),
-      "einbau_pumpe" = readr::col_character(),
-      "einbau_messkette" = readr::col_character(),
-      "filteroberkante_muGOK" = readr::col_double(),
-      "filterunterkante_muGOK" = readr::col_double(),
-      "sensor_id" = readr::col_integer(),
-      "sensor_endnummer" = readr::col_integer(),
-      "einbau_sensor_muGOK" = readr::col_double()
-    )
+  chr <- readr::col_character()
+  int <- readr::col_integer()
+  dbl <- readr::col_double()
+
+  col_types <- readr::cols(
+    galerie = chr,
+    brunnen_nummer = int,
+    dn = int,
+    einbau_pumpe = chr,
+    einbau_messkette = chr,
+    filteroberkante_muGOK = dbl,
+    filterunterkante_muGOK = dbl,
+    sensor_id = int,
+    sensor_endnummer = int,
+    einbau_sensor_muGOK = dbl
   )
+  
+  readr::read_csv(file, col_types = col_types)
 }
 
 #' Measurement Chains: Create an SFTP Connection
@@ -42,23 +42,13 @@ get_measurementchains_metadata <- function(
 #' @importFrom stringr str_length
 create_sftp_connection <- function()
 {
-  con_vars <- c(
+  con <- get_environment_variables(
     server = "MESSKETTEN_SERVER", 
     username = "MESSKETTEN_USER", 
-    password = "MESSKETTEN_PASSWORD"
+    password = "MESSKETTEN_PASSWORD",
+    check. = TRUE
   )
-  
-  con <- do.call(get_environment_variables, as.list(con_vars))
-  
-  not_defined <- sapply(con, stringr::str_length) == 0L
-  
-  if (any(not_defined)) {
-    kwb.utils::stopFormatted(
-      "The following required environment variables are undefined/empty:\n%s",
-      paste0(con_vars[not_defined], collapse = ", ")
-    )
-  }
-  
+
   do.call(sftp::sftp_connect, con)
 }
 
@@ -87,7 +77,8 @@ get_measurementchains_files <- function(
     debug = FALSE
 )
 {
-  file_info <- list_sftp_files(sftp_connection) %>%
+  file_info <- sftp_connection %>%
+    list_sftp_files() %>%
     kwb.utils::renameColumns(list(name = "sftp_path"))
 
   folder_file <- file_info %>%
@@ -122,7 +113,10 @@ list_sftp_files <- function(
 # split_into_folder_and_file ---------------------------------------------------
 split_into_folder_and_file <- function(x)
 {
-  data.frame(folder = dirname(x), file = basename(x))
+  data.frame(
+    folder = dirname(x), 
+    file = basename(x)
+  )
 }
 
 # split_into_galery_and_well ---------------------------------------------------
@@ -150,12 +144,9 @@ split_into_sensor_and_datetime <- function(x)
     dplyr::mutate(
       sensor_id = as.integer(.data[["sensor_id"]]),
       sensor_endnummer = as.integer(.data[["sensor_endnummer"]]),
-      datum_uhrzeit = as.POSIXct(
+      datum_uhrzeit = as_gmt_plus_one(
         .data[["datum_uhrzeit"]], 
-        format = "%Y-%m-%d-%H%M",
-        #data is always CET without switching
-        #https://stackoverflow.com/a/38333522
-        tz = "Etc/GMT-1"
+        format = "%Y-%m-%d-%H%M"
       )
     )
 }
@@ -321,23 +312,21 @@ exclude_existing_paths <- function(paths, target)
 #' }
 read_measurementchain_data <- function(path)
 {
-  readr::read_csv(
-    file = path,
-    locale = readr::locale(
-      #data is always CET without switching
-      #https://stackoverflow.com/a/38333522
-      tz = "Etc/GMT-1"
-    ),
-    col_types = readr::cols(
-      "Geraet" = readr::col_integer(),
-      "DatumUhrzeit" = readr::col_datetime(),
-      "Leitfaehigkeit" = readr::col_double(),
-      "Temperatur" = readr::col_double()
-    )
-  ) %>%
+  path %>%
+    readr::read_csv(
+      # data is always CET without switching
+      # https://stackoverflow.com/a/38333522
+      locale = readr::locale(tz = "Etc/GMT-1"),
+      col_types = readr::cols(
+        Geraet = readr::col_integer(),
+        DatumUhrzeit = readr::col_datetime(),
+        Leitfaehigkeit = readr::col_double(),
+        Temperatur = readr::col_double()
+      )
+    ) %>%
     dplyr::rename(
-      sensor_id = .data$Geraet,
-      datum_uhrzeit = .data$DatumUhrzeit
+      sensor_id = "Geraet",
+      datum_uhrzeit = "DatumUhrzeit"
     ) %>%
     tidyr::pivot_longer(
       names_to = "parameter",
@@ -351,8 +340,8 @@ read_measurementchain_data <- function(path)
 #' @param csv_files vector of paths as retrieved by
 #'   \code{\link{download_measurementchains_data}}
 #' @param datetime_installation datetime of first logger installation in well K10. 
-#' Used to filter out older measurement data! (default: as.POSIXct("2022-09-27 11:00:00", 
-#' tz = "Etc/GMT-1")
+#' Used to filter out older measurement data! Default: 
+#' kwb.geosalz:::as_gmt_plus_one("2022-09-27 11:00:00")
 #' @param run_parallel default: TRUE
 #' @param debug show debug messages (default: FALSE)
 #' @return data frame with imported data from csv files
@@ -373,7 +362,7 @@ read_measurementchain_data <- function(path)
 #' }
 read_measurementchains_data <- function(
     csv_files,
-    datetime_installation = as.POSIXct("2022-09-27 11:00:00", tz = "Etc/GMT-1"),
+    datetime_installation = as_gmt_plus_one("2022-09-27 11:00:00"),
     run_parallel = TRUE,
     debug = FALSE
 ) 

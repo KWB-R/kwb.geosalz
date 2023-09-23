@@ -29,10 +29,7 @@ plot_measurementchains <- function(mc_data, para = "Leitfaehigkeit")
     dat %>% 
       dplyr::filter(.data$brunnen_nummer == well_ids[i]) %>% 
       dplyr::filter(
-        .data$datum_uhrzeit >= as.POSIXct(
-          "2022-09-27 11:00:00", 
-          tz = "Etc/GMT-1"
-        )
+        .data$datum_uhrzeit >= as_gmt_plus_one("2022-09-27 11:00:00")
       ) %>% 
       dplyr::mutate(
         label = as.factor(sprintf(

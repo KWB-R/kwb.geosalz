@@ -4,13 +4,11 @@
 \alias{get_measurementchains_metadata}
 \title{Measurement Chains: Get Metadata}
 \usage{
-get_measurementchains_metadata(
-  file = system.file("extdata/metadata_messketten.csv", package = "kwb.geosalz")
-)
+get_measurementchains_metadata(file = extdata_file("metadata_messketten.csv"))
 }
 \arguments{
-\item{file}{path to measurement chains metadata file (default:
-system.file("extdata/metadata_messketten.csv", package = "kwb.geosalz"))}
+\item{file}{path to measurement chains metadata file. Default:
+kwb.geosalz:::extdata_file("metadata_messketten.csv")}
 }
 \value{
 tibble with measurement chains metadata
