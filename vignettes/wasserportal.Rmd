@@ -76,6 +76,8 @@ remove_geometry <- function(df) {
 }
 ```
 
+## Initialise objects
+
 ```{r setup}
 swl_map <- NULL
 gwl_map <- NULL
@@ -103,10 +105,11 @@ polygon_svm_fri <- svm$geometry[svm$name == "Friedrichshagen"]
 stations <- wasserportal::get_stations()
 ```
 
+## Download and Process Surface Water Level Data
+
 ```{r surfacewater_level}
 try({
   
-  # Surface water - water levels
   swl_master <- wasserportal::get_wasserportal_masters_data(
     master_urls = stations$overview_list$surface_water.water_level %>%
       dplyr::filter(.data$Betreiber == "Land Berlin") %>%
@@ -176,6 +179,8 @@ try({
 })
 ```
 
+## Download and Process Groundwater Level Data
+
 ```{r groundwater_level}
 try({
 
@@ -217,6 +222,8 @@ try({
   
 })
 ```
+
+## Download and Process Groundwater Quality Data
 
 ```{r groundwater_quality}
 try({
@@ -299,6 +306,7 @@ try({
 })
 ```
 
+## Create Maps
 
 ```{r print_maps}
 try({
@@ -359,7 +367,7 @@ try({
 
 ```
 
-## Maps 
+## Save Maps 
 
 Save maps for full page view:
 
