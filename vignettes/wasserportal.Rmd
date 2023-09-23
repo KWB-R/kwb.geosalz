@@ -98,8 +98,10 @@ svm <- "extdata/gis/shapefiles/svm_south.shp" %>%
 # Print information on the CRS
 sf::st_crs(svm)
 
-# Select polygon of interest
-polygon_svm_fri <- svm$geometry[svm$name == "Friedrichshagen"]
+# Function to filter for study area
+filter_for_study_area <- function(x) {
+  sf::st_filter(x, y = svm$geometry[svm$name == "Friedrichshagen"])
+}
 
 # Get information on "Wasserportal"-stations 
 stations <- wasserportal::get_stations()
@@ -118,7 +120,7 @@ try({
   
   swl_master_sf <- swl_master %>%
     kwb.geosalz::convert_to_sf() %>%
-    sf::st_filter(y = polygon_svm_fri) %>%
+    filter_for_study_area() %>%
     add_waterbody_label()
   
   swl_master <- swl_master %>% 
@@ -190,7 +192,7 @@ try({
   
   gwl_master_sf <- gwl_master %>%
     kwb.geosalz::convert_to_sf() %>%
-    sf::st_filter(y = polygon_svm_fri)
+    filter_for_study_area()
   
   gwl_master <- gwl_master %>% 
     dplyr::filter(.data$Nummer %in% gwl_master_sf$Nummer)
@@ -234,7 +236,7 @@ try({
 
   gwq_master_sf <- gwq_master %>%
     kwb.geosalz::convert_to_sf() %>%
-    sf::st_filter(y = polygon_svm_fri)
+    filter_for_study_area()
   
   gwq_master <- gwq_master %>% 
     dplyr::filter(.data$Nummer %in% gwq_master_sf$Nummer)
