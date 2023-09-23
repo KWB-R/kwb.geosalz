@@ -85,14 +85,12 @@ gwq_chloride_data_stats_export <- NULL
 ```{r}
 library(kwb.geosalz)
 
-### Set target CRS
-crs_target <- 4326
-
 ### Load SVM Boundaries
 svm <- "extdata/gis/shapefiles/svm_south.shp" %>%
   system.file(package = "kwb.geosalz") %>%
   sf::st_read() %>%
-  sf::st_transform(crs = crs_target)
+  # Transform to required coordinate reference system (CRS)
+  sf::st_transform(crs = 4326)
 
 sf::st_crs(svm)
 
@@ -103,6 +101,8 @@ stations <- wasserportal::get_stations()
 
 ```{r surfacewater_level}
 try({
+  
+  # Surface water - water levels
   swl_master <- wasserportal::get_wasserportal_masters_data(
     master_urls = stations$overview_list$surface_water.water_level %>%
       dplyr::filter(.data$Betreiber == "Land Berlin") %>%
@@ -110,7 +110,7 @@ try({
   ) 
   
   swl_master_sf <- swl_master %>%
-    kwb.geosalz::convert_to_sf(crs_target = crs_target) %>%
+    kwb.geosalz::convert_to_sf() %>%
     sf::st_filter(y = polygon_svm_fri) %>%
     add_label(columns = c("Nummer", "Gewaesser", "Auspraegung", "Betreiber"))
   
@@ -180,7 +180,7 @@ try({
   )
   
   gwl_master_sf <- gwl_master %>%
-    kwb.geosalz::convert_to_sf(crs_target = crs_target) %>%
+    kwb.geosalz::convert_to_sf() %>%
     sf::st_filter(y = polygon_svm_fri)
   
   gwl_master <- gwl_master %>% 
@@ -222,7 +222,7 @@ try({
   )
 
   gwq_master_sf <- gwq_master %>%
-    kwb.geosalz::convert_to_sf(crs_target = crs_target) %>%
+    kwb.geosalz::convert_to_sf() %>%
     sf::st_filter(y = polygon_svm_fri)
   
   gwq_master <- gwq_master %>% 
