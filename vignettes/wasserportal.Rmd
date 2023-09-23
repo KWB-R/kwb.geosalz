@@ -74,6 +74,8 @@ remove_geometry <- function(df) {
   sf::st_geometry(df) <- NULL
   df
 }
+
+write_csv <- readr::write_csv2
 ```
 
 ## Initialise objects
@@ -164,9 +166,9 @@ try({
       Tagesmittelwert_Pegelstand_mNN = as.numeric(.data[[column_level_zero]]) +
         .data$Tagesmittelwert_cm_ueber_Pegelnullpunkt / 100
     ) %>% 
-    dplyr::select(- .data[[column_level_zero]])
+    kwb.utils::removeColumns(column_level_zero)
   
-  readr::write_csv2(swl_data, file = "swl_data.csv")
+  write_csv(swl_data, file = "swl_data.csv")
   
   swl_data_stats <- get_data_stats(swl_data)
   
@@ -177,7 +179,7 @@ try({
       by = c("Nummer" = "Messstellennummer")
     )
   
-  readr::write_csv2(swl_data_stats_export, file = "swl_data_stats.csv")
+  write_csv(swl_data_stats_export, file = "swl_data_stats.csv")
 })
 ```
 
@@ -197,7 +199,7 @@ try({
   gwl_master <- gwl_master %>% 
     dplyr::filter(.data$Nummer %in% gwl_master_sf$Nummer)
   
-  readr::write_csv2(gwl_master, file = "gwl_master.csv")
+  write_csv(gwl_master, file = "gwl_master.csv")
   
   gwl_data <- data.table::rbindlist(
     lapply(gwl_master$Nummer, function(id) {
@@ -205,7 +207,7 @@ try({
     })
   )
   
-  readr::write_csv2(gwl_data, file = "gwl_data.csv")
+  write_csv(gwl_data, file = "gwl_data.csv")
   
   gwl_data_stats <- get_data_stats(gwl_data) 
   
@@ -216,7 +218,7 @@ try({
       by = c("Nummer" = "Messstellennummer")
     )
   
-  readr::write_csv2(gwl_data_stats_export, file = "gwl_data_stats.csv")
+  write_csv(gwl_data_stats_export, file = "gwl_data_stats.csv")
   
   gwl_master_stats <- gwl_master %>%
     dplyr::left_join(gwl_data_stats, by = c("Nummer" = "Messstellennummer")) %>%
@@ -241,21 +243,21 @@ try({
   gwq_master <- gwq_master %>% 
     dplyr::filter(.data$Nummer %in% gwq_master_sf$Nummer)
   
-  readr::write_csv2(gwq_master, file = "gwq_master.csv")
+  write_csv(gwq_master, file = "gwq_master.csv")
   
   gw_master <- gwl_master %>%  
     dplyr::full_join(gwq_master) %>% 
     dplyr::mutate(Nummer = as.integer(.data$Nummer)) %>% 
     dplyr::arrange(.data$Nummer)
   
-  readr::write_csv2(gw_master, file = "gw_master.csv")
+  write_csv(gw_master, file = "gw_master.csv")
   
   gwq_data <- jsonlite::fromJSON(
     "https://kwb-r.github.io/wasserportal/stations_gwq_data.json"
   ) %>%
     dplyr::filter(.data$Messstellennummer %in% gwq_master$Nummer)
   
-  readr::write_csv2(
+  write_csv(
     gwq_data,
     file = "gwq_data.csv"
   )
@@ -263,7 +265,7 @@ try({
   gwq_chloride_data <- gwq_data %>%
     dplyr::filter(.data$Parameter == "Chlorid")
   
-  readr::write_csv2(
+  write_csv(
     gwq_chloride_data,
     file = "gwq_chloride_data.csv"
   )
@@ -271,7 +273,7 @@ try({
   gwq_chloride_master <- gwq_master %>% 
     dplyr::filter(.data$Nummer %in% gwq_chloride_data$Messstellennummer)
   
-  readr::write_csv2(
+  write_csv(
     gwq_chloride_master,
     file = "gwq_chloride_master.csv"
   )
@@ -288,7 +290,7 @@ try({
       by = c("Nummer" = "Messstellennummer")
     )
   
-  readr::write_csv2(
+  write_csv(
     gwq_chloride_data_stats_export,
     file = "gwq_chloride_data_stats.csv"
   )
@@ -301,7 +303,7 @@ try({
     ) %>%
     add_interval_label()
   
-  readr::write_csv2(
+  write_csv(
     gwq_chloride_master_stats, 
     file = "gwq_chloride_master_stats.csv"
   )
