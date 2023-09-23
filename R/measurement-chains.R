@@ -77,7 +77,8 @@ get_measurementchains_files <- function(
     debug = FALSE
 )
 {
-  file_info <- list_sftp_files(sftp_connection) %>%
+  file_info <- sftp_connection %>%
+    list_sftp_files() %>%
     kwb.utils::renameColumns(list(name = "sftp_path"))
 
   folder_file <- file_info %>%
@@ -112,7 +113,10 @@ list_sftp_files <- function(
 # split_into_folder_and_file ---------------------------------------------------
 split_into_folder_and_file <- function(x)
 {
-  data.frame(folder = dirname(x), file = basename(x))
+  data.frame(
+    folder = dirname(x), 
+    file = basename(x)
+  )
 }
 
 # split_into_galery_and_well ---------------------------------------------------
@@ -143,8 +147,8 @@ split_into_sensor_and_datetime <- function(x)
       datum_uhrzeit = as.POSIXct(
         .data[["datum_uhrzeit"]], 
         format = "%Y-%m-%d-%H%M",
-        #data is always CET without switching
-        #https://stackoverflow.com/a/38333522
+        # data is always CET without switching
+        # https://stackoverflow.com/a/38333522
         tz = "Etc/GMT-1"
       )
     )
@@ -311,23 +315,21 @@ exclude_existing_paths <- function(paths, target)
 #' }
 read_measurementchain_data <- function(path)
 {
-  readr::read_csv(
-    file = path,
-    locale = readr::locale(
-      #data is always CET without switching
-      #https://stackoverflow.com/a/38333522
-      tz = "Etc/GMT-1"
-    ),
-    col_types = readr::cols(
-      "Geraet" = readr::col_integer(),
-      "DatumUhrzeit" = readr::col_datetime(),
-      "Leitfaehigkeit" = readr::col_double(),
-      "Temperatur" = readr::col_double()
-    )
-  ) %>%
+  path %>%
+    readr::read_csv(
+      # data is always CET without switching
+      # https://stackoverflow.com/a/38333522
+      locale = readr::locale(tz = "Etc/GMT-1"),
+      col_types = readr::cols(
+        Geraet = readr::col_integer(),
+        DatumUhrzeit = readr::col_datetime(),
+        Leitfaehigkeit = readr::col_double(),
+        Temperatur = readr::col_double()
+      )
+    ) %>%
     dplyr::rename(
-      sensor_id = .data$Geraet,
-      datum_uhrzeit = .data$DatumUhrzeit
+      sensor_id = "Geraet",
+      datum_uhrzeit = "DatumUhrzeit"
     ) %>%
     tidyr::pivot_longer(
       names_to = "parameter",
