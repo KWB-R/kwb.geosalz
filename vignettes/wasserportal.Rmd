@@ -198,11 +198,12 @@ try({
   
   write_csv(gwl_master, "gwl_master.csv")
   
-  gwl_data <- data.table::rbindlist(
-    lapply(gwl_master$Nummer, function(id) {
-      wasserportal::read_wasserportal_raw_gw(station = id, stype = "gwl")
-    })
-  )
+  gwl_data <- lapply(
+    X = gwl_master$Nummer,
+    FUN = wasserportal::read_wasserportal_raw_gw, 
+    stype = "gwl"
+  ) %>% 
+    data.table::rbindlist()
   
   write_csv(gwl_data, "gwl_data.csv")
   
