@@ -21,11 +21,7 @@ knitr::opts_chunk$set(
 ```{r define_helpers}
 library(kwb.geosalz)
 
-add_label <- function(
-    df, 
-    columns = c("Nummer", "start", "end", "n", "interval")
-)
-{
+add_label <- function(df, columns) {
   df %>%
     dplyr::mutate(label = wasserportal::columns_to_labels(
       data = df,
@@ -33,6 +29,14 @@ add_label <- function(
       fmt = "<p>%s: %s</p>",
       sep = ""
     ))
+}
+
+add_interval_label <- function(df) {
+  add_label(df, c("Nummer", "start", "end", "n", "interval"))
+}
+
+add_waterbody_label <- function(df) {
+  add_label(df, c("Nummer", "Gewaesser", "Auspraegung", "Betreiber"))
 }
 
 get_data_stats <- function(df, group_col = "Messstellennummer") {
@@ -112,7 +116,7 @@ try({
   swl_master_sf <- swl_master %>%
     kwb.geosalz::convert_to_sf() %>%
     sf::st_filter(y = polygon_svm_fri) %>%
-    add_label(columns = c("Nummer", "Gewaesser", "Auspraegung", "Betreiber"))
+    add_waterbody_label()
   
   swl_master <- swl_master %>% 
     dplyr::filter(.data$Nummer %in% swl_master_sf$Nummer) 
@@ -209,7 +213,7 @@ try({
   
   gwl_master_stats <- gwl_master %>%
     dplyr::left_join(gwl_data_stats, by = c("Nummer" = "Messstellennummer")) %>%
-    add_label()
+    add_interval_label()
   
 })
 ```
@@ -286,7 +290,7 @@ try({
       gwq_chloride_data_stats, 
       by = c("Nummer" = "Messstellennummer")
     ) %>%
-    add_label()
+    add_interval_label()
   
   readr::write_csv2(
     gwq_chloride_master_stats, 
