@@ -219,7 +219,7 @@ try({
   write_csv(gwl_data_stats_export, "gwl_data_stats.csv")
   
   gwl_master_stats <- gwl_master %>%
-    dplyr::left_join(gwl_data_stats, by = c("Nummer" = "Messstellennummer")) %>%
+    dplyr::left_join(gwl_data_stats, by = c(Nummer = "Messstellennummer")) %>%
     add_interval_label()
   
 })
