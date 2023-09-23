@@ -9,6 +9,43 @@ all_defined <- function(x)
   !any(is_empty_string(x))
 }
 
+# as_gmt_plus_one --------------------------------------------------------------
+as_gmt_plus_one <- function(x, format = "%Y-%m-%d %H:%M:%S")
+{
+  # data is always CET without switching
+  # https://stackoverflow.com/a/38333522
+  
+  # Timezone string. GMT-1 is correct! the result will be GMT+1, e.g.
+  # as_gmt_plus_one("2023-09-23 11:00:00") # "2023-09-23 11:00:00 +01"
+  
+  tzone <- "Etc/GMT-1"
+  
+  # If x is already a POSIXct object, change the tzone attribute
+  if (inherits(x, "POSIXct")) {
+    return(structure(x, tzone = tzone))
+  } 
+  
+  # Otherwise we expect x to be of type character  
+  stopifnot(is.character(x))
+  
+  # Convert character to POSIXct
+  as.POSIXct(x, format = format, tz = tzone)
+}
+
+# as_utc -----------------------------------------------------------------------
+as_utc <- function(x)
+{
+  # The given vector must be of type character
+  stopifnot(is.character(x))
+  
+  # All elements in x must look like this:
+  # <year>-<month>-<day>T<hour><minute><second>Z
+  stopifnot(all(grepl("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$", x)))
+  
+  # Convert character to POSIXct
+  as.POSIXct(x, format = "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")
+}
+
 # exclude_missing_files --------------------------------------------------------
 exclude_missing_files <- function(files)
 {

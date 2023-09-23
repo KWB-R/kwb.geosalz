@@ -144,12 +144,9 @@ split_into_sensor_and_datetime <- function(x)
     dplyr::mutate(
       sensor_id = as.integer(.data[["sensor_id"]]),
       sensor_endnummer = as.integer(.data[["sensor_endnummer"]]),
-      datum_uhrzeit = as.POSIXct(
+      datum_uhrzeit = as_gmt_plus_one(
         .data[["datum_uhrzeit"]], 
         format = "%Y-%m-%d-%H%M",
-        # data is always CET without switching
-        # https://stackoverflow.com/a/38333522
-        tz = "Etc/GMT-1"
       )
     )
 }
@@ -343,8 +340,8 @@ read_measurementchain_data <- function(path)
 #' @param csv_files vector of paths as retrieved by
 #'   \code{\link{download_measurementchains_data}}
 #' @param datetime_installation datetime of first logger installation in well K10. 
-#' Used to filter out older measurement data! (default: as.POSIXct("2022-09-27 11:00:00", 
-#' tz = "Etc/GMT-1")
+#' Used to filter out older measurement data! Default: 
+#' kwb.geosalz:::as_gmt_plus_one("2022-09-27 11:00:00")
 #' @param run_parallel default: TRUE
 #' @param debug show debug messages (default: FALSE)
 #' @return data frame with imported data from csv files
@@ -365,7 +362,7 @@ read_measurementchain_data <- function(path)
 #' }
 read_measurementchains_data <- function(
     csv_files,
-    datetime_installation = as.POSIXct("2022-09-27 11:00:00", tz = "Etc/GMT-1"),
+    datetime_installation = as_gmt_plus_one("2022-09-27 11:00:00"),
     run_parallel = TRUE,
     debug = FALSE
 ) 

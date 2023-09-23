@@ -28,8 +28,8 @@ get_measurement_chain_data_on_cloud <- function(dbg = TRUE)
     unzip_first_file() %>%
     read.csv() %>%
     dplyr::mutate(
-      # Convert the date time character to POSIXct
-      datum_uhrzeit = utc_text_to_posix_gmt_plus_1(.data[["datum_uhrzeit"]])
+      # Convert the date time character to POSIXct in GMT+1
+      datum_uhrzeit = as_gmt_plus_one(as_utc(.data[["datum_uhrzeit"]]))
     )
 }
 
@@ -49,19 +49,4 @@ unzip_first_file <- function(file)
   
   # Return the full path to the unzipped file
   kwb.utils::safePath(exdir, filename)
-}
-
-# utc_text_to_posix_gmt_plus_1 -------------------------------------------------
-utc_text_to_posix_gmt_plus_1 <- function(x)
-{
-  # The given vector must be of type character
-  stopifnot(is.character(x))
-  
-  # All elements in x must look like this:
-  # <year>-<month>-<day>T<hour><minute><second>Z
-  stopifnot(all(grepl("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$", x)))
- 
-  times <- as.POSIXct(x, format = "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")
-
-  structure(times, tzone = "Etc/GMT-1")
 }
