@@ -1,6 +1,6 @@
 Nummer;Name;Gewaesser;Betreiber;Auspraegung;Flusskilometer;Pegelnullpunkt_m_NHN;start;end;period_days;n;interval_days
-5827103;Allendestraße;Müggelspree;Land Berlin;DMA (US);35.00;31.83;2006-02-01;2024-01-30;6572;6573;1
-5827101;Fähre Rahnsdorf;Müggelspree;Land Berlin;DMA (US);8.51;31.78;1995-06-01;2024-01-30;10470;10471;1
-5826702;Gosener Landstraße;Gosener Graben;Land Berlin;WMA;1.00;31.78;1999-11-01;2024-01-29;8855;8856;1
-5826701;Neue Fahlenbergbrücke;Gosener Kanal;Land Berlin;DMA (US);1.00;31.81;1999-11-01;2024-01-30;8856;8857;1
-5862811;Schmöckwitz US;Zeuthener See;Land Berlin;DMA (US);11.20;31.94;2005-01-01;2024-01-30;6968;6969;1
+5827103;Allendestraße;Müggelspree;Land Berlin;DMA (US);35.00;31.83;2006-02-01;2024-01-31;6573;6574;1
+5827101;Fähre Rahnsdorf;Müggelspree;Land Berlin;DMA (US);8.51;31.78;1995-06-01;2024-01-31;10471;10472;1
+5826702;Gosener Landstraße;Gosener Graben;Land Berlin;WMA;1.00;31.78;1999-11-01;2024-01-30;8856;8857;1
+5826701;Neue Fahlenbergbrücke;Gosener Kanal;Land Berlin;DMA (US);1.00;31.81;1999-11-01;2024-01-31;8857;8858;1
+5862811;Schmöckwitz US;Zeuthener See;Land Berlin;DMA (US);11.20;31.94;2005-01-01;2024-01-31;6969;6970;1
