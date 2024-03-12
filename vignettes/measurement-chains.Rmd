@@ -94,7 +94,10 @@ paths <- kwb.utils::resolve(list(
   export_dir = "<local_dir>/export", 
  
   # KWB cloud directory to which data in "export_dir" is uploaded
-  upload_dir = "projects/GeoSalz/Monitoring/messketten"
+  upload_dir = "projects/GeoSalz/Monitoring/messketten",
+  
+  # KWB cloud directory with latest BWB well operation data
+  well_operation = "<upload_dir>/BWB_Brunnen_Prozessdaten"
 ))
 
 # Print all paths
@@ -374,3 +377,64 @@ if (kwb.utils::isTryError(result)) {
   )
 }
 ```
+
+### Download Well Operation Data from Cloud 
+
+```{r download_well_operation_data_from_cloud}
+
+mc_dat <- mc_data %>%  
+  dplyr::left_join(metadata[,c("sensor_id", "einbau_sensor_muGOK")], by = "sensor_id") %>% 
+  dplyr::left_join(mc_files %>% dplyr::select(sftp_path, galerie, brunnen_nummer),
+                   by = c(file = "sftp_path"))
+
+
+well_op_file <- kwb.nextcloud::list_files(path = paths$well_operation,
+                                     full_info = TRUE,
+                                     ) %>% 
+  dplyr::filter(lastmodified == max(lastmodified))
+
+
+file <- well_op_file$file[1]
+tdir <- fs::path_norm(paths$download_dir)
+
+xlsx_file <- kwb.nextcloud::download_files(hrefs = well_op_file$href,
+                                           target_dir = tdir)
+
+well_op_data <- readxl::read_xlsx(path = xlsx_file) %>% 
+  janitor::clean_names() %>%
+  dplyr::filter(.data$menge_summe_m3 < 2000)
+
+
+
+separate_name_der_messstelle_gms <- function(string) {
+  
+tibble::tibble(
+  wasserwerk = stringr::str_sub(string, 1L, 3L),
+  galerie = stringr::str_sub(string, 4L, 4L) %>% toupper(),
+  brunnen_nummer = stringr::str_sub(string, 5L, 9L) %>%
+    stringr::str_remove_all(pattern = "-") %>% 
+    as.integer(),
+  unbekannter_buchstabe = stringr::str_sub(string, 10L, 10L) %>%
+    stringr::str_remove_all(pattern = "-") %>% 
+    as.character(),
+  brunnen_baujahr = stringr::str_sub(string, 12L, 15L) %>%
+    stringr::str_remove_all(pattern = "-") %>% 
+    as.integer(),
+  brunnen_bauart = stringr::str_sub(string, 16L, 16L) %>%
+    stringr::str_remove_all(pattern = "-") %>% 
+    as.character()
+  )
+}
+
+
+well_op_data_meta <- well_op_data %>% 
+  dplyr::bind_cols(separate_name_der_messstelle_gms(well_op_data$name_der_messstelle_gms))
+
+
+```
+
+
+### Make combined EC and well operation plot
+
+
+
