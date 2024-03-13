@@ -22,7 +22,11 @@ plot_measurementchain_and_well_operation <- function(mc_dat,
                                                      date_min = as.Date("2023-05-10"), 
                                                      date_max = Sys.Date()) {
   
+  well_ids <- c(9,10,13)
   
+  if (! brunnen_nr %in% well_ids) {
+    stop("'brunnen_nr' has to be one of: ", paste(well_ids, collapse = ", "))
+  }
 
 # plot time series Brunnen 9
 selection <- mc_dat %>% 
