@@ -393,7 +393,7 @@ well_op_file <- kwb.nextcloud::list_files(path = paths$well_operation,
   dplyr::filter(lastmodified == max(lastmodified))
 
 file <- well_op_file$file[1]
-tdir <- fs::path_norm(paths$download_dir)
+tdir <- kwb.utils::safePath(fs::path_norm(paths$download_dir))
 
 
 
