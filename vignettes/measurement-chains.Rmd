@@ -395,6 +395,8 @@ well_op_file <- kwb.nextcloud::list_files(path = paths$well_operation,
 file <- well_op_file$file[1]
 tdir <- fs::path_norm(paths$download_dir)
 
+if(FALSE) {
+
 xlsx_file <- kwb.nextcloud::download_files(hrefs = well_op_file$href,
                                            target_dir = tdir)
 
@@ -427,6 +429,7 @@ tibble::tibble(
 
 well_op_data_meta <- well_op_data %>% 
   dplyr::bind_cols(separate_name_der_messstelle_gms(well_op_data$name_der_messstelle_gms))
+}
 
 ```
 
