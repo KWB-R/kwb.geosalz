@@ -389,11 +389,10 @@ mc_dat <- mc_data %>%
 
 
 well_op_file <- kwb.nextcloud::list_files(path = paths$well_operation,
-                                     full_info = TRUE,
-                                     ) %>% 
+                                          full_info = TRUE) %>% 
   dplyr::filter(lastmodified == max(lastmodified))
 
-
+if (FALSE) {
 file <- well_op_file$file[1]
 tdir <- fs::path_norm(paths$download_dir)
 
@@ -430,6 +429,7 @@ tibble::tibble(
 well_op_data_meta <- well_op_data %>% 
   dplyr::bind_cols(separate_name_der_messstelle_gms(well_op_data$name_der_messstelle_gms))
 
+}
 
 ```
 
@@ -438,7 +438,7 @@ well_op_data_meta <- well_op_data %>%
 
 and upload on cloud.
 
-```{r make_combined_plot}
+```{r make_combined_plot,eval = FALSE}
 well_ids <- c(9,10,13)
 
 pdf_names <- sprintf("mc_and_q_well-%02d.pdf", well_ids)
