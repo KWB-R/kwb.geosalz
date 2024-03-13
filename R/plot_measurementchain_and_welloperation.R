@@ -1,12 +1,28 @@
+#' Plot measurementchain and well operation in combined plot
+#'
+#' @param mc_dat mc_dat 
+#' @param well_op_data_meta well_op_data_meta 
+#' @param brunnen_nr well id (default: 9)
+#' @param para parameter (either: "Leitfaehigkeit" or "Temperatur")
+#' @param y_label y label (default: "elektr. Leitfaehigkeit (µS/cm)")
+#' @param date_min minimum date for plotting (default: as.Date("2023-05-10"))
+#' @param date_max maximum date for plotting (default: Sys.Date())
+#' @return combined plot
+#' @export
+#' @importFrom dplyr filter group_by summarize n 
+#' @importFrom RColorBrewer brewer.pal
+#' @importFrom ggplot2 ggplot aes geom_line scale_color_manual labs theme_bw
+#' theme guides guide_legend element_blank geom_bar scale_x_date
+#' @importFrom zoo rollmean
 plot_measurementchain_and_well_operation <- function(mc_dat,
                                                      well_op_data_meta,
                                                      brunnen_nr = 9,
                                                      para = "Leitfaehigkeit",
-                                                     y_label = "elektr. Leitf\u00E4higkeit (\u00B5S/cm)") {
+                                                     y_label = "elektr. Leitf\u00E4higkeit (\u00B5S/cm)",
+                                                     date_min = as.Date("2023-05-10"), 
+                                                     date_max = Sys.Date()) {
   
   
-  stopifnot("")
-
 
 # plot time series Brunnen 9
 selection <- mc_dat %>% 
@@ -28,7 +44,7 @@ p_well <- ggplot2::ggplot(selection,
   ggplot2::scale_color_manual(values = custom_palette) + 
   ggplot2::labs(x="", y = y_label, color = "Sensor [muGOK]") +
   ggplot2::theme_bw() +
-  #ggplot2::xlim(as.Date("2023-05-10"), as.Date("2024-03-31")) +
+  ggplot2::xlim(as.POSIXct(date_min), as.POSIXct(date_max))  +
   #ggplot2::ylim(500,3000) +
   ggplot2::theme(legend.position = "top",
                  axis.text.x = ggplot2::element_blank()) +  
@@ -50,12 +66,12 @@ plot_q_well <- ggplot2::ggplot(sum_well, ggplot2::aes(x = as.Date(bwb_datum), y 
   ggplot2::geom_bar(stat = "identity", width=1, color = "blue") +
   ggplot2::labs(x="", y = sprintf("Q, Brunnen %2d (m3/d)", brunnen_nr)) +
   ggplot2::theme_bw() +
-  ggplot2::theme(axis.text.x = ggplot2::element_blank())
+  ggplot2::theme(axis.text.x = ggplot2::element_blank()) + 
+  ggplot2::xlim(date_min, date_max) 
   # ggplot2::scale_x_date(date_breaks = "1 month", date_labels = "%b %Y") +
   # ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 0, 
   #                                                    vjust = 0.5, 
   #                                                    hjust = 1)) #+
-  #ggplot2::xlim(as.Date("2023-05-10"), as.Date("2024-03-31")) 
 
 
 sum_wellfield <- well_op_data_meta %>%
@@ -70,6 +86,7 @@ plot_q_wellfield <- ggplot2::ggplot(sum_wellfield, ggplot2::aes(x = as.Date(bwb_
   ggplot2::geom_bar(stat = "identity", width=1, color = "blue") +
   ggplot2::labs(x="Zeit", y = "Q, Brunnenfeld K-Galerie (m3/d)") +
   ggplot2::theme_bw() +
+  ggplot2::xlim(date_min, date_max) +
   ggplot2::scale_x_date(date_breaks = "1 month", date_labels = "%b %Y") +
   ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 0, 
                                                      vjust = 0.5, 
@@ -89,6 +106,4 @@ combined_plot_with_title
 
 }
 
-plot_measurementchain_and_well_operation(mc_dat = mc_dat, 
-                                         well_op_data_meta = well_op_data_meta, 
-                                         brunnen_nr = 9)
+
