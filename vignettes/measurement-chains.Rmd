@@ -395,11 +395,13 @@ well_op_file <- kwb.nextcloud::list_files(path = paths$well_operation,
 file <- well_op_file$file[1]
 tdir <- fs::path_norm(paths$download_dir)
 
-if(FALSE) {
+
 
 xlsx_file <- kwb.nextcloud::download_files(hrefs = well_op_file$href,
                                            target_dir = tdir)
 
+if(FALSE) {
+  
 well_op_data <- readxl::read_xlsx(path = xlsx_file) %>% 
   janitor::clean_names() %>%
   dplyr::filter(.data$menge_summe_m3 < 2000)
