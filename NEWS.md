@@ -1,3 +1,13 @@
+# [kwb.geosalz 0.7.0](https://github.com/KWB-R/kwb.geosalz/releases/tag/v0.7.0) <small>2024-03-13</small>
+
+* Add combined plot for wells with measurement chains (i.e. 9,10,13) showing 
+EC (top plot and daily abstraction rates of this well (middle plot) and total 
+daily wellfield production rate (bottom plot). These plots were automatically 
+created with the article [Measurement Chains](../articles/measurement-chains.html)
+and uploaded to the same cloud folder where already the measurement chains data
+and pdf files are located. For this the latest well operation export needs to be 
+uploaded to the KWB cloud folder `../messketten/BWB_Brunnen_Prozessdaten`. 
+
 # [kwb.geosalz 0.6.0](https://github.com/KWB-R/kwb.geosalz/releases/tag/v0.6.0) <small>2023-04-14</small>
 
 * Fix GitHub Actions failure: 
