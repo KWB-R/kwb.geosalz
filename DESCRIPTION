@@ -1,11 +1,13 @@
 Package: kwb.geosalz
 Title: R Package for Documenting Workflow Used in Project "geosalz"
-Version: 0.6.0
+Version: 0.7.0
 Authors@R: c(
     person("Michael", "Rustler", , "michael.rustler@kompetenz-wasser.de", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-0647-7726")),
     person("Hauke", "Sonnenberg", , "hauke.sonnenberg@kompetenz-wasser.de", role = "ctb",
            comment = c(ORCID = "0000-0001-9134-2871")),
+    person("Christoph", "Sprenger", , "christoph.sprenger@kompetenz-wasser.de", role = "ctb",
+           comment = c(ORCID = "0000-0002-0178-6645")),
     person("GeoSalz", role = "fnd"),
     person("Kompetenzzentrum Wasser Berlin gGmbH (KWB)", role = "cph")
   )
@@ -17,6 +19,7 @@ Depends:
     R (>= 2.10)
 Imports: 
     archive,
+    cowplot,
     cellranger (>= 1.1.0),
     crayon (>= 1.3.4),
     data.table (>= 1.12.0),
@@ -36,6 +39,7 @@ Imports:
     readODS,
     readr(>= 1.4.0),
     readxl (>= 1.2.0),
+    RColorBrewer, 
     rlang (>= 0.3.1),
     rmarkdown (>= 1.11),
     sf,
@@ -44,7 +48,8 @@ Imports:
     tibble (>= 2.0.1),
     tidyr (>= 0.8.2),
     tidyselect (>= 1.1.2),
-    withr
+    withr,
+    zoo
 Suggests: 
     covr (>= 3.2.1),
     DT,
@@ -71,4 +76,4 @@ Remotes:
 ByteCompile: true
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
