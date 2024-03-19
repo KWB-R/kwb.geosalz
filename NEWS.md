@@ -1,4 +1,4 @@
-# [kwb.geosalz 0.7.0](https://github.com/KWB-R/kwb.geosalz/releases/tag/v0.7.0) <small>2024-03-13</small>
+# [kwb.geosalz 0.7.0](https://github.com/KWB-R/kwb.geosalz/releases/tag/v0.7.0) <small>2024-03-19</small>
 
 * Add combined plot for wells with measurement chains (i.e. 9,10,13) showing 
 EC (top plot and daily abstraction rates of this well (middle plot) and total 
