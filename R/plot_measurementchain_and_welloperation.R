@@ -66,7 +66,8 @@ sum_well <- dat_well %>%
 sum_well$ma7 <- zoo::rollmean(sum_well$total_q, k = 7, fill = NA, align = "right")
 sum_well$ma10 <- zoo::rollmean(sum_well$total_q, k = 10, fill = NA, align = "right")
 
-plot_q_well <- ggplot2::ggplot(sum_well, ggplot2::aes(x = as.Date(bwb_datum), y = total_q)) +
+plot_q_well <- ggplot2::ggplot(sum_well, ggplot2::aes(x = as.Date(bwb_datum), 
+                                                      y = total_q)) +
   ggplot2::geom_bar(stat = "identity", width=1, color = "blue") +
   ggplot2::labs(x="", y = sprintf("Q, Brunnen %2d (m3/d)", brunnen_nr)) +
   ggplot2::theme_bw() +
@@ -90,12 +91,11 @@ plot_q_wellfield <- ggplot2::ggplot(sum_wellfield, ggplot2::aes(x = as.Date(bwb_
   ggplot2::geom_bar(stat = "identity", width=1, color = "blue") +
   ggplot2::labs(x="Zeit", y = "Q, Brunnenfeld K-Galerie (m3/d)") +
   ggplot2::theme_bw() +
-  ggplot2::xlim(date_min, date_max) +
-  ggplot2::scale_x_date(date_breaks = "1 month", date_labels = "%b %Y") +
+  ggplot2::scale_x_date(date_breaks = "1 month", date_labels = "%b %Y", 
+                        limits = c(date_min, date_max)) +
   ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 0, 
                                                      vjust = 0.5, 
                                                      hjust = 1))
-
 
 combined_plot <- cowplot::plot_grid(p_well, 
                                     plot_q_well,
