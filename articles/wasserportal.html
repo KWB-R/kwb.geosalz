@@ -239,7 +239,7 @@
 <span></span>
 <span><span class="co"># Get information on "Wasserportal"-stations </span></span>
 <span><span class="va">stations</span> <span class="op">&lt;-</span> <span class="fu">wasserportal</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/wasserportal/man/get_stations.html" class="external-link">get_stations</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Importing 10 station overviews from Wasserportal Berlin ... ok. (8.62 secs)</span></span></code></pre></div>
+<span><span class="co">#&gt; Importing 10 station overviews from Wasserportal Berlin ... ok. (10.24 secs)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="download-and-process-surface-water-level-data">Download and Process Surface Water Level Data<a class="anchor" aria-label="anchor" href="#download-and-process-surface-water-level-data"></a>
@@ -306,25 +306,25 @@
 <span>  </span>
 <span>  <span class="fu">write_csv</span><span class="op">(</span><span class="va">swl_data_stats_export</span>, <span class="st">"swl_data_stats.csv"</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Importing master data for 62 stations from Wasserportal Berlin ... ok. (32.93 secs) </span></span>
+<span><span class="co">#&gt; Importing master data for 62 stations from Wasserportal Berlin ... ok. (32.05 secs) </span></span>
 <span><span class="co">#&gt; Writing swl_master to swl_master.csv ... ok. (0.09 secs) </span></span>
-<span><span class="co">#&gt; Reading 'variable_ows' for station 5827103 (station_5827103) ... ok. (1.36 secs)</span></span>
+<span><span class="co">#&gt; Reading 'variable_ows' for station 5827103 (station_5827103) ... ok. (1.30 secs)</span></span>
 <span><span class="co">#&gt; Warning in warning_not_implemented("merge_raw_results_daily()"):</span></span>
 <span><span class="co">#&gt; merge_raw_results_daily() is not yet implemented. Returning raw data</span></span>
-<span><span class="co">#&gt; Reading 'variable_ows' for station 5827101 (station_5827101) ... ok. (0.91 secs)</span></span>
+<span><span class="co">#&gt; Reading 'variable_ows' for station 5827101 (station_5827101) ... ok. (0.81 secs)</span></span>
 <span><span class="co">#&gt; Warning in warning_not_implemented("merge_raw_results_daily()"):</span></span>
 <span><span class="co">#&gt; merge_raw_results_daily() is not yet implemented. Returning raw data</span></span>
-<span><span class="co">#&gt; Reading 'variable_ows' for station 5826702 (station_5826702) ... ok. (0.82 secs)</span></span>
+<span><span class="co">#&gt; Reading 'variable_ows' for station 5826702 (station_5826702) ... ok. (0.74 secs)</span></span>
 <span><span class="co">#&gt; Warning in warning_not_implemented("merge_raw_results_daily()"):</span></span>
 <span><span class="co">#&gt; merge_raw_results_daily() is not yet implemented. Returning raw data</span></span>
-<span><span class="co">#&gt; Reading 'variable_ows' for station 5826701 (station_5826701) ... ok. (0.83 secs)</span></span>
+<span><span class="co">#&gt; Reading 'variable_ows' for station 5826701 (station_5826701) ... ok. (0.72 secs)</span></span>
 <span><span class="co">#&gt; Warning in warning_not_implemented("merge_raw_results_daily()"):</span></span>
 <span><span class="co">#&gt; merge_raw_results_daily() is not yet implemented. Returning raw data</span></span>
-<span><span class="co">#&gt; Reading 'variable_ows' for station 5862811 (station_5862811) ... ok. (0.75 secs)</span></span>
+<span><span class="co">#&gt; Reading 'variable_ows' for station 5862811 (station_5862811) ... ok. (0.63 secs)</span></span>
 <span><span class="co">#&gt; Warning in warning_not_implemented("merge_raw_results_daily()"):</span></span>
 <span><span class="co">#&gt; merge_raw_results_daily() is not yet implemented. Returning raw data</span></span>
 <span><span class="co">#&gt; Writing swl_data to swl_data.csv ... ok. (0.20 secs) </span></span>
-<span><span class="co">#&gt; Writing swl_data_stats_export to swl_data_stats.csv ... ok. (0.00 secs)</span></span></code></pre></div>
+<span><span class="co">#&gt; Writing swl_data_stats_export to swl_data_stats.csv ... ok. (0.01 secs)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="download-and-process-groundwater-level-data">Download and Process Groundwater Level Data<a class="anchor" aria-label="anchor" href="#download-and-process-groundwater-level-data"></a>
@@ -446,7 +446,7 @@
 <span><span class="co">#&gt; Filteroberkante_m_u_GOK, Filterunterkante_m_u_GOK, Rechtswert_UTM_33_N,</span></span>
 <span><span class="co">#&gt; Hochwert_UTM_33_N)`</span></span>
 <span><span class="co">#&gt; Writing gw_master to gw_master.csv ... ok. (0.01 secs) </span></span>
-<span><span class="co">#&gt; Writing gwq_data to gwq_data.csv ... ok. (0.15 secs) </span></span>
+<span><span class="co">#&gt; Writing gwq_data to gwq_data.csv ... ok. (0.16 secs) </span></span>
 <span><span class="co">#&gt; Writing gwq_chloride_data to gwq_chloride_data.csv ... ok. (0.11 secs) </span></span>
 <span><span class="co">#&gt; Writing gwq_chloride_master to gwq_chloride_master.csv ... ok. (0.01 secs) </span></span>
 <span><span class="co">#&gt; Writing gwq_chloride_data_stats_export to gwq_chloride_data_stats.csv ... ok. (0.01 secs) </span></span>
@@ -583,7 +583,7 @@
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">DT</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/DT/man/datatable.html" class="external-link">datatable</a></span><span class="op">(</span><span class="va">swl_data_stats_export</span><span class="op">)</span></span></code></pre></div>
 <div class="datatables html-widget html-fill-item" id="htmlwidget-1fb4450895fe099f74a1" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-1fb4450895fe099f74a1">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5"],["5827103","5827101","5826702","5826701","5862811"],["Allendestraße","Fähre Rahnsdorf","Gosener Landstraße","Neue Fahlenbergbrücke","Schmöckwitz US"],["Müggelspree","Müggelspree","Gosener Graben","Gosener Kanal","Zeuthener See"],["Land Berlin","Land Berlin","Land Berlin","Land Berlin","Land Berlin"],["DMA (US)","DMA (US)","WMA","DMA (US)","DMA (US)"],["35.00","8.51","1.00","1.00","11.20"],["31.83","31.78","31.78","31.81","31.94"],["2006-02-01","1995-06-01","1999-11-01","1999-11-01","2005-01-01"],["2024-06-22","2024-06-22","2024-06-22","2024-06-22","2024-06-22"],[6716,10614,9000,9000,7112],[6717,10615,9001,9001,7113],[1,1,1,1,1]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Nummer<\/th>\n      <th>Name<\/th>\n      <th>Gewaesser<\/th>\n      <th>Betreiber<\/th>\n      <th>Auspraegung<\/th>\n      <th>Flusskilometer<\/th>\n      <th>Pegelnullpunkt_m_NHN<\/th>\n      <th>start<\/th>\n      <th>end<\/th>\n      <th>period_days<\/th>\n      <th>n<\/th>\n      <th>interval_days<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[10,11,12]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"Nummer","targets":1},{"name":"Name","targets":2},{"name":"Gewaesser","targets":3},{"name":"Betreiber","targets":4},{"name":"Auspraegung","targets":5},{"name":"Flusskilometer","targets":6},{"name":"Pegelnullpunkt_m_NHN","targets":7},{"name":"start","targets":8},{"name":"end","targets":9},{"name":"period_days","targets":10},{"name":"n","targets":11},{"name":"interval_days","targets":12}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-1fb4450895fe099f74a1">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5"],["5827103","5827101","5826702","5826701","5862811"],["Allendestraße","Fähre Rahnsdorf","Gosener Landstraße","Neue Fahlenbergbrücke","Schmöckwitz US"],["Müggelspree","Müggelspree","Gosener Graben","Gosener Kanal","Zeuthener See"],["Land Berlin","Land Berlin","Land Berlin","Land Berlin","Land Berlin"],["DMA (US)","DMA (US)","WMA","DMA (US)","DMA (US)"],["35.00","8.51","1.00","1.00","11.20"],["31.83","31.78","31.78","31.81","31.94"],["2006-02-01","1995-06-01","1999-11-01","1999-11-01","2005-01-01"],["2024-06-24","2024-06-24","2024-06-24","2024-06-24","2024-06-24"],[6718,10616,9002,9002,7114],[6719,10617,9003,9003,7115],[1,1,1,1,1]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Nummer<\/th>\n      <th>Name<\/th>\n      <th>Gewaesser<\/th>\n      <th>Betreiber<\/th>\n      <th>Auspraegung<\/th>\n      <th>Flusskilometer<\/th>\n      <th>Pegelnullpunkt_m_NHN<\/th>\n      <th>start<\/th>\n      <th>end<\/th>\n      <th>period_days<\/th>\n      <th>n<\/th>\n      <th>interval_days<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[10,11,12]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"Nummer","targets":1},{"name":"Name","targets":2},{"name":"Gewaesser","targets":3},{"name":"Betreiber","targets":4},{"name":"Auspraegung","targets":5},{"name":"Flusskilometer","targets":6},{"name":"Pegelnullpunkt_m_NHN","targets":7},{"name":"start","targets":8},{"name":"end","targets":9},{"name":"period_days","targets":10},{"name":"n","targets":11},{"name":"interval_days","targets":12}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div class="section level4">
 <h4 id="gw-levels">GW Levels<a class="anchor" aria-label="anchor" href="#gw-levels"></a>
