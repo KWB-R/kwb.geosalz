@@ -219,7 +219,7 @@ user-defined directory on your local device.</p>
 <span><span class="va">mc_files</span> <span class="op">&lt;-</span> <span class="fu">kwb.geosalz</span><span class="fu">::</span><span class="fu"><a href="../reference/get_measurementchains_files.html">get_measurementchains_files</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">mc_files</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 'data.frame':    11250 obs. of  16 variables:</span></span>
+<span><span class="co">#&gt; 'data.frame':    11304 obs. of  16 variables:</span></span>
 <span><span class="co">#&gt;  $ rights          : chr  "-rw-r--r--" "-rw-r--r--" "-rw-r--r--" "-rw-r--r--" ...</span></span>
 <span><span class="co">#&gt;  $ links           : chr  "1" "1" "1" "1" ...</span></span>
 <span><span class="co">#&gt;  $ ownername       : chr  "1011" "1011" "1011" "1011" ...</span></span>
@@ -270,8 +270,8 @@ user-defined directory on your local device.</p>
 <span><span class="co"># no file "mc_data.zip" in the Nextcloud folder </span></span>
 <span><span class="co"># "projects/GeoSalz/Monitoring/messketten"</span></span>
 <span><span class="va">old_data</span> <span class="op">&lt;-</span> <span class="fu">kwb.geosalz</span><span class="fu">::</span><span class="fu"><a href="../reference/get_measurement_chain_data_on_cloud.html">get_measurement_chain_data_on_cloud</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; The directory "~/../Downloads/nextcloud_1b04699e5a36" was created.</span></span>
-<span><span class="co">#&gt; Downloading remote.php/dav/files/hsonne/projects/GeoSalz/Monitoring/messketten/mc_data.zip ... ok. (0.80 secs)</span></span>
+<span><span class="co">#&gt; The directory "~/../Downloads/nextcloud_1a1c77dccb0" was created.</span></span>
+<span><span class="co">#&gt; Downloading remote.php/dav/files/hsonne/projects/GeoSalz/Monitoring/messketten/mc_data.zip ... ok. (1.21 secs)</span></span>
 <span><span class="co">#old_data &lt;- NULL</span></span></code></pre></div>
 </div>
 <div class="section level4">
@@ -311,10 +311,10 @@ user-defined directory on your local device.</p>
 <span>  </span>
 <span><span class="op">}</span> <span class="co"># else NULL implicitly</span></span>
 <span><span class="co">#&gt; The directory "C:\Users\RUNNER~1\AppData\Local\Temp/R_kwb.geosalz/download" was created.</span></span>
-<span><span class="co">#&gt; Download 18 measurement chains files (using 3 CPU cores) to C:\Users\RUNNER~1\AppData\Local\Temp/R_kwb.geosalz/download ... ok. (17.67 secs)</span></span>
+<span><span class="co">#&gt; Download 54 measurement chains files (using 3 CPU cores) to C:\Users\RUNNER~1\AppData\Local\Temp/R_kwb.geosalz/download ... ok. (1.14 mins)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">csv_files</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  chr [1:18] "C:\\Users\\RUNNER~1\\AppData\\Local\\Temp/R_kwb.geosalz/download/K09/4182013-2024-07-12-0506.csv" ...</span></span></code></pre></div>
+<span><span class="co">#&gt;  chr [1:54] "C:\\Users\\RUNNER~1\\AppData\\Local\\Temp/R_kwb.geosalz/download/K09/4182013-2024-07-13-0506.csv" ...</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
@@ -341,7 +341,7 @@ user-defined directory on your local device.</p>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">new_data</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>    <span class="fu">kwb.geosalz</span><span class="fu">::</span><span class="fu"><a href="../reference/order_measurement_chain_data.html">order_measurement_chain_data</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
-<span><span class="co">#&gt; Importing 18 measurement chains files (using 3 CPU cores) ... ok. (2.25 secs) </span></span>
+<span><span class="co">#&gt; Importing 54 measurement chains files (using 3 CPU cores) ... ok. (2.50 secs) </span></span>
 <span><span class="co">#&gt; Filtering out 'lab' measurements before '2022-09-27 11:00:00' (installation in K10) ... ok. (0.00 secs)</span></span></code></pre></div>
 <p>The following datasets were imported into R or already available in
 R:</p>
@@ -352,8 +352,8 @@ R:</p>
 <span>    <span class="va">.data</span><span class="op">$</span><span class="va">parameter</span>, </span>
 <span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">sensor_id</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p>These cover the time period from 2022-09-27 11:00:00 to 2024-07-11
-23:00:00 with a total of 176792 samples.</p>
+<p>These cover the time period from 2022-09-27 11:00:00 to 2024-07-14
+23:00:00 with a total of 177224 samples.</p>
 </div>
 <div class="section level3">
 <h3 id="data-export">Data Export<a class="anchor" aria-label="anchor" href="#data-export"></a>
@@ -368,7 +368,7 @@ R:</p>
 <span>  to_zip <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  debug <span class="op">=</span> <span class="va">debug</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Exporting provided dataset 'mc_data' to 'C:/Users/RUNNER~1/AppData/Local/Temp/R_kwb.geosalz/export/mc_data_20220927-110000TZ+01_20240711-230000TZ+01.csv' ... ok. (2.38 secs)</span></span>
+<span><span class="co">#&gt; Exporting provided dataset 'mc_data' to 'C:/Users/RUNNER~1/AppData/Local/Temp/R_kwb.geosalz/export/mc_data_20220927-110000TZ+01_20240714-230000TZ+01.csv' ... ok. (2.38 secs)</span></span>
 <span></span>
 <span><span class="va">size_data_csv</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/file_info.html" class="external-link">file_size</a></span><span class="op">(</span><span class="va">data_csv_path</span><span class="op">)</span></span>
 <span></span>
@@ -379,8 +379,8 @@ R:</p>
 <span>  to_zip <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  debug <span class="op">=</span> <span class="va">debug</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Exporting provided dataset 'mc_data' to 'C:/Users/RUNNER~1/AppData/Local/Temp/R_kwb.geosalz/export/mc_data_20220927-110000TZ+01_20240711-230000TZ+01.csv' ... ok. (2.37 secs) </span></span>
-<span><span class="co">#&gt; Exporting provided dataset 'mc_data' to 'C:\Users\RUNNER~1\AppData\Local\Temp/R_kwb.geosalz/export/mc_data.zip' and delete intermediate 'C:/Users/RUNNER~1/AppData/Local/Temp/R_kwb.geosalz/export/mc_data_20220927-110000TZ+01_20240711-230000TZ+01.csv' ... ok. (0.18 secs)</span></span>
+<span><span class="co">#&gt; Exporting provided dataset 'mc_data' to 'C:/Users/RUNNER~1/AppData/Local/Temp/R_kwb.geosalz/export/mc_data_20220927-110000TZ+01_20240714-230000TZ+01.csv' ... ok. (2.38 secs) </span></span>
+<span><span class="co">#&gt; Exporting provided dataset 'mc_data' to 'C:\Users\RUNNER~1\AppData\Local\Temp/R_kwb.geosalz/export/mc_data.zip' and delete intermediate 'C:/Users/RUNNER~1/AppData/Local/Temp/R_kwb.geosalz/export/mc_data_20220927-110000TZ+01_20240714-230000TZ+01.csv' ... ok. (0.18 secs)</span></span>
 <span></span>
 <span><span class="va">size_data_zip</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/file_info.html" class="external-link">file_size</a></span><span class="op">(</span><span class="va">data_zip_path</span><span class="op">)</span></span>
 <span><span class="va">size_data_csv</span> <span class="op">/</span> <span class="va">size_data_zip</span></span>
@@ -434,22 +434,22 @@ R:</p>
 <span>  <span class="fu">plot_to_pdf</span><span class="op">(</span><span class="va">mc_data</span>, <span class="st">"Temperatur"</span>, <span class="va">paths</span><span class="op">$</span><span class="va">export_dir</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Writting 'Leitfaehigkeit_K10' to 'C:\Users\RUNNER~1\AppData\Local\Temp/R_kwb.geosalz/export/mc_data_Leitfaehigkeit_K10.pdf' ...</span></span>
-<span><span class="co">#&gt; ok. (0.79 secs) </span></span>
+<span><span class="co">#&gt; ok. (0.92 secs) </span></span>
 <span><span class="co">#&gt; Writting 'Leitfaehigkeit_K13' to 'C:\Users\RUNNER~1\AppData\Local\Temp/R_kwb.geosalz/export/mc_data_Leitfaehigkeit_K13.pdf' ...</span></span>
-<span><span class="co">#&gt; ok. (0.67 secs) </span></span>
+<span><span class="co">#&gt; ok. (0.69 secs) </span></span>
 <span><span class="co">#&gt; Writting 'Leitfaehigkeit_K09' to 'C:\Users\RUNNER~1\AppData\Local\Temp/R_kwb.geosalz/export/mc_data_Leitfaehigkeit_K09.pdf' ...</span></span>
-<span><span class="co">#&gt; ok. (0.56 secs) </span></span>
+<span><span class="co">#&gt; ok. (0.54 secs) </span></span>
 <span><span class="co">#&gt; Writting 'Temperatur_K10' to 'C:\Users\RUNNER~1\AppData\Local\Temp/R_kwb.geosalz/export/mc_data_Temperatur_K10.pdf' ...</span></span>
-<span><span class="co">#&gt; ok. (0.68 secs) </span></span>
+<span><span class="co">#&gt; ok. (0.69 secs) </span></span>
 <span><span class="co">#&gt; Writting 'Temperatur_K13' to 'C:\Users\RUNNER~1\AppData\Local\Temp/R_kwb.geosalz/export/mc_data_Temperatur_K13.pdf' ...</span></span>
 <span><span class="co">#&gt; ok. (0.52 secs) </span></span>
 <span><span class="co">#&gt; Writting 'Temperatur_K09' to 'C:\Users\RUNNER~1\AppData\Local\Temp/R_kwb.geosalz/export/mc_data_Temperatur_K09.pdf' ...</span></span>
-<span><span class="co">#&gt; ok. (0.67 secs)</span></span>
+<span><span class="co">#&gt; ok. (0.56 secs)</span></span>
 <span></span>
 <span><span class="va">data_zip_path</span></span>
 <span><span class="co">#&gt; [1] "C:\\Users\\RUNNER~1\\AppData\\Local\\Temp/R_kwb.geosalz/export/mc_data.zip"</span></span></code></pre></div>
 <p>The file size of the
-mc_data_20220927-110000TZ+01_20240711-230000TZ+01.csv file is 20.4 times
+mc_data_20220927-110000TZ+01_20240714-230000TZ+01.csv file is 20.4 times
 larger compared to compressing it into mc_data.zip.</p>
 </div>
 <div class="section level3">
@@ -488,53 +488,53 @@ in a GitHub actions workflow there is no need to do this locally.</p>
 <span><span class="co">#&gt; Uploading file C:\Users\RUNNER~1\AppData\Local\Temp/R_kwb.geosalz/export/mc_data_stats.csv ... Uploading</span></span>
 <span><span class="co">#&gt;   C:\Users\RUNNER~1\AppData\Local\Temp/R_kwb.geosalz/export/mc_data_stats.csv</span></span>
 <span><span class="co">#&gt; to</span></span>
-<span><span class="co">#&gt;   projects/GeoSalz/Monitoring/messketten ... ok. (1.10 secs) </span></span>
-<span><span class="co">#&gt; ok. (1.41 secs) </span></span>
+<span><span class="co">#&gt;   projects/GeoSalz/Monitoring/messketten ... ok. (0.85 secs) </span></span>
+<span><span class="co">#&gt; ok. (1.73 secs) </span></span>
 <span><span class="co">#&gt; Uploading file C:\Users\RUNNER~1\AppData\Local\Temp/R_kwb.geosalz/export/mc_data_Leitfaehigkeit_K10.pdf ... Uploading</span></span>
 <span><span class="co">#&gt;   C:\Users\RUNNER~1\AppData\Local\Temp/R_kwb.geosalz/export/mc_data_Leitfaehigkeit_K10.pdf</span></span>
 <span><span class="co">#&gt; to</span></span>
-<span><span class="co">#&gt;   projects/GeoSalz/Monitoring/messketten ... ok. (3.43 secs) </span></span>
-<span><span class="co">#&gt; ok. (3.74 secs) </span></span>
+<span><span class="co">#&gt;   projects/GeoSalz/Monitoring/messketten ... ok. (3.61 secs) </span></span>
+<span><span class="co">#&gt; ok. (4.00 secs) </span></span>
 <span><span class="co">#&gt; Uploading file C:\Users\RUNNER~1\AppData\Local\Temp/R_kwb.geosalz/export/mc_data_Leitfaehigkeit_K13.pdf ... Uploading</span></span>
 <span><span class="co">#&gt;   C:\Users\RUNNER~1\AppData\Local\Temp/R_kwb.geosalz/export/mc_data_Leitfaehigkeit_K13.pdf</span></span>
 <span><span class="co">#&gt; to</span></span>
-<span><span class="co">#&gt;   projects/GeoSalz/Monitoring/messketten ... ok. (1.08 secs) </span></span>
-<span><span class="co">#&gt; ok. (1.38 secs) </span></span>
+<span><span class="co">#&gt;   projects/GeoSalz/Monitoring/messketten ... ok. (1.39 secs) </span></span>
+<span><span class="co">#&gt; ok. (1.78 secs) </span></span>
 <span><span class="co">#&gt; Uploading file C:\Users\RUNNER~1\AppData\Local\Temp/R_kwb.geosalz/export/mc_data_Leitfaehigkeit_K09.pdf ... Uploading</span></span>
 <span><span class="co">#&gt;   C:\Users\RUNNER~1\AppData\Local\Temp/R_kwb.geosalz/export/mc_data_Leitfaehigkeit_K09.pdf</span></span>
 <span><span class="co">#&gt; to</span></span>
-<span><span class="co">#&gt;   projects/GeoSalz/Monitoring/messketten ... ok. (1.03 secs) </span></span>
-<span><span class="co">#&gt; ok. (1.34 secs) </span></span>
+<span><span class="co">#&gt;   projects/GeoSalz/Monitoring/messketten ... ok. (1.21 secs) </span></span>
+<span><span class="co">#&gt; ok. (1.58 secs) </span></span>
 <span><span class="co">#&gt; Uploading file C:\Users\RUNNER~1\AppData\Local\Temp/R_kwb.geosalz/export/mc_data_Temperatur_K10.pdf ... Uploading</span></span>
 <span><span class="co">#&gt;   C:\Users\RUNNER~1\AppData\Local\Temp/R_kwb.geosalz/export/mc_data_Temperatur_K10.pdf</span></span>
 <span><span class="co">#&gt; to</span></span>
-<span><span class="co">#&gt;   projects/GeoSalz/Monitoring/messketten ... ok. (1.10 secs) </span></span>
-<span><span class="co">#&gt; ok. (1.41 secs) </span></span>
+<span><span class="co">#&gt;   projects/GeoSalz/Monitoring/messketten ... ok. (1.47 secs) </span></span>
+<span><span class="co">#&gt; ok. (1.86 secs) </span></span>
 <span><span class="co">#&gt; Uploading file C:\Users\RUNNER~1\AppData\Local\Temp/R_kwb.geosalz/export/mc_data_Temperatur_K13.pdf ... Uploading</span></span>
 <span><span class="co">#&gt;   C:\Users\RUNNER~1\AppData\Local\Temp/R_kwb.geosalz/export/mc_data_Temperatur_K13.pdf</span></span>
 <span><span class="co">#&gt; to</span></span>
-<span><span class="co">#&gt;   projects/GeoSalz/Monitoring/messketten ... ok. (0.99 secs) </span></span>
-<span><span class="co">#&gt; ok. (1.29 secs) </span></span>
+<span><span class="co">#&gt;   projects/GeoSalz/Monitoring/messketten ... ok. (1.26 secs) </span></span>
+<span><span class="co">#&gt; ok. (1.63 secs) </span></span>
 <span><span class="co">#&gt; Uploading file C:\Users\RUNNER~1\AppData\Local\Temp/R_kwb.geosalz/export/mc_data_Temperatur_K09.pdf ... Uploading</span></span>
 <span><span class="co">#&gt;   C:\Users\RUNNER~1\AppData\Local\Temp/R_kwb.geosalz/export/mc_data_Temperatur_K09.pdf</span></span>
 <span><span class="co">#&gt; to</span></span>
-<span><span class="co">#&gt;   projects/GeoSalz/Monitoring/messketten ... ok. (1.08 secs) </span></span>
-<span><span class="co">#&gt; ok. (1.39 secs) </span></span>
+<span><span class="co">#&gt;   projects/GeoSalz/Monitoring/messketten ... ok. (1.24 secs) </span></span>
+<span><span class="co">#&gt; ok. (1.60 secs) </span></span>
 <span><span class="co">#&gt; Uploading file C:\Users\RUNNER~1\AppData\Local\Temp/R_kwb.geosalz/export/metadata.csv ... Uploading</span></span>
 <span><span class="co">#&gt;   C:\Users\RUNNER~1\AppData\Local\Temp/R_kwb.geosalz/export/metadata.csv</span></span>
 <span><span class="co">#&gt; to</span></span>
-<span><span class="co">#&gt;   projects/GeoSalz/Monitoring/messketten ... ok. (0.70 secs) </span></span>
-<span><span class="co">#&gt; ok. (1.01 secs) </span></span>
+<span><span class="co">#&gt;   projects/GeoSalz/Monitoring/messketten ... ok. (0.75 secs) </span></span>
+<span><span class="co">#&gt; ok. (1.15 secs) </span></span>
 <span><span class="co">#&gt; Uploading file C:\Users\RUNNER~1\AppData\Local\Temp/R_kwb.geosalz/export/mc_files.csv ... Uploading</span></span>
 <span><span class="co">#&gt;   C:\Users\RUNNER~1\AppData\Local\Temp/R_kwb.geosalz/export/mc_files.csv</span></span>
 <span><span class="co">#&gt; to</span></span>
-<span><span class="co">#&gt;   projects/GeoSalz/Monitoring/messketten ... ok. (1.08 secs) </span></span>
-<span><span class="co">#&gt; ok. (1.40 secs) </span></span>
+<span><span class="co">#&gt;   projects/GeoSalz/Monitoring/messketten ... ok. (1.29 secs) </span></span>
+<span><span class="co">#&gt; ok. (1.67 secs) </span></span>
 <span><span class="co">#&gt; Uploading file C:\Users\RUNNER~1\AppData\Local\Temp/R_kwb.geosalz/export/mc_data.zip ... Uploading</span></span>
 <span><span class="co">#&gt;   C:\Users\RUNNER~1\AppData\Local\Temp/R_kwb.geosalz/export/mc_data.zip</span></span>
 <span><span class="co">#&gt; to</span></span>
-<span><span class="co">#&gt;   projects/GeoSalz/Monitoring/messketten ... ok. (0.94 secs) </span></span>
-<span><span class="co">#&gt; ok. (1.26 secs)</span></span></code></pre></div>
+<span><span class="co">#&gt;   projects/GeoSalz/Monitoring/messketten ... ok. (1.01 secs) </span></span>
+<span><span class="co">#&gt; ok. (1.38 secs)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="download-well-operation-data-from-cloud">Download Well Operation Data from Cloud<a class="anchor" aria-label="anchor" href="#download-well-operation-data-from-cloud"></a>
@@ -555,7 +555,7 @@ in a GitHub actions workflow there is no need to do this locally.</p>
 <span></span>
 <span><span class="va">xlsx_file</span> <span class="op">&lt;-</span> <span class="fu">kwb.nextcloud</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/kwb.nextcloud/man/download_files.html" class="external-link">download_files</a></span><span class="op">(</span>hrefs <span class="op">=</span> <span class="va">well_op_file</span><span class="op">$</span><span class="va">href</span>,</span>
 <span>                                           target_dir <span class="op">=</span> <span class="va">paths</span><span class="op">$</span><span class="va">export_dir</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Downloading /remote.php/dav/files/hsonne/projects/GeoSalz/Monitoring/messketten/BWB_Brunnen_Prozessdaten/FRI%20-%20K%20-%20Brunnenlaufzeiten%20und%20Q%20(Export%20f%c3%bcr%20KWB)2024-06-24.xlsx ... ok. (0.70 secs)</span></span>
+<span><span class="co">#&gt; Downloading /remote.php/dav/files/hsonne/projects/GeoSalz/Monitoring/messketten/BWB_Brunnen_Prozessdaten/FRI%20-%20K%20-%20Brunnenlaufzeiten%20und%20Q%20(Export%20f%c3%bcr%20KWB)2024-06-24.xlsx ... ok. (1.07 secs)</span></span>
 <span></span>
 <span><span class="va">well_op_data</span> <span class="op">&lt;-</span> <span class="fu">readxl</span><span class="fu">::</span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html" class="external-link">read_xlsx</a></span><span class="op">(</span>path <span class="op">=</span> <span class="va">xlsx_file</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">janitor</span><span class="fu">::</span><span class="fu"><a href="https://sfirke.github.io/janitor/reference/clean_names.html" class="external-link">clean_names</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -625,15 +625,15 @@ in a GitHub actions workflow there is no need to do this locally.</p>
 <span><span class="co">#&gt; Writting '9' to './mc-Leitfaehigkeit_and_abstraction_well-09.pdf' ...</span></span>
 <span><span class="co">#&gt; Warning: Removed 16530 rows containing missing values or values outside the scale range</span></span>
 <span><span class="co">#&gt; (`geom_line()`).</span></span>
-<span><span class="co">#&gt; ok. (0.68 secs) </span></span>
+<span><span class="co">#&gt; ok. (0.69 secs) </span></span>
 <span><span class="co">#&gt; Writting '10' to './mc-Leitfaehigkeit_and_abstraction_well-10.pdf' ...</span></span>
 <span><span class="co">#&gt; Warning: Removed 26112 rows containing missing values or values outside the scale range</span></span>
 <span><span class="co">#&gt; (`geom_line()`).</span></span>
-<span><span class="co">#&gt; ok. (0.77 secs) </span></span>
+<span><span class="co">#&gt; ok. (0.66 secs) </span></span>
 <span><span class="co">#&gt; Writting '13' to './mc-Leitfaehigkeit_and_abstraction_well-13.pdf' ...</span></span>
 <span><span class="co">#&gt; Warning: Removed 14226 rows containing missing values or values outside the scale range</span></span>
 <span><span class="co">#&gt; (`geom_line()`).</span></span>
-<span><span class="co">#&gt; ok. (0.59 secs)</span></span>
+<span><span class="co">#&gt; ok. (0.65 secs)</span></span>
 <span>  </span>
 <span><span class="co">### Upload pdf files on cloud </span></span>
 <span>  </span>
@@ -650,18 +650,18 @@ in a GitHub actions workflow there is no need to do this locally.</p>
 <span><span class="co">#&gt; Uploading file ./mc-Leitfaehigkeit_and_abstraction_well-09.pdf ... Uploading</span></span>
 <span><span class="co">#&gt;   ./mc-Leitfaehigkeit_and_abstraction_well-09.pdf</span></span>
 <span><span class="co">#&gt; to</span></span>
-<span><span class="co">#&gt;   projects/GeoSalz/Monitoring/messketten ... ok. (0.98 secs) </span></span>
-<span><span class="co">#&gt; ok. (1.29 secs) </span></span>
+<span><span class="co">#&gt;   projects/GeoSalz/Monitoring/messketten ... ok. (0.80 secs) </span></span>
+<span><span class="co">#&gt; ok. (1.18 secs) </span></span>
 <span><span class="co">#&gt; Uploading file ./mc-Leitfaehigkeit_and_abstraction_well-10.pdf ... Uploading</span></span>
 <span><span class="co">#&gt;   ./mc-Leitfaehigkeit_and_abstraction_well-10.pdf</span></span>
 <span><span class="co">#&gt; to</span></span>
-<span><span class="co">#&gt;   projects/GeoSalz/Monitoring/messketten ... ok. (0.68 secs) </span></span>
-<span><span class="co">#&gt; ok. (0.99 secs) </span></span>
+<span><span class="co">#&gt;   projects/GeoSalz/Monitoring/messketten ... ok. (0.82 secs) </span></span>
+<span><span class="co">#&gt; ok. (1.19 secs) </span></span>
 <span><span class="co">#&gt; Uploading file ./mc-Leitfaehigkeit_and_abstraction_well-13.pdf ... Uploading</span></span>
 <span><span class="co">#&gt;   ./mc-Leitfaehigkeit_and_abstraction_well-13.pdf</span></span>
 <span><span class="co">#&gt; to</span></span>
-<span><span class="co">#&gt;   projects/GeoSalz/Monitoring/messketten ... ok. (0.70 secs) </span></span>
-<span><span class="co">#&gt; ok. (1.02 secs)</span></span></code></pre></div>
+<span><span class="co">#&gt;   projects/GeoSalz/Monitoring/messketten ... ok. (0.78 secs) </span></span>
+<span><span class="co">#&gt; ok. (1.17 secs)</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
