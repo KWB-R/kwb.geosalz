@@ -222,7 +222,7 @@
 <span></span>
 <span><span class="co"># Get information on "Wasserportal"-stations </span></span>
 <span><span class="va">stations</span> <span class="op">&lt;-</span> <span class="fu">wasserportal</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/wasserportal/man/get_stations.html" class="external-link">get_stations</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Importing 10 station overviews from Wasserportal Berlin ... ok. (8.58 secs)</span></span></code></pre></div>
+<span><span class="co">#&gt; Importing 10 station overviews from Wasserportal Berlin ... ok. (6.41 secs)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="download-and-process-surface-water-level-data">Download and Process Surface Water Level Data<a class="anchor" aria-label="anchor" href="#download-and-process-surface-water-level-data"></a>
@@ -289,7 +289,7 @@
 <span>  </span>
 <span>  <span class="fu">write_csv</span><span class="op">(</span><span class="va">swl_data_stats_export</span>, <span class="st">"swl_data_stats.csv"</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Importing master data for 61 stations from Wasserportal Berlin ... ok. (30.17 secs)</span></span>
+<span><span class="co">#&gt; Importing master data for 61 stations from Wasserportal Berlin ... ok. (21.54 secs)</span></span>
 <span><span class="co">#&gt; Failed fetching data from the following URLs:</span></span>
 <span><span class="co">#&gt;  [1] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5865900"</span></span>
 <span><span class="co">#&gt;  [2] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5827103"</span></span>
@@ -474,7 +474,7 @@
 <span><span class="co">#&gt; Filteroberkante_m_u_GOK, Filterunterkante_m_u_GOK, Rechtswert_UTM_33_N,</span></span>
 <span><span class="co">#&gt; Hochwert_UTM_33_N)`</span></span>
 <span><span class="co">#&gt; Writing gw_master to gw_master.csv ... ok. (0.01 secs) </span></span>
-<span><span class="co">#&gt; Writing gwq_data to gwq_data.csv ... ok. (0.16 secs) </span></span>
+<span><span class="co">#&gt; Writing gwq_data to gwq_data.csv ... ok. (0.17 secs) </span></span>
 <span><span class="co">#&gt; Writing gwq_chloride_data to gwq_chloride_data.csv ... ok. (0.11 secs) </span></span>
 <span><span class="co">#&gt; Writing gwq_chloride_master to gwq_chloride_master.csv ... ok. (0.01 secs) </span></span>
 <span><span class="co">#&gt; Writing gwq_chloride_data_stats_export to gwq_chloride_data_stats.csv ... ok. (0.01 secs) </span></span>
