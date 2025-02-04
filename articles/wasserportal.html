@@ -222,7 +222,7 @@
 <span></span>
 <span><span class="co"># Get information on "Wasserportal"-stations </span></span>
 <span><span class="va">stations</span> <span class="op">&lt;-</span> <span class="fu">wasserportal</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/wasserportal/man/get_stations.html" class="external-link">get_stations</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Importing 10 station overviews from Wasserportal Berlin ... ok. (8.45 secs)</span></span></code></pre></div>
+<span><span class="co">#&gt; Importing 10 station overviews from Wasserportal Berlin ... ok. (9.22 secs)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="download-and-process-surface-water-level-data">Download and Process Surface Water Level Data<a class="anchor" aria-label="anchor" href="#download-and-process-surface-water-level-data"></a>
@@ -289,7 +289,7 @@
 <span>  </span>
 <span>  <span class="fu">write_csv</span><span class="op">(</span><span class="va">swl_data_stats_export</span>, <span class="st">"swl_data_stats.csv"</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Importing master data for 61 stations from Wasserportal Berlin ... ok. (32.12 secs)</span></span>
+<span><span class="co">#&gt; Importing master data for 63 stations from Wasserportal Berlin ... ok. (34.16 secs)</span></span>
 <span><span class="co">#&gt; Failed fetching data from the following URLs:</span></span>
 <span><span class="co">#&gt;  [1] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5865900"</span></span>
 <span><span class="co">#&gt;  [2] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5827103"</span></span>
@@ -303,55 +303,57 @@
 <span><span class="co">#&gt; [10] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5867003"</span></span>
 <span><span class="co">#&gt; [11] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5867401"</span></span>
 <span><span class="co">#&gt; [12] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5800301"</span></span>
-<span><span class="co">#&gt; [13] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5863000"</span></span>
-<span><span class="co">#&gt; [14] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5867900"</span></span>
-<span><span class="co">#&gt; [15] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5827101"</span></span>
-<span><span class="co">#&gt; [16] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5800320"</span></span>
-<span><span class="co">#&gt; [17] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5800313"</span></span>
-<span><span class="co">#&gt; [18] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5860900"</span></span>
-<span><span class="co">#&gt; [19] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5867101"</span></span>
-<span><span class="co">#&gt; [20] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5826702"</span></span>
-<span><span class="co">#&gt; [21] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5800305"</span></span>
-<span><span class="co">#&gt; [22] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5800304"</span></span>
-<span><span class="co">#&gt; [23] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5800306"</span></span>
-<span><span class="co">#&gt; [24] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5861000"</span></span>
-<span><span class="co">#&gt; [25] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5867300"</span></span>
-<span><span class="co">#&gt; [26] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5864700"</span></span>
-<span><span class="co">#&gt; [27] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5865000"</span></span>
-<span><span class="co">#&gt; [28] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5865200"</span></span>
-<span><span class="co">#&gt; [29] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5800308"</span></span>
-<span><span class="co">#&gt; [30] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5867100"</span></span>
-<span><span class="co">#&gt; [31] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5869700"</span></span>
-<span><span class="co">#&gt; [32] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5867500"</span></span>
-<span><span class="co">#&gt; [33] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5870100"</span></span>
-<span><span class="co">#&gt; [34] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5800309"</span></span>
-<span><span class="co">#&gt; [35] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5819901"</span></span>
-<span><span class="co">#&gt; [36] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5800318"</span></span>
-<span><span class="co">#&gt; [37] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5826701"</span></span>
-<span><span class="co">#&gt; [38] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5800315"</span></span>
-<span><span class="co">#&gt; [39] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5800316"</span></span>
-<span><span class="co">#&gt; [40] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5867700"</span></span>
-<span><span class="co">#&gt; [41] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5803500"</span></span>
-<span><span class="co">#&gt; [42] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5800312"</span></span>
-<span><span class="co">#&gt; [43] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5867000"</span></span>
-<span><span class="co">#&gt; [44] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5800106"</span></span>
-<span><span class="co">#&gt; [45] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5866700"</span></span>
-<span><span class="co">#&gt; [46] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5866800"</span></span>
-<span><span class="co">#&gt; [47] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5862811"</span></span>
-<span><span class="co">#&gt; [48] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5867600"</span></span>
-<span><span class="co">#&gt; [49] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5827700"</span></span>
-<span><span class="co">#&gt; [50] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5820000"</span></span>
-<span><span class="co">#&gt; [51] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5815911"</span></span>
-<span><span class="co">#&gt; [52] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5803200"</span></span>
-<span><span class="co">#&gt; [53] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5867301"</span></span>
-<span><span class="co">#&gt; [54] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5867201"</span></span>
-<span><span class="co">#&gt; [55] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5867202"</span></span>
-<span><span class="co">#&gt; [56] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5800310"</span></span>
-<span><span class="co">#&gt; [57] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5800314"</span></span>
-<span><span class="co">#&gt; [58] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5861200"</span></span>
-<span><span class="co">#&gt; [59] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5867001"</span></span>
-<span><span class="co">#&gt; [60] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5864800"</span></span>
-<span><span class="co">#&gt; [61] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5866301"</span></span>
+<span><span class="co">#&gt; [13] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5800302"</span></span>
+<span><span class="co">#&gt; [14] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5863000"</span></span>
+<span><span class="co">#&gt; [15] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5867900"</span></span>
+<span><span class="co">#&gt; [16] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5827101"</span></span>
+<span><span class="co">#&gt; [17] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5800320"</span></span>
+<span><span class="co">#&gt; [18] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5800313"</span></span>
+<span><span class="co">#&gt; [19] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5860900"</span></span>
+<span><span class="co">#&gt; [20] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5867101"</span></span>
+<span><span class="co">#&gt; [21] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5800303"</span></span>
+<span><span class="co">#&gt; [22] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5826702"</span></span>
+<span><span class="co">#&gt; [23] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5800305"</span></span>
+<span><span class="co">#&gt; [24] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5800304"</span></span>
+<span><span class="co">#&gt; [25] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5800306"</span></span>
+<span><span class="co">#&gt; [26] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5861000"</span></span>
+<span><span class="co">#&gt; [27] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5867300"</span></span>
+<span><span class="co">#&gt; [28] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5864700"</span></span>
+<span><span class="co">#&gt; [29] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5865000"</span></span>
+<span><span class="co">#&gt; [30] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5865200"</span></span>
+<span><span class="co">#&gt; [31] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5800308"</span></span>
+<span><span class="co">#&gt; [32] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5867100"</span></span>
+<span><span class="co">#&gt; [33] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5869700"</span></span>
+<span><span class="co">#&gt; [34] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5867500"</span></span>
+<span><span class="co">#&gt; [35] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5870100"</span></span>
+<span><span class="co">#&gt; [36] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5800309"</span></span>
+<span><span class="co">#&gt; [37] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5819901"</span></span>
+<span><span class="co">#&gt; [38] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5800318"</span></span>
+<span><span class="co">#&gt; [39] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5826701"</span></span>
+<span><span class="co">#&gt; [40] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5800315"</span></span>
+<span><span class="co">#&gt; [41] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5800316"</span></span>
+<span><span class="co">#&gt; [42] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5867700"</span></span>
+<span><span class="co">#&gt; [43] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5803500"</span></span>
+<span><span class="co">#&gt; [44] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5800312"</span></span>
+<span><span class="co">#&gt; [45] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5867000"</span></span>
+<span><span class="co">#&gt; [46] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5800106"</span></span>
+<span><span class="co">#&gt; [47] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5866700"</span></span>
+<span><span class="co">#&gt; [48] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5866800"</span></span>
+<span><span class="co">#&gt; [49] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5862811"</span></span>
+<span><span class="co">#&gt; [50] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5867600"</span></span>
+<span><span class="co">#&gt; [51] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5827700"</span></span>
+<span><span class="co">#&gt; [52] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5820000"</span></span>
+<span><span class="co">#&gt; [53] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5815911"</span></span>
+<span><span class="co">#&gt; [54] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5803200"</span></span>
+<span><span class="co">#&gt; [55] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5867301"</span></span>
+<span><span class="co">#&gt; [56] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5867201"</span></span>
+<span><span class="co">#&gt; [57] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5867202"</span></span>
+<span><span class="co">#&gt; [58] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5800310"</span></span>
+<span><span class="co">#&gt; [59] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5800314"</span></span>
+<span><span class="co">#&gt; [60] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5861200"</span></span>
+<span><span class="co">#&gt; [61] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5867001"</span></span>
+<span><span class="co">#&gt; [62] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5864800"</span></span>
+<span><span class="co">#&gt; [63] "https://wasserportal.berlin.de/station.php?anzeige=i&amp;thema=ows&amp;station=5866301"</span></span>
 <span><span class="co">#&gt; Error in `[.data.frame`(x, i) : undefined columns selected</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -474,8 +476,8 @@
 <span><span class="co">#&gt; Filteroberkante_m_u_GOK, Filterunterkante_m_u_GOK, Rechtswert_UTM_33_N,</span></span>
 <span><span class="co">#&gt; Hochwert_UTM_33_N)`</span></span>
 <span><span class="co">#&gt; Writing gw_master to gw_master.csv ... ok. (0.01 secs) </span></span>
-<span><span class="co">#&gt; Writing gwq_data to gwq_data.csv ... ok. (0.16 secs) </span></span>
-<span><span class="co">#&gt; Writing gwq_chloride_data to gwq_chloride_data.csv ... ok. (0.11 secs) </span></span>
+<span><span class="co">#&gt; Writing gwq_data to gwq_data.csv ... ok. (0.15 secs) </span></span>
+<span><span class="co">#&gt; Writing gwq_chloride_data to gwq_chloride_data.csv ... ok. (0.10 secs) </span></span>
 <span><span class="co">#&gt; Writing gwq_chloride_master to gwq_chloride_master.csv ... ok. (0.01 secs) </span></span>
 <span><span class="co">#&gt; Writing gwq_chloride_data_stats_export to gwq_chloride_data_stats.csv ... ok. (0.01 secs) </span></span>
 <span><span class="co">#&gt; Writing gwq_chloride_master_stats to gwq_chloride_master_stats.csv ... ok. (0.01 secs)</span></span></code></pre></div>
