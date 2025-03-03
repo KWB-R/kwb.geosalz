@@ -65,7 +65,7 @@
                         <h4 data-toc-skip class="author">Michael
 Rustler</h4>
             
-            <h4 data-toc-skip class="date">2025-02-28</h4>
+            <h4 data-toc-skip class="date">2025-03-03</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/KWB-R/kwb.geosalz/blob/main/vignettes/workflow.Rmd" class="external-link"><code>vignettes/workflow.Rmd</code></a></small>
       <div class="d-none name"><code>workflow.Rmd</code></div>
@@ -221,7 +221,7 @@ it:</p>
 <span><span class="va">has_errors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">labor_list_1meta</span>, <span class="fu">kwb.utils</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/kwb.utils/man/isTryError.html" class="external-link">isTryError</a></span><span class="op">)</span></span>
 <span><span class="co">#has_errors</span></span>
 <span></span>
-<span><span class="va">labor_df_1meta</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/rbindlist.html" class="external-link">rbindlist</a></span><span class="op">(</span></span>
+<span><span class="va">labor_df_1meta</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/rbindlist.html" class="external-link">rbindlist</a></span><span class="op">(</span></span>
 <span>  l <span class="op">=</span> <span class="va">labor_list_1meta</span><span class="op">[</span><span class="op">!</span><span class="va">has_errors</span><span class="op">]</span>,</span>
 <span>  fill <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -249,7 +249,7 @@ it:</p>
 <span><span class="va">has_errors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">labor_header2_list</span>, <span class="fu">kwb.utils</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/kwb.utils/man/isTryError.html" class="external-link">isTryError</a></span><span class="op">)</span></span>
 <span><span class="co">#has_errors</span></span>
 <span></span>
-<span><span class="va">labor_header2_df</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/rbindlist.html" class="external-link">rbindlist</a></span><span class="op">(</span></span>
+<span><span class="va">labor_header2_df</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/rbindlist.html" class="external-link">rbindlist</a></span><span class="op">(</span></span>
 <span>  l <span class="op">=</span> <span class="va">labor_header2_list</span><span class="op">[</span><span class="op">!</span><span class="va">has_errors</span><span class="op">]</span>,</span>
 <span>  fill <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -271,7 +271,7 @@ it:</p>
 <span><span class="va">has_errors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">labor_header4_list</span>, <span class="va">inherits</span>, <span class="st">"try-error"</span><span class="op">)</span></span>
 <span><span class="va">has_errors</span></span>
 <span></span>
-<span><span class="va">labor_header4_df</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/rbindlist.html" class="external-link">rbindlist</a></span><span class="op">(</span></span>
+<span><span class="va">labor_header4_df</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/rbindlist.html" class="external-link">rbindlist</a></span><span class="op">(</span></span>
 <span>  l <span class="op">=</span> <span class="va">labor_header4_list</span><span class="op">[</span><span class="op">!</span><span class="va">has_errors</span><span class="op">]</span>,</span>
 <span>  fill <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -284,7 +284,7 @@ it:</p>
 <h3 id="merging-header2-and-header4">4.1 Merging Header2 and Header4<a class="anchor" aria-label="anchor" href="#merging-header2-and-header4"></a>
 </h3>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">labor_all</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/rbindlist.html" class="external-link">rbindlist</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">labor_all</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/rbindlist.html" class="external-link">rbindlist</a></span><span class="op">(</span></span>
 <span>  l <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    x1 <span class="op">=</span> <span class="va">labor_header2_df</span>,</span>
 <span>    x2 <span class="op">=</span> <span class="va">labor_header4_df</span></span>
@@ -456,7 +456,7 @@ it:</p>
 <tbody>
 <tr class="odd">
 <td align="left">version</td>
-<td align="left">R version 4.4.2 (2024-10-31 ucrt)</td>
+<td align="left">R version 4.4.3 (2025-02-28 ucrt)</td>
 </tr>
 <tr class="even">
 <td align="left">os</td>
@@ -488,7 +488,7 @@ it:</p>
 </tr>
 <tr class="odd">
 <td align="left">date</td>
-<td align="left">2025-02-28</td>
+<td align="left">2025-03-03</td>
 </tr>
 <tr class="even">
 <td align="left">pandoc</td>
