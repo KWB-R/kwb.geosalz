@@ -294,9 +294,9 @@ files_path <- write_csv(mc_files, postfix, target_dir)
 
 # Replace too high conductivity values (> 20000 uS) with NA_real_
 mc_data_filtered <- mc_data %>% 
-  dplyr:mutate(messwert = dplyr::if_else(parameter == "Leitfaehigkeit" & messwert > 20000,
-                                         NA_real_,
-                                         messwert))
+  dplyr::mutate(messwert = dplyr::if_else(parameter == "Leitfaehigkeit" & messwert > 20000,
+                                          NA_real_,
+                                          messwert))
 
 # Define function that plots data to a pdf file
 plot_to_pdf <- function(mc_data, para, target_dir = ".", debug = TRUE) {
