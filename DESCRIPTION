@@ -1,6 +1,6 @@
 Package: kwb.geosalz
 Title: R Package for Documenting Workflow Used in Project "geosalz"
-Version: 0.7.0
+Version: 0.7.1
 Authors@R: c(
     person("Michael", "Rustler", , "michael.rustler@kompetenz-wasser.de", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-0647-7726")),
@@ -66,9 +66,10 @@ Suggests:
 VignetteBuilder: 
     knitr
 Remotes:
+    github::cran/phreeqc,
     github::KWB-R/geosalz.phreeqc,
     github::KWB-R/kwb.base,
-    github::KWB-R/kwb.nextcloud@dev,
+    github::KWB-R/kwb.nextcloud,
     github::KWB-R/kwb.pkgbuild,
     github::KWB-R/kwb.utils,
     github::KWB-R/wasserportal,
@@ -76,4 +77,4 @@ Remotes:
 ByteCompile: true
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2

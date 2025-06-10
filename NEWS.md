@@ -1,3 +1,12 @@
+# [kwb.geosalz 0.7.1](https://github.com/KWB-R/kwb.geosalz/releases/tag/v0.7.1) <small>2024-06-10</small>
+
+* Plotting: filter out conductivity values (>20000 us) and improve x-axis labelling 
+for combined measurement chain & operation plot (lable every 3 month instead of 
+each month)
+
+* Fix GH-actions workflow by bumping version numbers vor cache and checkout from 
+v2 to v4
+
 # [kwb.geosalz 0.7.0](https://github.com/KWB-R/kwb.geosalz/releases/tag/v0.7.0) <small>2024-03-19</small>
 
 * Add combined plot for wells with measurement chains (i.e. 9,10,13) showing 

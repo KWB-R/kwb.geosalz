@@ -13,7 +13,7 @@ jobs:
       MESSKETTEN_USER:  ${{ secrets.MESSKETTEN_USER }} 
       MESSKETTEN_PASSWORD: ${{ secrets.MESSKETTEN_PASSWORD }} 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: r-lib/actions/pr-fetch@master
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
