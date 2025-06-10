@@ -66,6 +66,7 @@ Suggests:
 VignetteBuilder: 
     knitr
 Remotes:
+    github::cran/phreeqc,
     github::KWB-R/geosalz.phreeqc,
     github::KWB-R/kwb.base,
     github::KWB-R/kwb.nextcloud,
