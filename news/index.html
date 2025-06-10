@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">kwb.geosalz</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,7 +22,6 @@
     <li><a class="dropdown-item" href="../articles/emshoff91.html">Emshoff 91</a></li>
     <li><a class="dropdown-item" href="../articles/hydrochemistry.html">Hydrochemistry</a></li>
     <li><a class="dropdown-item" href="../articles/measurement-chains.html">Measurement Chains</a></li>
-    <li><a class="dropdown-item" href="../articles/wasserportal.html">Wasserportal</a></li>
     <li><a class="dropdown-item" href="../articles/workflow.html">Workflow</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -38,9 +37,16 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/KWB-R/kwb.geosalz/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/KWB-R/kwb.geosalz/blob/dev/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.7.1" id="kwbgeosalz-071-2024-06-10">
+<a href="https://github.com/KWB-R/kwb.geosalz/releases/tag/v0.7.1" class="external-link">kwb.geosalz 0.7.1</a> <small>2024-06-10</small>
+<a class="anchor" aria-label="anchor" href="#kwbgeosalz-071-2024-06-10"></a></h2>
+<ul><li><p>Plotting: filter out conductivity values (&gt;20000 us) and improve x-axis labelling for combined measurement chain &amp; operation plot (lable every 3 month instead of each month)</p></li>
+<li><p>Fix GH-actions workflow by bumping version numbers vor cache and checkout from v2 to v4</p></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.7.0" id="kwbgeosalz-070-2024-03-19">
 <a href="https://github.com/KWB-R/kwb.geosalz/releases/tag/v0.7.0" class="external-link">kwb.geosalz 0.7.0</a> <small>2024-03-19</small>
@@ -134,7 +140,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>

@@ -4,20 +4,12 @@
 <url><loc>https://kwb-r.github.io/kwb.geosalz/articles/emshoff91.html</loc></url>
 <url><loc>https://kwb-r.github.io/kwb.geosalz/articles/hydrochemistry.html</loc></url>
 <url><loc>https://kwb-r.github.io/kwb.geosalz/articles/index.html</loc></url>
-<url><loc>https://kwb-r.github.io/kwb.geosalz/articles/map_gwl.html</loc></url>
-<url><loc>https://kwb-r.github.io/kwb.geosalz/articles/map_gwq.html</loc></url>
-<url><loc>https://kwb-r.github.io/kwb.geosalz/articles/map_swl.html</loc></url>
 <url><loc>https://kwb-r.github.io/kwb.geosalz/articles/measurement-chains.html</loc></url>
-<url><loc>https://kwb-r.github.io/kwb.geosalz/articles/wasserportal.html</loc></url>
 <url><loc>https://kwb-r.github.io/kwb.geosalz/articles/workflow.html</loc></url>
 <url><loc>https://kwb-r.github.io/kwb.geosalz/authors.html</loc></url>
 <url><loc>https://kwb-r.github.io/kwb.geosalz/index.html</loc></url>
 <url><loc>https://kwb-r.github.io/kwb.geosalz/LICENSE-text.html</loc></url>
 <url><loc>https://kwb-r.github.io/kwb.geosalz/LICENSE.html</loc></url>
-<url><loc>https://kwb-r.github.io/kwb.geosalz/map_gwl.html</loc></url>
-<url><loc>https://kwb-r.github.io/kwb.geosalz/map_gwq.html</loc></url>
-<url><loc>https://kwb-r.github.io/kwb.geosalz/map_swl.html</loc></url>
-<url><loc>https://kwb-r.github.io/kwb.geosalz/master_gwl_before-1970.html</loc></url>
 <url><loc>https://kwb-r.github.io/kwb.geosalz/news/index.html</loc></url>
 <url><loc>https://kwb-r.github.io/kwb.geosalz/reference/add_para_metadata.html</loc></url>
 <url><loc>https://kwb-r.github.io/kwb.geosalz/reference/add_site_metadata.html</loc></url>
@@ -40,8 +32,6 @@
 <url><loc>https://kwb-r.github.io/kwb.geosalz/reference/emshoff91_remap_values.html</loc></url>
 <url><loc>https://kwb-r.github.io/kwb.geosalz/reference/gather_and_join_1.html</loc></url>
 <url><loc>https://kwb-r.github.io/kwb.geosalz/reference/gather_and_join_2.html</loc></url>
-<url><loc>https://kwb-r.github.io/kwb.geosalz/reference/gather_ignore.html</loc></url>
-<url><loc>https://kwb-r.github.io/kwb.geosalz/reference/gather_ignore_clean.html</loc></url>
 <url><loc>https://kwb-r.github.io/kwb.geosalz/reference/get_excelcnv_exe.html</loc></url>
 <url><loc>https://kwb-r.github.io/kwb.geosalz/reference/get_foerdermengen.html</loc></url>
 <url><loc>https://kwb-r.github.io/kwb.geosalz/reference/get_foerdermengen_gal_fri.html</loc></url>
@@ -74,12 +64,10 @@
 <url><loc>https://kwb-r.github.io/kwb.geosalz/reference/read_multiple_emshoff91_ods.html</loc></url>
 <url><loc>https://kwb-r.github.io/kwb.geosalz/reference/replace_nanb_with_na.html</loc></url>
 <url><loc>https://kwb-r.github.io/kwb.geosalz/reference/safe_office_folder.html</loc></url>
-<url><loc>https://kwb-r.github.io/kwb.geosalz/reference/stop_formatted.html</loc></url>
 <url><loc>https://kwb-r.github.io/kwb.geosalz/reference/stop_if_duplicated_samples_found.html</loc></url>
 <url><loc>https://kwb-r.github.io/kwb.geosalz/reference/stop_on_missing_or_inform_on_extra_sheets.html</loc></url>
 <url><loc>https://kwb-r.github.io/kwb.geosalz/reference/to_full_metadata_2.html</loc></url>
 <url><loc>https://kwb-r.github.io/kwb.geosalz/reference/to_full_metadata_4.html</loc></url>
 <url><loc>https://kwb-r.github.io/kwb.geosalz/reference/write_measurementchains_data.html</loc></url>
-<url><loc>https://kwb-r.github.io/kwb.geosalz/timeseries_gwl_before-1970.html</loc></url>
 </urlset>
 
