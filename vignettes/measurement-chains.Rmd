@@ -292,6 +292,10 @@ stats_path <- write_csv(mc_data_stats, postfix, target_dir)
 metadata_path <- write_csv(metadata, postfix, target_dir)
 files_path <- write_csv(mc_files, postfix, target_dir)
 
+# Filter out too high conductivity values (> 20000 uS)
+mc_data_filtered <- mc_data %>% 
+  dplyr::filter(!(parameter == "Leitfaehigkeit" & messwert > 20000))
+
 # Define function that plots data to a pdf file
 plot_to_pdf <- function(mc_data, para, target_dir = ".", debug = TRUE) {
   
@@ -313,8 +317,8 @@ plot_to_pdf <- function(mc_data, para, target_dir = ".", debug = TRUE) {
 }
 
 pdf_files <- c(
-  plot_to_pdf(mc_data, "Leitfaehigkeit", paths$export_dir), 
-  plot_to_pdf(mc_data, "Temperatur", paths$export_dir)
+  plot_to_pdf(mc_data_filtered, "Leitfaehigkeit", paths$export_dir), 
+  plot_to_pdf(mc_data_filtered, "Temperatur", paths$export_dir)
 )
 
 data_zip_path
@@ -382,7 +386,7 @@ if (kwb.utils::isTryError(result)) {
 
 ```{r download_well_operation_data_from_cloud}
 
-mc_dat <- mc_data %>%  
+mc_dat <- mc_data_filtered %>%  
   dplyr::left_join(metadata[,c("sensor_id", "einbau_sensor_muGOK")], by = "sensor_id") %>% 
   dplyr::left_join(mc_files %>% dplyr::select(sftp_path, galerie, brunnen_nummer),
                    by = c(file = "sftp_path"))
