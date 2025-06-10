@@ -160,16 +160,16 @@ Rustler</h4>
 <code class="sourceCode R"><span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/create.html" class="external-link">dir_create</a></span><span class="op">(</span><span class="va">paths</span><span class="op">$</span><span class="va">phreeqc_dir</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">### Load PHREEQC database "phreeqc.dat"</span></span>
-<span><span class="fu">phreeqc</span><span class="fu">::</span><span class="fu">phrLoadDatabaseString</span><span class="op">(</span><span class="fu">phreeqc</span><span class="fu">::</span><span class="va">phreeqc.dat</span><span class="op">)</span></span>
+<span><span class="fu">phreeqc</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/phreeqc/man/phrLoadDatabaseString.html" class="external-link">phrLoadDatabaseString</a></span><span class="op">(</span><span class="fu">phreeqc</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/phreeqc/man/phreeqc.dat.html" class="external-link">phreeqc.dat</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">### Capture PHREEQC output normally sent to output file into a buffer</span></span>
-<span><span class="fu">phreeqc</span><span class="fu">::</span><span class="fu">phrSetOutputStringsOn</span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu">phreeqc</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/phreeqc/man/phrSetOutputStringsOn.html" class="external-link">phrSetOutputStringsOn</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">## Run PHREEQC with "solutions_input"</span></span>
-<span><span class="fu">phreeqc</span><span class="fu">::</span><span class="fu">phrRunString</span><span class="op">(</span>input <span class="op">=</span> <span class="va">solutions_input</span><span class="op">)</span></span>
+<span><span class="fu">phreeqc</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/phreeqc/man/phrRunString.html" class="external-link">phrRunString</a></span><span class="op">(</span>input <span class="op">=</span> <span class="va">solutions_input</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">### Retrieves the phreeqc output as a character vector</span></span>
-<span><span class="va">phreeqc_output</span> <span class="op">&lt;-</span> <span class="fu">phreeqc</span><span class="fu">::</span><span class="fu">phrGetOutputStrings</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">phreeqc_output</span> <span class="op">&lt;-</span> <span class="fu">phreeqc</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/phreeqc/man/phrGetOutputStrings.html" class="external-link">phrGetOutputStrings</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/writeLines.html" class="external-link">writeLines</a></span><span class="op">(</span><span class="va">phreeqc_output</span>, <span class="va">paths</span><span class="op">$</span><span class="va">phreeqc_txt</span><span class="op">)</span></span></code></pre></div>
 <p>Here is the content of <code>phreeqc_output</code></p>
 </div>
