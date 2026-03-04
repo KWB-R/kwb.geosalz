@@ -2,13 +2,13 @@
 % Please edit documentation in R/measurement-chains.R
 \name{create_sftp_connection}
 \alias{create_sftp_connection}
-\title{Measurement Chains: Create an SFTP Connection}
+\title{Measurement Chains: Create SFTP credentials (curl backend)}
 \usage{
 create_sftp_connection()
 }
 \value{
-sftp connection
+list with server/username/password/port
 }
 \description{
-Measurement Chains: Create an SFTP Connection
+Measurement Chains: Create SFTP credentials (curl backend)
 }

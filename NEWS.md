@@ -1,3 +1,10 @@
+# [kwb.geosalz 0.7.2](https://github.com/KWB-R/kwb.geosalz/releases/tag/v0.7.2) <small>2026-03-04</small>
+
+* Fix [Measurement Chains](../articles/measurement-chains.html) workflow (get rid of 
+[stenevang/sftp](https://github.com/stenevang/sftp) and use R package `curl` instead)
+
+* Increase speed of listing files on SFTP server (`list_sftp_files()`) by factor 50-100
+
 # [kwb.geosalz 0.7.1](https://github.com/KWB-R/kwb.geosalz/releases/tag/v0.7.1) <small>2025-06-10</small>
 
 * Plotting: filter out conductivity values (>20000 us) and improve x-axis labelling 
