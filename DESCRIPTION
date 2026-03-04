@@ -1,6 +1,6 @@
 Package: kwb.geosalz
 Title: R Package for Documenting Workflow Used in Project "geosalz"
-Version: 0.7.1
+Version: 0.7.2
 Authors@R: c(
     person("Michael", "Rustler", , "michael.rustler@kompetenz-wasser.de", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-0647-7726")),
@@ -51,6 +51,7 @@ Imports:
     withr,
     zoo
 Suggests: 
+    curl,
     covr (>= 3.2.1),
     DT,
     ggforce,
@@ -72,8 +73,7 @@ Remotes:
     github::KWB-R/kwb.nextcloud,
     github::KWB-R/kwb.pkgbuild,
     github::KWB-R/kwb.utils,
-    github::KWB-R/wasserportal,
-    github::stenevang/sftp
+    github::KWB-R/wasserportal
 ByteCompile: true
 Encoding: UTF-8
 LazyData: true

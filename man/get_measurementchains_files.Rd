@@ -2,7 +2,7 @@
 % Please edit documentation in R/measurement-chains.R
 \name{get_measurementchains_files}
 \alias{get_measurementchains_files}
-\title{Measurement Chains: Get Tidied Files Metadata}
+\title{Measurement Chains: Get Available Files from SFTP}
 \usage{
 get_measurementchains_files(
   sftp_connection = create_sftp_connection(),
@@ -10,21 +10,77 @@ get_measurementchains_files(
 )
 }
 \arguments{
-\item{sftp_connection}{an SFTP connnection as retrieved by
-\code{\link{create_sftp_connection}}}
+\item{sftp_connection}{connection credentials as returned by
+\code{\link{create_sftp_connection}}.}
 
-\item{debug}{show debug messages (default: FALSE)}
+\item{debug}{logical. If \code{TRUE}, prints diagnostic messages about files
+that do not match the measurement chain naming scheme. Default: \code{FALSE}.}
 }
 \value{
-tibble with information on available files and tidied meta-information
-based on file naming
+A tibble with metadata for all detected measurement chain files.
+The table includes:
+
+\itemize{
+\item \code{sftp_path} – full path of the file on the SFTP server
+\item \code{galerie} – gallery identifier derived from folder name
+\item \code{brunnen_nummer} – well number derived from folder name
+\item \code{prefix} – optional file prefix (e.g. \code{LF_})
+\item \code{sensor_id} – numeric sensor identifier
+\item \code{sensor_endnummer} – sensor end number
+\item \code{datum_uhrzeit} – timestamp parsed from the filename
+}
+
+Additionally the returned object contains an attribute:
+
+\itemize{
+\item \code{ignored_files} – tibble listing files that were skipped because
+  their names do not match the expected measurement chain pattern.
+}
 }
 \description{
-Measurement Chains: Get Tidied Files Metadata
+Lists all available measurement chain files on the SFTP server and extracts
+metadata encoded in the file names. The function recursively scans the
+remote directory, identifies files belonging to measurement chains and
+returns a tidy table with parsed metadata.
+}
+\details{
+Files that do not match the expected measurement chain naming pattern are
+automatically ignored and reported in an attribute of the returned object.
+
+Expected filename pattern (without extension):
+
+\code{LF_<sensor_id><sensor_endnummer>-YYYY-MM-DD-HHMM}
+
+or
+
+\code{<sensor_id><sensor_endnummer>-YYYY-MM-DD-HHMM}
+
+
+The function performs the following steps:
+
+\enumerate{
+\item Recursively lists all files in the configured SFTP directory
+\item Splits paths into folder and filename components
+\item Validates filenames against the measurement chain naming scheme
+\item Parses sensor metadata and timestamps from filenames
+\item Returns a tidy table with extracted metadata
+}
+
+This approach makes the import robust against unrelated files (e.g.
+\code{Thumbs.db}, \code{desktop.ini}, or documentation files) that may be
+present on the server.
 }
 \examples{
 \dontrun{
+
+# connect and list files
 mc_files <- kwb.geosalz::get_measurementchains_files()
+
+# inspect parsed metadata
 str(mc_files)
+
+# inspect ignored files
+attr(mc_files, "ignored_files")
+
 }
 }

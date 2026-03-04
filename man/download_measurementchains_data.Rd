@@ -2,41 +2,27 @@
 % Please edit documentation in R/measurement-chains.R
 \name{download_measurementchains_data}
 \alias{download_measurementchains_data}
-\title{Measurement Chains: download data}
+\title{Measurement Chains: download data (SFTP via curl)}
 \usage{
 download_measurementchains_data(
   sftp_paths,
   target_directory = temp_dir(),
-  sftp_connection = create_sftp_connection(),
   run_parallel = TRUE,
   debug = FALSE
 )
 }
 \arguments{
-\item{sftp_paths}{character vector with paths to files to be downloaded. As
-retrieved by \code{\link{get_measurementchains_files}} column "sftp_path"}
+\item{sftp_paths}{character vector with relative paths to files (under MESSKETTEN_REMOTE_DIR)}
 
 \item{target_directory}{target directory}
 
-\item{sftp_connection}{an SFTP connnection as retrieved by
-\code{\link{create_sftp_connection}}}
-
-\item{run_parallel}{default: TRUE}
+\item{run_parallel}{default: TRUE (will create separate curl handles; ok)}
 
 \item{debug}{show debug messages (default: FALSE)}
 }
 \value{
-tibble with columns file_id, sftp_path and local_path of csv files
+character vector of local file paths
 }
 \description{
-Measurement Chains: download data
-}
-\examples{
-\dontrun{
-mc_files <- kwb.geosalz::get_measurementchains_files()
-target_directory <- tempdir()
-local_paths <- kwb.geosalz::download_measurementchains_data(
-sftp_paths = mc_files$sftp_path,
-target_directory)
-}
+Measurement Chains: download data (SFTP via curl)
 }
